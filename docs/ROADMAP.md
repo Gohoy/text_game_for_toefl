@@ -21,4 +21,4 @@
 ## Progress Notes
 
 - 2026-06-18: Created project overview, repository instructions, README, and roadmap.
-- 2026-06-18: Added `scripts/continue_codex.sh` for 30-minute local cron continuation under `/Users/gaohongyu1/project/text_game_for_toefl`.
+- 2026-06-18: Removed the local LaunchAgent/script continuation path in favor of Codex app automation for visible run details.
