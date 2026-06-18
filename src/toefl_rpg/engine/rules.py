@@ -1,6 +1,12 @@
 from __future__ import annotations
 
 from toefl_rpg.content.schema import World
+from toefl_rpg.engine.quests import (
+    ANALYZE_FUNGUS_SAMPLE,
+    COLLECT_FUNGUS_SAMPLE,
+    quest_summary,
+    step_for_task,
+)
 from toefl_rpg.engine.state import GameState, TurnResult
 from toefl_rpg.language.parser import ParsedIntent, parse_intent
 
@@ -92,7 +98,10 @@ class GameEngine:
             if practiced and gained_xp
             else ""
         )
-        return TurnResult(True, f"You collect {item}.{practice_text}", feedback)
+        quest_text = ""
+        if item == "fungus sample":
+            quest_text = self._complete_task(COLLECT_FUNGUS_SAMPLE)
+        return TurnResult(True, f"You collect {item}.{practice_text}{quest_text}", feedback)
 
     def _use(self, intent: ParsedIntent, feedback: str) -> TurnResult:
         room = self.state.current_room
@@ -113,11 +122,13 @@ class GameEngine:
                 )
             words = ["microscope", "bacteria", "strain"]
             gained_xp = self._practice_words(words, 5)
+            quest_text = self._complete_task(ANALYZE_FUNGUS_SAMPLE)
             return TurnResult(
                 True,
                 (
                     "Under the microscope, the fungus sample shows a bacterial strain "
                     f"around the cells. Practiced words: {', '.join(words)}. XP +{gained_xp}."
+                    f"{quest_text}"
                 ),
                 feedback,
             )
@@ -176,4 +187,17 @@ class GameEngine:
     def _status_summary(self) -> str:
         mastered = len(self.state.mastered_words)
         total = len(self.state.world.core_words)
-        return f"HP {self.state.player.hp}/{self.state.player.max_hp}. XP {self.state.player.xp}. Vocabulary {mastered}/{total} practiced."
+        return (
+            f"HP {self.state.player.hp}/{self.state.player.max_hp}. XP {self.state.player.xp}. "
+            f"Vocabulary {mastered}/{total} practiced. Quest: {quest_summary(self.state.completed_tasks)}"
+        )
+
+    def _complete_task(self, task_id: str) -> str:
+        if task_id in self.state.completed_tasks:
+            return ""
+        step = step_for_task(task_id)
+        if step is None:
+            return ""
+        self.state.completed_tasks.add(task_id)
+        self.state.player.xp += step.xp
+        return f" Quest updated: {step.title}. XP +{step.xp}."

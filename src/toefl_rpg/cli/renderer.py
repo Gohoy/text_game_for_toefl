@@ -12,6 +12,7 @@ except ModuleNotFoundError:
     Table = None
 
 from toefl_rpg.engine.state import GameState, TurnResult
+from toefl_rpg.engine.quests import quest_summary
 
 
 class PlainConsole:
@@ -58,6 +59,7 @@ class Renderer:
         vocabulary = ", ".join(room.target_words) or "none"
         inventory = ", ".join(state.player.inventory) or "empty"
         mastered = ", ".join(sorted(state.mastered_words)) or "none yet"
+        quest = quest_summary(state.completed_tasks)
 
         if Table is None or Panel is None or Group is None:
             self.console.print("")
@@ -67,6 +69,7 @@ class Renderer:
             self.console.print(f"Visible: {visible}")
             self.console.print(f"Vocabulary: {vocabulary}")
             self.console.print(f"Inventory: {inventory}")
+            self.console.print(f"Quest: {quest}")
             self.console.print(f"XP: {state.player.xp}")
             self.console.print(f"Mastered: {mastered}")
             return
@@ -79,6 +82,7 @@ class Renderer:
         table.add_row("Visible", visible)
         table.add_row("Vocabulary", vocabulary)
         table.add_row("Inventory", inventory)
+        table.add_row("Quest", quest)
         table.add_row("XP", str(state.player.xp))
         table.add_row("Mastered", mastered)
 

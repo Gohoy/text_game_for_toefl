@@ -55,3 +55,26 @@ def test_use_microscope_with_sample_practices_words() -> None:
 
     assert result.success
     assert {"fungus", "microscope", "bacteria", "strain"} <= engine.state.mastered_words
+
+
+def test_biology_quest_progress_awards_xp_once() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+    engine.handle("go north")
+
+    collect_result = engine.handle("I want to collect the fungus sample")
+
+    assert collect_result.success
+    assert "Quest updated" in collect_result.message
+    assert "collect_fungus_sample" in engine.state.completed_tasks
+
+    engine.handle("go south")
+    engine.handle("go east")
+    analyze_result = engine.handle("I want to use the microscope")
+    xp_after_first_analysis = engine.state.player.xp
+    repeat_result = engine.handle("I want to use the microscope")
+
+    assert analyze_result.success
+    assert "analyze_fungus_sample" in engine.state.completed_tasks
+    assert "Quest updated" in analyze_result.message
+    assert "Quest updated" not in repeat_result.message
+    assert engine.state.player.xp == xp_after_first_analysis

@@ -19,6 +19,7 @@ class GameState:
     current_room_id: str
     player: Player = field(default_factory=Player)
     mastered_words: set[str] = field(default_factory=set)
+    completed_tasks: set[str] = field(default_factory=set)
 
     @property
     def current_room(self) -> Room:
@@ -31,4 +32,3 @@ class TurnResult:
     message: str
     english_feedback: str = ""
     should_quit: bool = False
-

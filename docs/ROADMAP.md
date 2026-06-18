@@ -24,3 +24,5 @@
 - 2026-06-18: Removed the local LaunchAgent/script continuation path in favor of Codex app automation for visible run details.
 - 2026-06-18: Added the first playable Python/Rich scaffold with Biology Realm rooms, sentence parsing, movement, inspection, XP, and smoke-tested CLI output.
 - 2026-06-18: Copied the full TOEFL vocabulary source into `data/raw/`, expanded the Biology demo to five rooms, and added inventory, collect, use, help, and status actions.
+- 2026-06-18: Added deterministic Biology Investigation quest progress with objectives, quest XP, status/UI display, and tests.
+- 2026-06-18: Removed the tracked raw vocabulary copy; future import work should read `/Users/gaohongyu1/Downloads/TOEFLiBT  词以类记2.0.txt` directly or generate small validated derived content.
