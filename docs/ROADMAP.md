@@ -2,9 +2,9 @@
 
 ## Current State
 
-- Repository initialized with planning documentation.
+- Repository initialized with planning documentation and a minimal playable Python scaffold.
 - Vocabulary source identified at `/Users/gaohongyu1/Downloads/TOEFLiBT  词以类记2.0.txt`.
-- No playable code has been added yet.
+- The game can currently render a small Biology Realm, move between rooms, inspect target words, award XP, and provide basic English feedback.
 
 ## Next Milestones
 
@@ -22,3 +22,4 @@
 
 - 2026-06-18: Created project overview, repository instructions, README, and roadmap.
 - 2026-06-18: Removed the local LaunchAgent/script continuation path in favor of Codex app automation for visible run details.
+- 2026-06-18: Added the first playable Python/Rich scaffold with Biology Realm rooms, sentence parsing, movement, inspection, XP, and smoke-tested CLI output.
