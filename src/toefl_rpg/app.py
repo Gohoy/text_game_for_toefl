@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-from rich.console import Console
-
-from toefl_rpg.cli.renderer import Renderer
+from toefl_rpg.cli.renderer import Renderer, create_console
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.rules import GameEngine
 
 
 def main() -> None:
-    console = Console()
+    console = create_console()
     world = build_biology_realm()
     engine = GameEngine.new_game(world)
     renderer = Renderer(console)
@@ -23,4 +21,3 @@ def main() -> None:
         renderer.show_result(result)
         if result.should_quit:
             break
-

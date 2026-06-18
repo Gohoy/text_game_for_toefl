@@ -17,9 +17,20 @@ PYTHONPATH=src python3 -m toefl_rpg
 
 Current supported actions include:
 
+- `help`
 - `look`
 - `go east`
 - `I want to go to the east`
 - `I want to inspect the microscope`
+- `I want to collect the fungus sample`
+- `I want to use the microscope`
 - `talk to Dr. Lin`
+- `inventory`
+- `status`
 - `quit`
+
+The full source vocabulary file has been copied into:
+
+```text
+data/raw/TOEFLiBT  词以类记2.0.txt
+```

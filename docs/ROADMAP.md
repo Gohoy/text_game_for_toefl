@@ -23,3 +23,4 @@
 - 2026-06-18: Created project overview, repository instructions, README, and roadmap.
 - 2026-06-18: Removed the local LaunchAgent/script continuation path in favor of Codex app automation for visible run details.
 - 2026-06-18: Added the first playable Python/Rich scaffold with Biology Realm rooms, sentence parsing, movement, inspection, XP, and smoke-tested CLI output.
+- 2026-06-18: Copied the full TOEFL vocabulary source into `data/raw/`, expanded the Biology demo to five rooms, and added inventory, collect, use, help, and status actions.

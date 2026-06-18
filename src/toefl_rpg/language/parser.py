@@ -13,6 +13,12 @@ def parse_intent(text: str) -> ParsedIntent:
     normalized = " ".join(text.lower().strip().split())
     if normalized in {"quit", "exit"}:
         return ParsedIntent("quit")
+    if normalized in {"help", "commands"}:
+        return ParsedIntent("help")
+    if normalized in {"inventory", "items", "bag"}:
+        return ParsedIntent("inventory")
+    if normalized in {"status", "stats", "progress"}:
+        return ParsedIntent("status")
     if normalized in {"look", "look around"}:
         return ParsedIntent("look")
 
@@ -31,10 +37,21 @@ def parse_intent(text: str) -> ParsedIntent:
         if marker in normalized:
             return ParsedIntent("inspect", normalized.split(marker, 1)[1].strip())
 
+    for verb in ("collect", "take", "pick up", "gather"):
+        if normalized.startswith(verb):
+            return ParsedIntent("collect", normalized.removeprefix(verb).strip())
+        marker = f" {verb} "
+        if marker in normalized:
+            return ParsedIntent("collect", normalized.split(marker, 1)[1].strip())
+
+    if normalized.startswith("use "):
+        return ParsedIntent("use", normalized.removeprefix("use ").strip())
+    if " use " in normalized:
+        return ParsedIntent("use", normalized.split(" use ", 1)[1].strip())
+
     if normalized.startswith("talk to "):
         return ParsedIntent("talk", normalized.removeprefix("talk to ").strip())
     if " talk to " in normalized:
         return ParsedIntent("talk", normalized.split(" talk to ", 1)[1].strip())
 
     return ParsedIntent("unknown", normalized)
-

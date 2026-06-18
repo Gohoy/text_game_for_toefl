@@ -21,3 +21,37 @@ def test_inspecting_core_word_grants_xp_once_per_turn() -> None:
     assert engine.state.player.xp == 5
     assert "microscope" in engine.state.mastered_words
 
+
+def test_collect_visible_item_adds_it_to_inventory() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+    engine.handle("go north")
+
+    result = engine.handle("I want to collect the fungus sample")
+
+    assert result.success
+    assert "fungus sample" in engine.state.player.inventory
+    assert "fungus sample" not in engine.state.current_room.items
+    assert "fungus" in engine.state.mastered_words
+
+
+def test_use_microscope_requires_sample() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+    engine.handle("go east")
+
+    result = engine.handle("I want to use the microscope")
+
+    assert not result.success
+    assert "fungus sample" in result.message
+
+
+def test_use_microscope_with_sample_practices_words() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+    engine.handle("go north")
+    engine.handle("I want to collect the fungus sample")
+    engine.handle("go south")
+    engine.handle("go east")
+
+    result = engine.handle("I want to use the microscope")
+
+    assert result.success
+    assert {"fungus", "microscope", "bacteria", "strain"} <= engine.state.mastered_words
