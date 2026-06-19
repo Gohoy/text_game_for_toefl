@@ -24,7 +24,7 @@ class GameEngine:
         feedback = self._english_feedback(text)
 
         if intent.action == "quit":
-            return TurnResult(True, "Progress is not saved yet. Goodbye.", feedback, True)
+            return TurnResult(True, "Progress saved. Goodbye.", feedback, True)
         if intent.action == "help":
             return TurnResult(
                 True,

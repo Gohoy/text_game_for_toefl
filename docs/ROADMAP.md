@@ -4,7 +4,7 @@
 
 - Repository initialized with planning documentation and a minimal playable Python scaffold.
 - Vocabulary source identified at `/Users/gaohongyu1/Downloads/TOEFLiBT  词以类记2.0.txt`.
-- The game can currently render a small Biology Realm, move between rooms, inspect target words, award XP, and provide basic English feedback.
+- The game can currently render Biology Realm, move between rooms, collect and use items, inspect target words, advance a quest, autosave progress, award XP, and provide basic English feedback.
 
 ## Next Milestones
 
@@ -26,3 +26,4 @@
 - 2026-06-18: Copied the full TOEFL vocabulary source into `data/raw/`, expanded the Biology demo to five rooms, and added inventory, collect, use, help, and status actions.
 - 2026-06-18: Added deterministic Biology Investigation quest progress with objectives, quest XP, status/UI display, and tests.
 - 2026-06-18: Removed the tracked raw vocabulary copy; future import work should read `/Users/gaohongyu1/Downloads/TOEFLiBT  词以类记2.0.txt` directly or generate small validated derived content.
+- 2026-06-19: Added deterministic JSON save/load with autosave after each handled turn, ignored local save files, and covered restore behavior with tests.

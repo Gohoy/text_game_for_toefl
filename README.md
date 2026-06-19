@@ -29,8 +29,14 @@ Current supported actions include:
 - `status`
 - `quit`
 
-The full source vocabulary file has been copied into:
+Progress is autosaved after each handled turn:
 
 ```text
-data/raw/TOEFLiBT  词以类记2.0.txt
+data/saves/slot1.json
+```
+
+The full TOEFL vocabulary source should stay outside the repo and be read from:
+
+```text
+/Users/gaohongyu1/Downloads/TOEFLiBT  词以类记2.0.txt
 ```

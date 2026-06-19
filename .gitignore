@@ -4,6 +4,7 @@ __pycache__/
 .mypy_cache/
 .venv/
 data/raw/
+data/saves/
 dist/
 build/
 *.egg-info/

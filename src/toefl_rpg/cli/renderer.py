@@ -34,9 +34,11 @@ class Renderer:
     def __init__(self, console: object) -> None:
         self.console = console
 
-    def show_welcome(self) -> None:
+    def show_welcome(self, loaded: bool = False) -> None:
+        save_text = "Saved progress loaded." if loaded else "New game started."
         if Panel is None:
             self.console.print("=== TOEFL Text RPG ===")
+            self.console.print(save_text)
             self.console.print(
                 "Type full English sentences such as I want to inspect the microscope "
                 "or short commands such as go east. Type quit to leave."
@@ -45,6 +47,7 @@ class Renderer:
 
         self.console.print(
             Panel(
+                f"{save_text}\n\n"
                 "Type full English sentences such as [bold]I want to inspect the microscope[/] "
                 "or short commands such as [bold]go east[/]. Type [bold]quit[/] to leave.",
                 title="TOEFL Text RPG",
