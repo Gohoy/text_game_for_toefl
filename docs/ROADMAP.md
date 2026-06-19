@@ -27,3 +27,4 @@
 - 2026-06-18: Added deterministic Biology Investigation quest progress with objectives, quest XP, status/UI display, and tests.
 - 2026-06-18: Removed the tracked raw vocabulary copy; future import work should read `/Users/gaohongyu1/Downloads/TOEFLiBT  词以类记2.0.txt` directly or generate small validated derived content.
 - 2026-06-19: Added deterministic JSON save/load with autosave after each handled turn, ignored local save files, and covered restore behavior with tests.
+- 2026-06-20: Added a deterministic TOEFL vocabulary importer that parses external source headings into structured categories without copying the full source into the repo.
