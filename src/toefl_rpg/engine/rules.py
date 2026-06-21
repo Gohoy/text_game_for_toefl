@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 from toefl_rpg.content.schema import World
 from toefl_rpg.engine.quests import (
     ANALYZE_FUNGUS_SAMPLE,
@@ -31,7 +33,7 @@ class GameEngine:
                 (
                     "Try full sentences: I want to go north; I want to inspect the microscope; "
                     "I want to collect the fungus sample; I want to use the microscope; "
-                    "talk to Dr. Lin."
+                    "talk to Dr. Lin; The fungus is vital for the forest."
                 ),
                 feedback,
             )
@@ -51,9 +53,12 @@ class GameEngine:
             return self._use(intent, feedback)
         if intent.action == "talk":
             return self._talk(intent, feedback)
+        practice_result = self._practice_sentence(text, feedback)
+        if practice_result is not None:
+            return practice_result
         return TurnResult(
             False,
-            "I could not turn that sentence into a game action yet. Try: go north, inspect microscope, collect sample, or talk to Dr. Lin.",
+            "I could not turn that sentence into a game action yet. Try: go north, inspect microscope, collect sample, talk to Dr. Lin, or write a sentence using this room's vocabulary.",
             feedback,
         )
 
@@ -178,6 +183,30 @@ class GameEngine:
     def _core_words_in_text(self, text: str) -> list[str]:
         lowered = text.lower()
         return [word for word in self.state.world.core_words if word.lower() in lowered]
+
+    def _practice_sentence(self, text: str, feedback: str) -> Optional[TurnResult]:
+        if len(text.split()) < 4:
+            return None
+
+        room_words = self.state.current_room.target_words
+        practiced = self._core_words_in_text(text)
+        contextual_words = [word for word in practiced if word in room_words]
+        if not contextual_words:
+            return None
+
+        gained_xp = self._practice_words(contextual_words, 8)
+        words_text = ", ".join(contextual_words)
+        if gained_xp:
+            return TurnResult(
+                True,
+                f"You used target vocabulary in context: {words_text}. XP +{gained_xp}.",
+                feedback,
+            )
+        return TurnResult(
+            True,
+            f"You used already-practiced vocabulary in context: {words_text}.",
+            feedback,
+        )
 
     def _inventory_summary(self) -> str:
         if not self.state.player.inventory:

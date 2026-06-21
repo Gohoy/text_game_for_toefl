@@ -78,3 +78,28 @@ def test_biology_quest_progress_awards_xp_once() -> None:
     assert "Quest updated" in analyze_result.message
     assert "Quest updated" not in repeat_result.message
     assert engine.state.player.xp == xp_after_first_analysis
+
+
+def test_freeform_sentence_practices_contextual_room_words_once() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+    engine.handle("go north")
+
+    result = engine.handle("The fungus is vital for the old forest.")
+    xp_after_first_sentence = engine.state.player.xp
+    repeat_result = engine.handle("The fungus is vital for the old forest.")
+
+    assert result.success
+    assert "fungus" in engine.state.mastered_words
+    assert "vital" in engine.state.mastered_words
+    assert xp_after_first_sentence == 16
+    assert repeat_result.success
+    assert engine.state.player.xp == xp_after_first_sentence
+
+
+def test_freeform_sentence_must_use_current_room_vocabulary() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+
+    result = engine.handle("The microscope shows a bacterial strain.")
+
+    assert not result.success
+    assert "microscope" not in engine.state.mastered_words
