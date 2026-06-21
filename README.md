@@ -30,6 +30,8 @@ Current supported actions include:
 - `status`
 - `quit`
 
+The game gives deterministic English feedback for common patterns such as `I want go...`, `I want collect...`, and `talk researcher`.
+
 Progress is autosaved after each handled turn:
 
 ```text

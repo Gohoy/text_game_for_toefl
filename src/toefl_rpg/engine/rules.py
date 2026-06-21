@@ -10,6 +10,7 @@ from toefl_rpg.engine.quests import (
     step_for_task,
 )
 from toefl_rpg.engine.state import GameState, TurnResult
+from toefl_rpg.language.feedback import evaluate_english
 from toefl_rpg.language.parser import ParsedIntent, parse_intent
 
 
@@ -23,7 +24,7 @@ class GameEngine:
 
     def handle(self, text: str) -> TurnResult:
         intent = parse_intent(text)
-        feedback = self._english_feedback(text)
+        feedback = evaluate_english(text)
 
         if intent.action == "quit":
             return TurnResult(True, "Progress saved. Goodbye.", feedback, True)
@@ -154,14 +155,6 @@ class GameEngine:
             ),
             feedback,
         )
-
-    def _english_feedback(self, text: str) -> str:
-        lowered = text.lower()
-        if "want collect" in lowered:
-            return "Better English: I want to collect ..."
-        if len(text.split()) >= 4:
-            return "Good: you used a full sentence."
-        return "Short command accepted. Try a full sentence for better practice."
 
     def _find_visible_word(self, target: str, candidates: list[str]) -> str:
         target = target.lower()

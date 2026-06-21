@@ -103,3 +103,11 @@ def test_freeform_sentence_must_use_current_room_vocabulary() -> None:
 
     assert not result.success
     assert "microscope" not in engine.state.mastered_words
+
+
+def test_engine_returns_specific_english_feedback() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+
+    result = engine.handle("I want go east")
+
+    assert result.english_feedback == "Better English: I want to go ..."
