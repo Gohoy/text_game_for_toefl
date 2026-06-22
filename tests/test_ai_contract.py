@@ -12,8 +12,10 @@ from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import RoomNarrationRequest
+from toefl_rpg.ai.contract import StructuredContentDraft
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
+from toefl_rpg.ai.contract import VocabularyExplanation
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
 from toefl_rpg.ai.contract import require_ai_provider
 from toefl_rpg.engine.actions import DETERMINISTIC_ACTIONS
@@ -52,6 +54,16 @@ def test_ai_turn_feedback_requires_player_facing_text() -> None:
         )
 
 
+def test_turn_feedback_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        TurnFeedback(
+            narration="You move carefully.",
+            sentence_feedback="Use a clear verb.",
+            suggested_sentence="I go north.",
+            xp=100,
+        )
+
+
 def test_fake_ai_provider_supports_vocabulary_explanations() -> None:
     provider = FakeAIProvider()
     request = VocabularyExplanationRequest(
@@ -66,6 +78,17 @@ def test_fake_ai_provider_supports_vocabulary_explanations() -> None:
     assert "biology" in response.plain_meaning
     assert response.example_sentence
     assert response.memory_hint
+
+
+def test_vocabulary_explanation_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        VocabularyExplanation(
+            word="fungus",
+            plain_meaning="A living growth.",
+            example_sentence="A fungus grows in the forest.",
+            memory_hint="Think of forest growth.",
+            mastered=True,
+        )
 
 
 def test_fake_ai_provider_supports_structured_content_drafts() -> None:
@@ -83,6 +106,31 @@ def test_fake_ai_provider_supports_structured_content_drafts() -> None:
         "theme": "biology",
         "required_words": ["fungus", "symbiosis"],
     }
+
+
+def test_structured_content_draft_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        StructuredContentDraft(
+            draft_type="room_draft",
+            payload={"theme": "biology"},
+            xp=100,
+        )
+
+
+def test_player_facing_response_schemas_are_strict_for_codex() -> None:
+    response_models = [
+        TurnFeedback,
+        VocabularyExplanation,
+        PlayerSentenceInterpretation,
+        NPCDialogue,
+        RoomNarration,
+        ReviewAnswerEvaluation,
+        StructuredContentDraft,
+    ]
+
+    for response_model in response_models:
+        schema = response_model.model_json_schema()
+        assert schema["additionalProperties"] is False
 
 
 def test_fake_ai_provider_supports_player_sentence_interpretation() -> None:

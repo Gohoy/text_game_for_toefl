@@ -37,7 +37,7 @@ class CodexCliProvider:
     def __init__(
         self,
         executable: str = "codex",
-        timeout_seconds: int = 60,
+        timeout_seconds: int = 180,
         cwd: Optional[Path] = None,
         runner: Runner = subprocess.run,
     ) -> None:
@@ -111,7 +111,7 @@ class CodexCliProvider:
             schema_path = Path(temp_dir) / "response_schema.json"
             output_path = Path(temp_dir) / "last_message.json"
             schema_path.write_text(
-                json.dumps(response_model.model_json_schema()),
+                json.dumps(self._build_response_schema(response_model)),
                 encoding="utf-8",
             )
 
@@ -161,6 +161,17 @@ class CodexCliProvider:
             str(output_path),
             "-",
         ]
+
+    def _build_response_schema(
+        self,
+        response_model: Type[ResponseModel],
+    ) -> dict[str, object]:
+        schema = response_model.model_json_schema()
+        properties = schema.get("properties")
+        if isinstance(properties, dict):
+            schema["additionalProperties"] = False
+            schema["required"] = list(properties)
+        return schema
 
     def _build_prompt(self, purpose: str, payload: dict[str, object]) -> str:
         return (

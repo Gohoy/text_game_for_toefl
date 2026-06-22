@@ -15,6 +15,8 @@ from toefl_rpg.engine.storage import DEFAULT_SAVE_PATH, load_game, save_game
 
 
 SAVE_PATH_ENV_VAR = "TOEFL_RPG_SAVE_PATH"
+CODEX_TIMEOUT_ENV_VAR = "TOEFL_RPG_CODEX_TIMEOUT"
+DEFAULT_CODEX_TIMEOUT_SECONDS = 180
 
 
 def build_ai_provider_from_env() -> AIProvider:
@@ -26,7 +28,9 @@ def build_ai_provider_from_env() -> AIProvider:
             "Unsupported TOEFL_RPG_AI_PROVIDER. Use 'codex' for normal play or 'fake' for smoke tests."
         )
     executable = os.environ.get("TOEFL_RPG_CODEX_EXECUTABLE", "codex")
-    timeout = int(os.environ.get("TOEFL_RPG_CODEX_TIMEOUT", "60"))
+    timeout = int(
+        os.environ.get(CODEX_TIMEOUT_ENV_VAR, str(DEFAULT_CODEX_TIMEOUT_SECONDS))
+    )
     return CodexCliProvider(executable=executable, timeout_seconds=timeout)
 
 

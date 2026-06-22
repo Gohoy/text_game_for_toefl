@@ -24,6 +24,9 @@ inventory before anything changes. Review answers are also evaluated through the
 AI provider for meaningful target-word use, while deterministic code still
 controls review stage, XP, duplicate suppression, and saves. The executable
 defaults to `codex`; override it with `TOEFL_RPG_CODEX_EXECUTABLE` when needed.
+Live Codex turns default to a 180-second timeout. If your configured model is
+slower, set `TOEFL_RPG_CODEX_TIMEOUT`, for example
+`TOEFL_RPG_CODEX_TIMEOUT=300`.
 
 For deterministic smoke tests without a live Codex call, opt into the fake test
 provider explicitly. Use `TOEFL_RPG_SAVE_PATH` to keep smoke runs away from the

@@ -39,7 +39,10 @@ Review answer evaluation is advisory but required in normal runtime. The request
 
 ## Validation Rule
 
-AI output must be parsed into typed models before use. Invalid or incomplete AI output must not mutate game state.
+AI output must be parsed into typed models before use. Player-facing response
+schemas are strict and include `additionalProperties: false` so `codex exec`
+can pass them to the OpenAI structured-output response format. Invalid,
+incomplete, or extra-field AI output must not mutate game state.
 
 AI-authored world-pack drafts must pass through `validate_world_pack_draft()` or
 `draft_world_pack()` in `src/toefl_rpg/ai/drafts.py` before they can be reviewed

@@ -23,6 +23,9 @@ def test_codex_cli_provider_builds_bounded_exec_command(tmp_path) -> None:
         output_path = Path(command[command.index("--output-last-message") + 1])
         schema_path = Path(command[command.index("--output-schema") + 1])
         assert schema_path.exists()
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        assert schema["additionalProperties"] is False
+        assert set(schema["required"]) == set(schema["properties"])
         output_path.write_text(
             json.dumps(
                 {

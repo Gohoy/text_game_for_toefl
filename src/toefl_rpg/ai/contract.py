@@ -21,6 +21,8 @@ class TurnFeedbackRequest(BaseModel):
 
 
 class TurnFeedback(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     narration: str = Field(min_length=1)
     sentence_feedback: str = Field(min_length=1)
     suggested_sentence: str = Field(min_length=1)
@@ -34,6 +36,8 @@ class VocabularyExplanationRequest(BaseModel):
 
 
 class VocabularyExplanation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     word: str = Field(min_length=1)
     plain_meaning: str = Field(min_length=1)
     example_sentence: str = Field(min_length=1)
@@ -64,6 +68,8 @@ class ContentDraftRequest(BaseModel):
 
 
 class StructuredContentDraft(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     draft_type: str = Field(min_length=1)
     payload: dict[str, object] = Field(default_factory=dict)
 
