@@ -5,18 +5,25 @@ from typing import Any
 
 import pytest
 
+from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import FakeAIProvider
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
+from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.rules import GameEngine
 from toefl_rpg.language.parser import parse_intent
 
 
 CORPUS_PATH = Path(__file__).parent / "fixtures" / "learner_sentence_regression.json"
+REVIEW_CORPUS_PATH = Path(__file__).parent / "fixtures" / "review_answer_regression.json"
 
 
 def load_corpus() -> list[dict[str, Any]]:
     return json.loads(CORPUS_PATH.read_text(encoding="utf-8"))
+
+
+def load_review_corpus() -> list[dict[str, Any]]:
+    return json.loads(REVIEW_CORPUS_PATH.read_text(encoding="utf-8"))
 
 
 class CorpusAIProvider(FakeAIProvider):
@@ -37,10 +44,31 @@ class CorpusAIProvider(FakeAIProvider):
         return PlayerSentenceInterpretation(**interpretation)
 
 
+class ReviewCorpusAIProvider(FakeAIProvider):
+    def __init__(self, case: dict[str, Any]) -> None:
+        super().__init__()
+        self.case = case
+
+    def evaluate_review_answer(self, request):
+        self.review_evaluation_requests.append(request)
+        evaluation = self.case.get("ai_review_evaluation")
+        if evaluation is None:
+            return super().evaluate_review_answer(request)
+        if self.case["category"] == "malformed":
+            return evaluation
+        return ReviewAnswerEvaluation(**evaluation)
+
+
 def test_learner_sentence_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_corpus()}
 
     assert {"accepted", "rejected", "ambiguous"} <= categories
+
+
+def test_review_answer_corpus_has_required_case_types() -> None:
+    categories = {case["category"] for case in load_review_corpus()}
+
+    assert {"accepted", "rejected", "malformed"} <= categories
 
 
 @pytest.mark.parametrize("case", load_corpus(), ids=lambda case: case["id"])
@@ -73,3 +101,37 @@ def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
         assert case["expected_inventory_contains"] in engine.state.player.inventory
     if case["category"] in {"rejected", "ambiguous"}:
         assert engine.state == before_state
+
+
+@pytest.mark.parametrize("case", load_review_corpus(), ids=lambda case: case["id"])
+def test_review_answer_corpus_routes(case: dict[str, Any]) -> None:
+    provider = ReviewCorpusAIProvider(case)
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("review")
+    provider.review_evaluation_requests.clear()
+    before_state = deepcopy(engine.state)
+
+    if "expected_exception" in case:
+        with pytest.raises(AIProviderUnavailable, match=case["expected_exception"]):
+            engine.handle(case["sentence"])
+        assert engine.state == before_state
+    else:
+        result = engine.handle(case["sentence"])
+        assert result.success is case["expected_success"]
+        assert case["expected_message_contains"] in result.message
+
+    reached_ai = bool(provider.review_evaluation_requests)
+    assert reached_ai is case["expected_ai_evaluation"]
+    if reached_ai:
+        assert provider.review_evaluation_requests[0].word == "fungus"
+        assert (
+            provider.review_evaluation_requests[0].learner_sentence
+            == case["sentence"]
+        )
+
+    fungus = engine.state.vocabulary_mastery["fungus"]
+    assert engine.state.active_review_word == case["expected_active_review_word"]
+    assert fungus.review_stage == case["expected_review_stage"]
+    assert engine.state.player.xp == case["expected_xp"]

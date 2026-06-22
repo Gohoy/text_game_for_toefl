@@ -1,0 +1,58 @@
+[
+  {
+    "id": "review_answer_ai_accepted",
+    "category": "accepted",
+    "sentence": "A fungus can be vital for forest metabolism.",
+    "expected_success": true,
+    "expected_message_contains": "Result: Review complete for 'fungus'.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": true,
+      "explanation": "The sentence uses fungus as a biological organism.",
+      "suggested_sentence": "A fungus can be vital for forest metabolism."
+    },
+    "expected_active_review_word": null,
+    "expected_review_stage": 1,
+    "expected_xp": 26
+  },
+  {
+    "id": "review_answer_deterministic_rejected_before_ai",
+    "category": "rejected",
+    "sentence": "It matters.",
+    "expected_success": false,
+    "expected_message_contains": "write a full sentence that uses 'fungus'",
+    "expected_ai_evaluation": false,
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
+    "id": "review_answer_ai_rejected",
+    "category": "rejected",
+    "sentence": "The word fungus appears in my sentence.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence names the word but does not show its meaning.",
+      "suggested_sentence": "A fungus can decompose wood in a forest."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
+    "id": "review_answer_malformed_ai_evaluation",
+    "category": "malformed",
+    "sentence": "A fungus can be vital for forest metabolism.",
+    "expected_exception": "AI review evaluation failed",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "explanation": "Missing the required judgment."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  }
+]
