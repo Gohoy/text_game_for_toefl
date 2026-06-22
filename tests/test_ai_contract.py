@@ -341,6 +341,30 @@ def test_fake_ai_provider_supports_room_narration() -> None:
     assert provider.room_narration_requests == [request]
 
 
+def test_room_narration_request_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        RoomNarrationRequest(
+            location_id="fungus_grove",
+            room_name="Fungus Grove",
+            room_description="Pale mushrooms cover old roots.",
+            quest_progress="Biology Investigation 0/3",
+            exits={"south": "research_camp"},
+            visible_items=["fungus sample"],
+            visible_npcs=[],
+            visible_enemies=[],
+            target_words=["fungus", "symbiosis"],
+            xp=100,
+            inventory=["fungus sample"],
+            quest_completed=True,
+        )
+
+    message = str(exc_info.value)
+    assert "xp" in message
+    assert "inventory" in message
+    assert "quest_completed" in message
+    assert "Extra inputs are not permitted" in message
+
+
 def test_room_narration_rejects_extra_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         RoomNarration(

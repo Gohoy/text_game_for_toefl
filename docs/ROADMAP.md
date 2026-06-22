@@ -68,6 +68,7 @@ Phase 1 is complete. Exit evidence:
 - AI NPC dialogue with unauthorized extra fields is rejected before display while preserving deterministic state
 - AI NPC dialogue requests reject unauthorized extra state-like fields before reaching providers
 - AI-backed room look narration grounded in deterministic room state
+- AI room narration requests reject unauthorized extra state-like fields before reaching providers
 - malformed AI room narration responses are rejected with clear provider errors and state preservation
 - mismatched AI room narration room IDs are rejected before display while preserving deterministic state
 - AI room narration with unauthorized extra fields is rejected before display while preserving deterministic state
@@ -1048,7 +1049,7 @@ None.
 
 ### T-182 — Add room narration request strictness regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep room narration prompts bounded to deterministic room context before they reach providers.
 - **Acceptance criteria:**
@@ -1057,6 +1058,30 @@ None.
   - tests do not require live Codex CLI
 - **Verification:** AI contract tests and full suite.
 - **Dependencies:** T-181.
+
+### T-183 — Add review-evaluation request strictness regression
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Keep review-evaluation prompts bounded to the active review word and learner answer before they reach providers.
+- **Acceptance criteria:**
+  - review-evaluation request models reject unauthorized extra fields such as XP, inventory, or review-stage overrides
+  - existing fake-provider review-evaluation behavior remains unchanged
+  - tests do not require live Codex CLI
+- **Verification:** AI contract tests and full suite.
+- **Dependencies:** T-182.
+
+### T-184 — Audit remaining AI request strictness coverage
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Confirm every AI request model has explicit strictness coverage or a documented reason for not needing it.
+- **Acceptance criteria:**
+  - tests or notes cover each request model in `toefl_rpg.ai.contract`
+  - any missing strictness regression is split into a small follow-up task
+  - no live Codex CLI is required
+- **Verification:** AI contract tests and full suite.
+- **Dependencies:** T-183.
 
 ## Blocked Tasks
 
@@ -1106,6 +1131,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-182 by adding a regression that AI room narration requests reject unauthorized state-like extra fields before provider use while preserving fake-provider narration behavior.
 - 2026-06-23: Completed T-181 by making AI NPC dialogue requests reject unauthorized state-like extra fields before provider use while preserving fake-provider dialogue behavior.
 - 2026-06-23: Completed T-180 by adding a regression that parser-miss AI interpretation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider interpretation behavior.
 - 2026-06-23: Completed T-179 by making AI vocabulary-explanation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider explanation behavior.
@@ -1115,6 +1141,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-175 by adding subprocess-fake Codex CLI provider coverage for strict content-draft response schemas and unchanged structured draft parsing.
 - 2026-06-23: Completed T-174 by adding AI content-draft and world-schema regressions that reject nested mutation-like payload fields before generated world content is accepted.
 - 2026-06-23: Completed T-173 by validating AI content-draft envelopes before payload acceptance and rejecting unauthorized mutation-like top-level fields.
-- 2026-06-22: Completed T-172 by adding a fake-provider regression that rejects AI review evaluations containing unauthorized mutation-like fields while preserving the active review word.
 
 Keep at most ten items here.
