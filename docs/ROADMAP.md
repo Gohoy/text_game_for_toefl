@@ -57,6 +57,7 @@ Phase 1 is complete when:
 - deterministic placeholder English corrections retained only for tests/development
 - JSON autosave and load
 - versioned vocabulary mastery records in saves, with legacy-save defaults
+- deterministic mastery events for encounters, correct use, and incorrect attempts
 - external vocabulary importer
 - focused tests for several existing systems
 
@@ -74,7 +75,7 @@ Evidence from an in-memory playthrough:
 - one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
 - a fresh in-memory playtest also found verbose movement sentences such as `I go north to the fungus grove.` are not yet parsed as movement, confirming the next learning-loop work should keep improving structured interpretation
 
-Conclusion: continue with T-121 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, and saves now carry a versioned vocabulary mastery record. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: continue with T-122 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, and deterministic learning events now update mastery records for encounters, correct use, and incorrect attempts. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -223,7 +224,7 @@ None.
 
 ### T-121 — Record encounter and practice events
 
-- **State:** ready
+- **State:** done
 - **Priority:** P1
 - **Goal:** Update mastery deterministically when a word is encountered or correctly practiced.
 - **Acceptance criteria:**
@@ -235,7 +236,7 @@ None.
 
 ### T-122 — Prevent mastery reward farming
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P1
 - **Goal:** Stop repeated identical sentence use in the same context from awarding unlimited mastery or XP.
 - **Acceptance criteria:**
@@ -327,6 +328,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-121 by adding deterministic learning events for word encounters, correct usage, and incorrect attempts, wiring room encounters and practice actions into mastery records, and covering context IDs with focused tests.
 - 2026-06-22: Completed T-120 by adding explicit `VocabularyMastery` state, serializing a versioned `mastery` save block, and loading legacy saves without mastery data through safe default records.
 - 2026-06-22: Completed T-115 by validating world-pack start-room, exit, item, NPC, enemy, and quest-task references before runtime conversion, with focused missing-reference tests and updated Biology pack namespaces.
 - 2026-06-22: Completed T-114 by switching Biology startup from hardcoded content to the validated JSON world pack, removing the old hardcoded room/enemy definitions, preserving behavior through characterization tests, and adding package-data metadata for the pack.
@@ -336,6 +338,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-107 by routing normal turn feedback through the required AI provider, keeping deterministic feedback behind explicit test/development paths, rolling back state on AI feedback failure, and documenting fake-provider CLI smoke.
 - 2026-06-22: Completed T-106 by adding a bounded Codex CLI provider that requests schema-validated JSON, handles missing executable and timeout failures, and is covered by fake-runner tests.
 - 2026-06-22: Completed T-105 by adding the required AI-agent contract, validated request/response models, a fake provider for tests, and explicit missing-provider behavior.
-- 2026-06-22: Completed T-110 by adding characterization tests for the current Biology world identity, topology, content placement, enemy contract, target words, and quest steps.
 
 Keep at most ten items here.

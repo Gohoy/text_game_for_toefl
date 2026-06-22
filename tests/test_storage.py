@@ -41,21 +41,20 @@ def test_new_save_contains_versioned_mastery_data(tmp_path) -> None:
 
     payload = json.loads(save_path.read_text(encoding="utf-8"))
     assert payload["mastery"]["version"] == 1
-    assert set(payload["mastery"]["words"]) == {"fungus", "vital"}
+    assert {"fungus", "symbiosis", "vital"} <= set(payload["mastery"]["words"])
     fungus_record = payload["mastery"]["words"]["fungus"]
-    assert fungus_record == {
-        "word": "fungus",
-        "status": "learning",
-        "mastery_points": 1,
-        "encounter_count": 0,
-        "correct_use_count": 1,
-        "incorrect_use_count": 0,
-        "review_stage": 0,
-        "last_practiced_at": None,
-        "next_review_at": None,
-        "distinct_context_ids": [],
-        "recent_response_fingerprints": [],
-    }
+    assert fungus_record["word"] == "fungus"
+    assert fungus_record["status"] == "learning"
+    assert fungus_record["mastery_points"] == 1
+    assert fungus_record["encounter_count"] == 1
+    assert fungus_record["correct_use_count"] == 1
+    assert fungus_record["incorrect_use_count"] == 0
+    assert fungus_record["distinct_context_ids"] == ["room:fungus_grove"]
+
+    symbiosis_record = payload["mastery"]["words"]["symbiosis"]
+    assert symbiosis_record["status"] == "encountered"
+    assert symbiosis_record["mastery_points"] == 0
+    assert symbiosis_record["encounter_count"] == 1
 
 
 def test_load_legacy_save_without_mastery_uses_safe_defaults(tmp_path) -> None:

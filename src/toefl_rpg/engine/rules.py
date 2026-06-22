@@ -8,6 +8,11 @@ from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import require_ai_provider
 from toefl_rpg.content.schema import World
 from toefl_rpg.engine.combat import PLAYER_ATTACK, PLAYER_DEFENSE, calculate_damage
+from toefl_rpg.engine.mastery import LearningEvent
+from toefl_rpg.engine.mastery import record_learning_event
+from toefl_rpg.engine.mastery import record_room_encounter
+from toefl_rpg.engine.mastery import response_fingerprint
+from toefl_rpg.engine.mastery import room_context_id
 from toefl_rpg.engine.quests import (
     ANALYZE_FUNGUS_SAMPLE,
     CLEAR_INVASIVE_VINE,
@@ -38,8 +43,10 @@ class GameEngine:
         ai_provider: Optional[AIProvider] = None,
         use_deterministic_feedback: bool = False,
     ) -> "GameEngine":
+        state = GameState(world=world, current_room_id=world.start_room_id)
+        record_room_encounter(state)
         return cls(
-            GameState(world=world, current_room_id=world.start_room_id),
+            state,
             ai_provider=ai_provider,
             use_deterministic_feedback=use_deterministic_feedback,
         )
@@ -161,6 +168,7 @@ class GameEngine:
         if intent.target not in room.exits:
             return TurnResult(False, f"You cannot go {intent.target} from here.", feedback)
         self.state.current_room_id = room.exits[intent.target]
+        record_room_encounter(self.state)
         return TurnResult(True, f"You go {intent.target}.", feedback)
 
     def _inspect(self, intent: ParsedIntent, feedback: str) -> TurnResult:
@@ -323,9 +331,16 @@ class GameEngine:
 
     def _practice_words(self, words: list[str], xp_each: int) -> int:
         gained_xp = 0
+        context_id = room_context_id(self.state.current_room_id)
         for word in words:
             if word in self.state.mastered_words:
                 continue
+            record_learning_event(
+                self.state,
+                LearningEvent.USAGE_CORRECT,
+                word,
+                context_id,
+            )
             self.state.mastered_words.add(word)
             self.state.player.xp += xp_each
             gained_xp += xp_each
@@ -343,6 +358,7 @@ class GameEngine:
         practiced = self._core_words_in_text(text)
         contextual_words = [word for word in practiced if word in room_words]
         if not contextual_words:
+            self._record_incorrect_practice(text, practiced)
             return None
 
         gained_xp = self._practice_words(contextual_words, 8)
@@ -381,3 +397,14 @@ class GameEngine:
         self.state.completed_tasks.add(task_id)
         self.state.player.xp += step.xp
         return f" Quest updated: {step.title}. XP +{step.xp}."
+
+    def _record_incorrect_practice(self, text: str, words: list[str]) -> None:
+        context_id = room_context_id(self.state.current_room_id)
+        for word in words:
+            record_learning_event(
+                self.state,
+                LearningEvent.USAGE_INCORRECT,
+                word,
+                context_id,
+                response_fingerprint(text, word, context_id),
+            )
