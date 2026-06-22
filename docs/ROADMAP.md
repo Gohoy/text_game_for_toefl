@@ -49,6 +49,7 @@ Phase 1 is complete when:
 - Rich-based room presentation
 - five-room Biology world loaded from the validated JSON world pack
 - full-sentence action parsing for common actions
+- verbose directional sentences such as `I go north to the fungus grove.`
 - movement, inspection, inventory, collect, and use
 - deterministic combat
 - a three-step Biology Investigation quest
@@ -80,7 +81,7 @@ Evidence from an in-memory playthrough:
 - one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
 - a fresh in-memory playtest also found verbose movement sentences such as `I go north to the fungus grove.` are not yet parsed as movement, confirming the next learning-loop work should keep improving structured interpretation
 
-Conclusion: continue with T-126 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order, an end-to-end test protects quest completion plus review persistence, and visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: continue with T-127 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order, an end-to-end test protects quest completion plus review persistence, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, and verbose directional sentences now resolve to deterministic movement intents. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -301,7 +302,7 @@ None.
 
 ### T-126 — Improve structured interpretation for verbose movement
 
-- **State:** ready
+- **State:** done
 - **Priority:** P1
 - **Goal:** Handle common full-sentence movement phrasing such as `I go north to the fungus grove`.
 - **Acceptance criteria:**
@@ -310,6 +311,45 @@ None.
   - tests cover at least one accepted verbose sentence and one rejected impossible move
 - **Verification:** parser/engine tests and CLI smoke.
 - **Dependencies:** T-125.
+
+### T-127 — Add a structured AI interpretation contract
+
+- **State:** ready
+- **Priority:** P1
+- **Goal:** Define the AI-provider request and validated response shape for interpreting open-ended player sentences into proposed game intents.
+- **Acceptance criteria:**
+  - contract includes player sentence, current room context, visible entities, exits, and target words
+  - response is limited to known deterministic actions and a proposed target
+  - invalid response shapes fail clearly before reaching engine state mutation
+  - fake provider supports deterministic tests without paid API access
+- **Verification:** AI contract tests and provider validation tests.
+- **Dependencies:** T-126.
+
+### T-128 — Use AI interpretation as a validated fallback
+
+- **State:** planned
+- **Priority:** P1
+- **Goal:** When deterministic parsing returns unknown, ask the AI provider for a structured interpretation and then run the deterministic engine validation.
+- **Acceptance criteria:**
+  - fallback is used only after deterministic parser rules miss
+  - AI cannot invent unavailable rooms, items, enemies, XP, or quest completion
+  - ambiguous or invalid AI interpretations produce a clear player message without state mutation
+  - tests cover one accepted open-ended command and one rejected AI-invented target
+- **Verification:** parser/engine/provider tests and CLI smoke with fake provider.
+- **Dependencies:** T-127.
+
+### T-129 — Add AI-backed NPC dialogue
+
+- **State:** planned
+- **Priority:** P1
+- **Goal:** Make `talk to Dr. Lin` use a structured AI dialogue response while deterministic code still owns quest state and rewards.
+- **Acceptance criteria:**
+  - dialogue request includes NPC, room, quest progress, and visible target words
+  - response is validated before display
+  - AI dialogue cannot mutate inventory, XP, quest state, mastery, or saves
+  - missing or invalid AI output fails clearly and preserves state
+- **Verification:** AI contract tests, engine tests, CLI smoke with fake provider.
+- **Dependencies:** T-127.
 
 ## Blocked Tasks
 
@@ -357,6 +397,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-126 by parsing verbose directional sentences such as `I go north to the fungus grove.` into deterministic move intents while preserving engine-side exit validation for impossible movement.
 - 2026-06-22: Completed T-125 by adding an AI-backed `explain <word>` command for visible or practiced Biology vocabulary, validating requested words before provider calls, displaying structured explanations without state mutation, and preserving state on invalid AI output.
 - 2026-06-22: Completed T-130 by adding a fake-AI end-to-end Biology playthrough covering movement, vocabulary practice, due review completion, quest completion, combat, save, reload, and post-load status.
 - 2026-06-22: Completed T-123 by adding a deterministic review-due selector with an injected clock, stable due ordering, optional limiting, and regression coverage for unseen and malformed review records.
@@ -366,6 +407,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-115 by validating world-pack start-room, exit, item, NPC, enemy, and quest-task references before runtime conversion, with focused missing-reference tests and updated Biology pack namespaces.
 - 2026-06-22: Completed T-114 by switching Biology startup from hardcoded content to the validated JSON world pack, removing the old hardcoded room/enemy definitions, preserving behavior through characterization tests, and adding package-data metadata for the pack.
 - 2026-06-22: Completed T-113 by encoding the current Biology world as `src/toefl_rpg/data/worlds/biology_realm_01.json`, including rooms, exits, items, enemies, target words, core words, and quest steps matched against the current runtime world.
-- 2026-06-22: Completed T-112 by adding `load_world_pack(path)`, actionable loader errors for missing files, invalid JSON, and schema failures, plus focused loader tests.
 
 Keep at most ten items here.

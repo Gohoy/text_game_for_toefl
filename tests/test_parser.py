@@ -8,6 +8,13 @@ def test_parse_full_sentence_movement() -> None:
     assert intent.target == "east"
 
 
+def test_parse_verbose_movement_to_named_room() -> None:
+    intent = parse_intent("I go north to the fungus grove.")
+
+    assert intent.action == "move"
+    assert intent.target == "north"
+
+
 def test_parse_inspect_sentence() -> None:
     intent = parse_intent("I want to inspect the microscope")
 

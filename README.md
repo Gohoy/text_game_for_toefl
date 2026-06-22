@@ -34,6 +34,7 @@ Current supported actions include:
 - `look`
 - `go east`
 - `I want to go to the east`
+- `I go north to the fungus grove.`
 - `I want to inspect the microscope`
 - `I want to collect the fungus sample`
 - `I want to use the microscope`

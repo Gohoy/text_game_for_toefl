@@ -10,7 +10,7 @@ class ParsedIntent:
 
 
 def parse_intent(text: str) -> ParsedIntent:
-    normalized = " ".join(text.lower().strip().split())
+    normalized = " ".join(text.lower().strip().split()).strip(".,!?")
     if normalized in {"quit", "exit"}:
         return ParsedIntent("quit")
     if normalized in {"help", "commands"}:
@@ -36,11 +36,16 @@ def parse_intent(text: str) -> ParsedIntent:
         return ParsedIntent("look")
 
     for direction in ("north", "south", "east", "west"):
+        padded = f" {normalized} "
         if normalized == direction or normalized.endswith(f" go {direction}"):
             return ParsedIntent("move", direction)
         if normalized.startswith(f"go {direction}") or f" to the {direction}" in normalized:
             return ParsedIntent("move", direction)
-        if f"walk {direction}" in normalized or f"move {direction}" in normalized:
+        if (
+            f" go {direction} " in padded
+            or f" walk {direction} " in padded
+            or f" move {direction} " in padded
+        ):
             return ParsedIntent("move", direction)
 
     for verb in ("inspect", "examine", "study", "look at"):

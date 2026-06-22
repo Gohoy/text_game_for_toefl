@@ -25,6 +25,25 @@ def test_move_between_rooms() -> None:
     assert engine.state.current_room_id == "microscope_tent"
 
 
+def test_verbose_movement_sentence_uses_deterministic_exits() -> None:
+    engine = new_test_engine()
+
+    result = engine.handle("I go north to the fungus grove.")
+
+    assert result.success
+    assert engine.state.current_room_id == "fungus_grove"
+
+
+def test_verbose_movement_rejects_unavailable_exit() -> None:
+    engine = new_test_engine()
+
+    result = engine.handle("I go west to the river.")
+
+    assert not result.success
+    assert "cannot go west" in result.message
+    assert engine.state.current_room_id == "research_camp"
+
+
 def test_runtime_requires_ai_provider_for_turn_feedback() -> None:
     engine = GameEngine.new_game(build_biology_realm())
 
