@@ -1,11 +1,16 @@
 from pathlib import Path
 
 from toefl_rpg.content.loader import load_world_pack
+from toefl_rpg.content.sample_world import BIOLOGY_WORLD_PACK_PATH
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.quests import BIOLOGY_STEPS
 
 
 BIOLOGY_PACK_PATH = Path("src/toefl_rpg/data/worlds/biology_realm_01.json")
+
+
+def test_runtime_biology_world_uses_repository_pack() -> None:
+    assert BIOLOGY_WORLD_PACK_PATH.samefile(BIOLOGY_PACK_PATH)
 
 
 def test_biology_world_pack_matches_current_runtime_world() -> None:

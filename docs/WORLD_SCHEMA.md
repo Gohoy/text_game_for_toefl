@@ -168,6 +168,8 @@ The first implemented pack model validates required fields, forbids runtime-stat
 
 World packs are loaded through `load_world_pack(path)` in `src/toefl_rpg/content/loader.py`. Loader failures are reported as `WorldPackLoadError` with messages for missing files, invalid JSON locations, and schema validation details.
 
+The Biology startup path uses `src/toefl_rpg/data/worlds/biology_realm_01.json` as the source of truth through `build_biology_realm()`. The legacy Python builder remains as a compatibility entry point, but it no longer owns hardcoded room or enemy content.
+
 ## Schema Evolution
 
 Every world pack has `schema_version`.

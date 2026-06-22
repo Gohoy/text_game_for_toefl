@@ -47,7 +47,7 @@ Phase 1 is complete when:
 
 - terminal startup through `python -m toefl_rpg`
 - Rich-based room presentation
-- five-room Biology world
+- five-room Biology world loaded from the validated JSON world pack
 - full-sentence action parsing for common actions
 - movement, inspection, inventory, collect, and use
 - deterministic combat
@@ -72,7 +72,7 @@ Evidence from an in-memory playthrough:
 - narrative and NPC text are static, so repeated play does not feel conversational or adaptive
 - one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
 
-Conclusion: continue with T-114 next. The next development work should switch Biology startup to the validated JSON pack without changing player-visible behavior. AI feedback is now wired into the turn loop, while deterministic code remains the authority for state changes and rewards.
+Conclusion: continue with T-115 next. Biology startup now uses the validated JSON pack without changing player-visible behavior. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -186,7 +186,7 @@ None.
 
 ### T-114 — Switch Biology startup to the JSON loader
 
-- **State:** ready
+- **State:** done
 - **Priority:** P0
 - **Goal:** Use the validated world pack at runtime without changing player-visible behavior.
 - **Acceptance criteria:**
@@ -198,7 +198,7 @@ None.
 
 ### T-115 — Validate cross-references
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P0
 - **Goal:** Reject exits, item references, enemy references, and quest references that point to missing IDs.
 - **Acceptance criteria:**
@@ -325,6 +325,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-114 by switching Biology startup from hardcoded content to the validated JSON world pack, removing the old hardcoded room/enemy definitions, preserving behavior through characterization tests, and adding package-data metadata for the pack.
 - 2026-06-22: Completed T-113 by encoding the current Biology world as `src/toefl_rpg/data/worlds/biology_realm_01.json`, including rooms, exits, items, enemies, target words, core words, and quest steps matched against the current runtime world.
 - 2026-06-22: Completed T-112 by adding `load_world_pack(path)`, actionable loader errors for missing files, invalid JSON, and schema failures, plus focused loader tests.
 - 2026-06-22: Completed T-111 by adding minimal `WorldPack` Pydantic models, duplicate room/enemy ID validation, runtime-state field rejection, conversion to the existing runtime `World`, and focused schema tests.
@@ -333,7 +334,6 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-105 by adding the required AI-agent contract, validated request/response models, a fake provider for tests, and explicit missing-provider behavior.
 - 2026-06-22: Updated project direction to make the AI agent required and central, with deterministic code retained as the authority for game-state changes.
 - 2026-06-22: Completed T-110 by adding characterization tests for the current Biology world identity, topology, content placement, enemy contract, target words, and quest steps.
-- 2026-06-22: Adopted the Codex automation documentation bundle, including the runbook, quality gates, world schema notes, learning design notes, and the `.codex/20_minute_prompt.md` scheduled prompt.
 
 Keep at most ten items here.
 

@@ -24,6 +24,9 @@ toefl-rpg = "toefl_rpg.app:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+toefl_rpg = ["data/worlds/*.json"]
+
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
