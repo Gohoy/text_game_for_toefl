@@ -38,6 +38,12 @@ Room narration is display-only. The request includes the deterministic room desc
 
 AI output must be parsed into typed models before use. Invalid or incomplete AI output must not mutate game state.
 
+AI-authored world-pack drafts must pass through `validate_world_pack_draft()` or
+`draft_world_pack()` in `src/toefl_rpg/ai/drafts.py` before they can be reviewed
+as usable content. These helpers reject unsupported draft types and reuse the
+`WorldPack` schema so malformed references, duplicate IDs, runtime-state fields,
+and missing required fields cannot enter runtime content.
+
 ## Codex CLI Provider
 
 The first concrete provider lives in `src/toefl_rpg/ai/codex_cli.py`.

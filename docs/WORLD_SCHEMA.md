@@ -175,6 +175,12 @@ World packs are loaded through `load_world_pack(path)` in `src/toefl_rpg/content
 
 The Biology startup path uses `src/toefl_rpg/data/worlds/biology_realm_01.json` as the source of truth through `build_biology_realm()`. The legacy Python builder remains as a compatibility entry point, but it no longer owns hardcoded room or enemy content.
 
+AI-generated world-pack drafts are not runtime content until they pass
+`validate_world_pack_draft()` or `draft_world_pack()` in
+`src/toefl_rpg/ai/drafts.py`. Those helpers accept only `world_pack` drafts and
+reuse the `WorldPack` model, including duplicate-ID, missing-reference, and
+runtime-state-field rejection.
+
 ## Schema Evolution
 
 Every world pack has `schema_version`.

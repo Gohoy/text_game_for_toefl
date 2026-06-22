@@ -228,6 +228,37 @@ class FakeAIProvider:
 
     def draft_content(self, request: ContentDraftRequest) -> StructuredContentDraft:
         self.content_requests.append(request)
+        if request.purpose == "world_pack":
+            first_word = request.required_words[0]
+            return StructuredContentDraft(
+                draft_type="world_pack",
+                payload={
+                    "schema_version": 1,
+                    "world_id": "fake_biology_world",
+                    "title": f"Fake {request.theme.title()} World",
+                    "source_category": request.theme,
+                    "difficulty": "A2",
+                    "start_room_id": "start_room",
+                    "core_words": list(request.required_words),
+                    "items": ["field notebook"],
+                    "npcs": ["Guide"],
+                    "rooms": [
+                        {
+                            "id": "start_room",
+                            "name": "Start Room",
+                            "description": "A fake AI-authored room for tests.",
+                            "exits": {},
+                            "items": ["field notebook"],
+                            "npcs": ["Guide"],
+                            "enemies": [],
+                            "target_words": [first_word],
+                        }
+                    ],
+                    "enemies": [],
+                    "quest_task_ids": [],
+                    "quest_steps": [],
+                },
+            )
         return StructuredContentDraft(
             draft_type=request.purpose,
             payload={"theme": request.theme, "required_words": request.required_words},
