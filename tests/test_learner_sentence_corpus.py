@@ -41,6 +41,8 @@ class CorpusAIProvider(FakeAIProvider):
                 confidence=0,
                 reason="No corpus fallback expected.",
             )
+        if self.case["category"] == "malformed":
+            return interpretation
         return PlayerSentenceInterpretation(**interpretation)
 
 
@@ -67,6 +69,7 @@ def test_learner_sentence_corpus_has_required_case_types() -> None:
         "rejected",
         "low_confidence",
         "unknown_interpretation",
+        "malformed",
     } <= categories
 
 
@@ -86,6 +89,15 @@ def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
     before_state = deepcopy(engine.state)
 
     parsed = parse_intent(case["sentence"])
+    if "expected_exception" in case:
+        with pytest.raises(AIProviderUnavailable, match=case["expected_exception"]):
+            engine.handle(case["sentence"])
+        assert engine.state == before_state
+        assert parsed.action == "unknown"
+        assert len(provider.interpretation_requests) == 1
+        assert provider.interpretation_requests[0].player_sentence == case["sentence"]
+        return
+
     result = engine.handle(case["sentence"])
 
     assert result.success is case["expected_success"]

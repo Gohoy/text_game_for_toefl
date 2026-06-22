@@ -83,5 +83,22 @@
     "expected_success": false,
     "expected_message_contains": "I could not turn that sentence into a game action yet.",
     "expected_state_unchanged": true
+  },
+  {
+    "id": "malformed_parser_miss_ai_response",
+    "category": "malformed",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "Could you process this specimen somehow?",
+    "ai_interpretation": {
+      "action": "collect",
+      "target": "fungus sample",
+      "confidence": 1.7,
+      "reason": "Confidence is outside the allowed range."
+    },
+    "expected_exception": "AI sentence interpretation failed",
+    "expected_state_unchanged": true
   }
 ]
