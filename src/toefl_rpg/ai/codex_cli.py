@@ -10,6 +10,8 @@ from pydantic import BaseModel, ValidationError
 
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import ContentDraftRequest
+from toefl_rpg.ai.contract import PlayerSentenceInterpretation
+from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import StructuredContentDraft
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
@@ -42,6 +44,15 @@ class CodexCliProvider:
         return self._invoke(
             response_model=TurnFeedback,
             purpose="turn feedback",
+            payload=request.model_dump(),
+        )
+
+    def interpret_player_sentence(
+        self, request: PlayerSentenceInterpretationRequest
+    ) -> PlayerSentenceInterpretation:
+        return self._invoke(
+            response_model=PlayerSentenceInterpretation,
+            purpose="structured player sentence interpretation",
             payload=request.model_dump(),
         )
 

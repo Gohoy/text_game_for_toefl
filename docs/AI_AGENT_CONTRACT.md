@@ -19,11 +19,14 @@ The initial interface lives in `src/toefl_rpg/ai/contract.py`.
 It defines:
 
 - `TurnFeedbackRequest` and `TurnFeedback` for live turn narration and sentence coaching
+- `PlayerSentenceInterpretationRequest` and `PlayerSentenceInterpretation` for proposed interpretations of open-ended player sentences
 - `VocabularyExplanationRequest` and `VocabularyExplanation` for word-level learning help
 - `ContentDraftRequest` and `StructuredContentDraft` for generated world or quest drafts
 - `AIProvider` protocol for concrete providers
 - `FakeAIProvider` for tests
 - `require_ai_provider` for explicit missing-provider checks
+
+Player sentence interpretation is advisory. The response is limited to a known deterministic action plus a proposed target and confidence score. AI cannot return HP, XP, inventory, quest, mastery, save, or map mutations through this model, and extra response fields are rejected before engine use.
 
 ## Validation Rule
 

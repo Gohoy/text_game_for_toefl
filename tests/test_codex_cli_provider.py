@@ -7,6 +7,7 @@ import pytest
 from toefl_rpg.ai.codex_cli import CodexCliProvider
 from toefl_rpg.ai.codex_cli import CodexCliProviderError
 from toefl_rpg.ai.contract import AIProviderUnavailable
+from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
 
@@ -85,6 +86,43 @@ def test_codex_cli_provider_parses_stdout_when_output_file_is_absent() -> None:
 
     assert response.word == "mimicry"
     assert response.memory_hint
+
+
+def test_codex_cli_provider_supports_player_sentence_interpretation() -> None:
+    def fake_runner(command, **kwargs):
+        assert "structured player sentence interpretation" in kwargs["input"]
+        assert '"visible_items": [' in kwargs["input"]
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            stdout=json.dumps(
+                {
+                    "action": "collect",
+                    "target": "fungus sample",
+                    "confidence": 0.82,
+                    "reason": "The player asks to collect the visible sample.",
+                }
+            ),
+            stderr="",
+        )
+
+    provider = CodexCliProvider(runner=fake_runner)
+    request = PlayerSentenceInterpretationRequest(
+        player_sentence="I want collect a sample with the microscope.",
+        location_id="fungus_grove",
+        room_name="Fungus Grove",
+        exits={"south": "research_camp"},
+        visible_items=["fungus sample"],
+        visible_npcs=[],
+        visible_enemies=[],
+        target_words=["fungus", "symbiosis", "vital"],
+    )
+
+    response = provider.interpret_player_sentence(request)
+
+    assert response.action == "collect"
+    assert response.target == "fungus sample"
+    assert response.confidence == 0.82
 
 
 def test_codex_cli_provider_reports_missing_executable() -> None:

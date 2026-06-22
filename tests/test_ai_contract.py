@@ -4,6 +4,8 @@ from pydantic import ValidationError
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import ContentDraftRequest
 from toefl_rpg.ai.contract import FakeAIProvider
+from toefl_rpg.ai.contract import PlayerSentenceInterpretation
+from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
@@ -74,3 +76,43 @@ def test_fake_ai_provider_supports_structured_content_drafts() -> None:
         "theme": "biology",
         "required_words": ["fungus", "symbiosis"],
     }
+
+
+def test_fake_ai_provider_supports_player_sentence_interpretation() -> None:
+    provider = FakeAIProvider()
+    request = PlayerSentenceInterpretationRequest(
+        player_sentence="I want collect a sample with the microscope.",
+        location_id="research_camp",
+        room_name="Research Camp",
+        exits={"north": "fungus_grove", "east": "microscope_tent"},
+        visible_items=["field notebook"],
+        visible_npcs=["Dr. Lin"],
+        visible_enemies=[],
+        target_words=["organism", "species", "evolve"],
+    )
+
+    response = provider.interpret_player_sentence(request)
+
+    assert response.action == "unknown"
+    assert response.target == ""
+    assert response.confidence == 0
+    assert provider.interpretation_requests == [request]
+
+
+def test_interpretation_response_rejects_unknown_actions() -> None:
+    with pytest.raises(ValidationError):
+        PlayerSentenceInterpretation(
+            action="teleport",
+            target="fungus_grove",
+            confidence=0.9,
+        )
+
+
+def test_interpretation_response_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        PlayerSentenceInterpretation(
+            action="move",
+            target="north",
+            confidence=0.9,
+            xp=100,
+        )

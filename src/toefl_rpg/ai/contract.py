@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import Protocol, Optional
+from typing import Literal, Optional, Protocol
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class AIProviderUnavailable(RuntimeError):
@@ -49,8 +49,52 @@ class StructuredContentDraft(BaseModel):
     payload: dict[str, object] = Field(default_factory=dict)
 
 
+DeterministicAction = Literal[
+    "move",
+    "look",
+    "inspect",
+    "collect",
+    "use",
+    "talk",
+    "attack",
+    "review",
+    "explain",
+    "inventory",
+    "status",
+    "quit",
+    "unknown",
+]
+
+
+class PlayerSentenceInterpretationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    player_sentence: str = Field(min_length=1)
+    location_id: str = Field(min_length=1)
+    room_name: str = Field(min_length=1)
+    exits: dict[str, str] = Field(default_factory=dict)
+    visible_items: list[str] = Field(default_factory=list)
+    visible_npcs: list[str] = Field(default_factory=list)
+    visible_enemies: list[str] = Field(default_factory=list)
+    target_words: list[str] = Field(default_factory=list)
+
+
+class PlayerSentenceInterpretation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    action: DeterministicAction
+    target: str = ""
+    confidence: float = Field(ge=0, le=1)
+    reason: str = ""
+
+
 class AIProvider(Protocol):
     def generate_turn_feedback(self, request: TurnFeedbackRequest) -> TurnFeedback:
+        raise NotImplementedError
+
+    def interpret_player_sentence(
+        self, request: PlayerSentenceInterpretationRequest
+    ) -> PlayerSentenceInterpretation:
         raise NotImplementedError
 
     def explain_vocabulary(
@@ -73,6 +117,7 @@ def require_ai_provider(provider: Optional[AIProvider]) -> AIProvider:
 class FakeAIProvider:
     def __init__(self) -> None:
         self.turn_feedback_requests: list[TurnFeedbackRequest] = []
+        self.interpretation_requests: list[PlayerSentenceInterpretationRequest] = []
         self.vocabulary_requests: list[VocabularyExplanationRequest] = []
         self.content_requests: list[ContentDraftRequest] = []
 
@@ -84,6 +129,17 @@ class FakeAIProvider:
             sentence_feedback="AI feedback: your sentence is understandable.",
             suggested_sentence=request.player_sentence,
             vocabulary_notes=[f"Practiced: {practiced}."],
+        )
+
+    def interpret_player_sentence(
+        self, request: PlayerSentenceInterpretationRequest
+    ) -> PlayerSentenceInterpretation:
+        self.interpretation_requests.append(request)
+        return PlayerSentenceInterpretation(
+            action="unknown",
+            target="",
+            confidence=0,
+            reason="Fake provider does not infer gameplay actions.",
         )
 
     def explain_vocabulary(
