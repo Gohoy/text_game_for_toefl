@@ -1,4 +1,34 @@
+from typing import get_args
+
+from toefl_rpg.engine.actions import DETERMINISTIC_ACTIONS
+from toefl_rpg.engine.actions import DeterministicAction
 from toefl_rpg.language.parser import parse_intent
+
+
+def test_shared_action_contract_matches_literal_type() -> None:
+    assert DETERMINISTIC_ACTIONS == get_args(DeterministicAction)
+
+
+def test_parser_outputs_only_shared_deterministic_actions() -> None:
+    samples = [
+        "help",
+        "I want to go to the east",
+        "look",
+        "I want to inspect the microscope",
+        "I want to collect the fungus sample",
+        "I want to use the microscope",
+        "talk to Dr. Lin",
+        "I attack the invasive vine",
+        "review vocabulary",
+        "Please explain the word fungus",
+        "inventory",
+        "status",
+        "quit",
+        "Could you grab the specimen for my research?",
+    ]
+
+    for sample in samples:
+        assert parse_intent(sample).action in DETERMINISTIC_ACTIONS
 
 
 def test_parse_full_sentence_movement() -> None:

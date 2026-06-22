@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from toefl_rpg.engine.actions import DeterministicAction
+
 
 @dataclass(frozen=True)
 class ParsedIntent:
-    action: str
+    action: DeterministicAction
     target: str = ""
 
 

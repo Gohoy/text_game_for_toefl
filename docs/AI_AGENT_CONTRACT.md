@@ -29,7 +29,7 @@ It defines:
 - `FakeAIProvider` for tests
 - `require_ai_provider` for explicit missing-provider checks
 
-Player sentence interpretation is advisory. The response is limited to a known deterministic action plus a proposed target and confidence score. AI cannot return HP, XP, inventory, quest, mastery, save, or map mutations through this model, and extra response fields are rejected before engine use.
+Player sentence interpretation is advisory. The response is limited to a known deterministic action plus a proposed target and confidence score. The shared action set is defined by deterministic code in `src/toefl_rpg/engine/actions.py` and reused by parser and AI validation. AI cannot return HP, XP, inventory, quest, mastery, save, or map mutations through this model, and extra response fields are rejected before engine use.
 
 NPC dialogue is also display-only. The request includes the NPC, room, quest progress, visible entities, and target words. The response may include a speaker line and vocabulary notes, but it cannot return deterministic state changes.
 

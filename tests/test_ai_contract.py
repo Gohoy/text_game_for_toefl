@@ -16,6 +16,7 @@ from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
 from toefl_rpg.ai.contract import require_ai_provider
+from toefl_rpg.engine.actions import DETERMINISTIC_ACTIONS
 
 
 def test_missing_ai_provider_fails_clearly() -> None:
@@ -112,6 +113,16 @@ def test_interpretation_response_rejects_unknown_actions() -> None:
             target="fungus_grove",
             confidence=0.9,
         )
+
+
+def test_interpretation_response_accepts_shared_deterministic_actions() -> None:
+    for action in DETERMINISTIC_ACTIONS:
+        response = PlayerSentenceInterpretation(
+            action=action,
+            target="",
+            confidence=0.9,
+        )
+        assert response.action == action
 
 
 def test_interpretation_response_rejects_extra_state_mutation_fields() -> None:

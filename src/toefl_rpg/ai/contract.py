@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from typing import Literal, Optional, Protocol
+from typing import Optional, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
+
+from toefl_rpg.engine.actions import DeterministicAction
 
 
 class AIProviderUnavailable(RuntimeError):
@@ -12,7 +14,7 @@ class AIProviderUnavailable(RuntimeError):
 class TurnFeedbackRequest(BaseModel):
     player_sentence: str = Field(min_length=1)
     location_id: str = Field(min_length=1)
-    deterministic_action: str = Field(min_length=1)
+    deterministic_action: DeterministicAction
     deterministic_result: str = Field(min_length=1)
     target_words: list[str] = Field(default_factory=list)
     practiced_words: list[str] = Field(default_factory=list)
@@ -64,23 +66,6 @@ class ContentDraftRequest(BaseModel):
 class StructuredContentDraft(BaseModel):
     draft_type: str = Field(min_length=1)
     payload: dict[str, object] = Field(default_factory=dict)
-
-
-DeterministicAction = Literal[
-    "move",
-    "look",
-    "inspect",
-    "collect",
-    "use",
-    "talk",
-    "attack",
-    "review",
-    "explain",
-    "inventory",
-    "status",
-    "quit",
-    "unknown",
-]
 
 
 class PlayerSentenceInterpretationRequest(BaseModel):

@@ -49,6 +49,7 @@ Phase 1 is complete. Exit evidence:
 - Rich-based room presentation
 - five-room Biology world loaded from the validated JSON world pack
 - full-sentence action parsing for common actions
+- shared deterministic action contract used by parser intents and AI interpretation validation
 - verbose directional sentences such as `I go north to the fungus grove.`
 - movement, inspection, inventory, collect, and use
 - deterministic combat
@@ -91,9 +92,10 @@ Evidence from an in-memory playthrough:
 - a learner-sentence regression corpus now captures accepted, rejected, and ambiguous sentence patterns and verifies whether each route is handled by deterministic parsing or validated AI interpretation fallback
 - review answers now use a validated AI quality judgment for meaningful target-word use while deterministic code still controls review events, stages, XP, duplicate suppression, and saves
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
+- parser intents and AI interpretation responses now share the same deterministic action contract from `src/toefl_rpg/engine/actions.py`
 - CLI playtests still use the default save path, so automation should prefer in-memory playthroughs until a configurable smoke-test save path is added
 
-Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, an end-to-end test protects quest completion plus review persistence, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, an end-to-end test protects quest completion plus review persistence, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, parser and AI action names share one deterministic contract, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -439,7 +441,7 @@ None.
 
 ### T-137 — Centralize deterministic action names
 
-- **State:** ready
+- **State:** done
 - **Priority:** P1
 - **Goal:** Keep parser actions, AI interpretation actions, and engine dispatch names aligned through one shared contract.
 - **Acceptance criteria:**
@@ -451,7 +453,7 @@ None.
 
 ### T-138 — Separate review coaching text from reward summaries
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Make review result messages easier to read by keeping AI coaching text distinct from deterministic reward and scheduling summaries.
 - **Acceptance criteria:**
@@ -460,6 +462,30 @@ None.
   - no mastery, XP, duplicate suppression, or save behavior changes
 - **Verification:** review engine tests, CLI smoke with fake provider, full suite.
 - **Dependencies:** T-135.
+
+### T-139 — Add configurable CLI smoke save path
+
+- **State:** planned
+- **Priority:** P1
+- **Goal:** Let automated CLI smoke tests run without reading or writing the user's default save slot.
+- **Acceptance criteria:**
+  - CLI/runtime can use an environment-configured save path
+  - default save behavior remains unchanged for normal play
+  - smoke command can target a temporary save path and leave tracked files untouched
+- **Verification:** CLI smoke with fake provider and temporary save path, storage tests, full suite.
+- **Dependencies:** T-138.
+
+### T-140 — Add review-answer learner corpus cases
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Extend the learner sentence corpus with review-answer examples that distinguish deterministic minimum checks from AI quality judgment.
+- **Acceptance criteria:**
+  - corpus includes accepted, rejected, and malformed review-answer cases
+  - tests verify which cases stop at deterministic checks and which reach AI evaluation
+  - fake providers are used; no live Codex CLI call is required
+- **Verification:** learner corpus tests, review engine tests, full suite.
+- **Dependencies:** T-138.
 
 ## Blocked Tasks
 
@@ -509,6 +535,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-137 by moving deterministic action literals into `src/toefl_rpg/engine/actions.py`, making parser intents and AI interpretation validation share that contract, and adding regression tests to detect future action-name drift.
 - 2026-06-22: Completed T-136 by validating AI turn feedback and sentence interpretation outputs at the engine boundary, adding malformed-output regression tests, and confirming invalid turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration preserve deterministic state with clear provider errors.
 - 2026-06-22: Completed T-135 by adding a validated AI review-answer evaluation contract, routing normal review answers through it, preserving deterministic ownership of review stage, XP, duplicate suppression, and saves, and documenting the updated AI-assisted review rule.
 - 2026-06-22: Completed T-134 by adding a reusable learner-sentence regression corpus with accepted, rejected, and ambiguous cases, plus tests that distinguish direct deterministic parser handling from validated AI interpretation fallback without live Codex or paid API calls.
@@ -518,6 +545,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-129 by adding structured AI NPC dialogue requests and responses, routing `talk to Dr. Lin` through the AI provider, validating dialogue before display, and preserving deterministic quest, XP, inventory, mastery, and save state.
 - 2026-06-22: Completed T-128 by asking the AI provider for a structured interpretation only after deterministic parsing misses, converting accepted proposals back through existing deterministic handlers, and covering accepted open-ended collection plus rejected invented targets.
 - 2026-06-22: Completed T-127 by adding advisory `PlayerSentenceInterpretationRequest` and `PlayerSentenceInterpretation` models, restricting AI-proposed actions to deterministic engine actions, forbidding extra state-mutation fields, and wiring fake/Codex providers through validated schemas.
-- 2026-06-22: Completed T-126 by parsing verbose directional sentences such as `I go north to the fungus grove.` into deterministic move intents while preserving engine-side exit validation for impossible movement.
 
 Keep at most ten items here.
