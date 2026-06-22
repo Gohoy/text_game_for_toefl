@@ -88,6 +88,7 @@ Phase 1 is complete. Exit evidence:
 - review result messages separate AI coaching text from deterministic reward and retry summaries
 - rejected review answers keep AI advice, suggested sentence, and deterministic retry result visibly distinct
 - AI review-evaluation requests reject unauthorized extra state-like fields before reaching providers
+- all AI request models have strict-schema audit coverage in the AI contract tests
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
@@ -1074,7 +1075,7 @@ None.
 
 ### T-184 — Audit remaining AI request strictness coverage
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Confirm every AI request model has explicit strictness coverage or a documented reason for not needing it.
 - **Acceptance criteria:**
@@ -1083,6 +1084,42 @@ None.
   - no live Codex CLI is required
 - **Verification:** AI contract tests and full suite.
 - **Dependencies:** T-183.
+
+### T-185 — Audit parser intent shape consistency
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Ensure deterministic parser intents and AI interpretation results continue to share the same action vocabulary and target conventions.
+- **Acceptance criteria:**
+  - tests identify every deterministic action exposed through parser or AI interpretation
+  - target conventions for movement, collection, use, attack, talk, look, explain, review, status, and inventory are documented by assertions or fixtures
+  - no live Codex CLI is required
+- **Verification:** parser, AI contract, and rules tests plus full suite.
+- **Dependencies:** T-184.
+
+### T-186 — Add learner sentence corpus case for polite command forms
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Expand full-sentence input coverage for polite learner commands such as "Could you..." and "Please...".
+- **Acceptance criteria:**
+  - corpus includes at least one accepted deterministic case and one AI-interpretation fallback case
+  - expected state mutation remains deterministic and explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-185.
+
+### T-187 — Add renderer regression for AI coaching versus deterministic results
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep AI coaching text visually distinct from deterministic result summaries in player-facing output.
+- **Acceptance criteria:**
+  - renderer tests assert separate labels or sections for AI feedback and deterministic result text
+  - at least one successful action and one rejected action are covered
+  - no live Codex CLI is required
+- **Verification:** renderer tests and full suite.
+- **Dependencies:** T-186.
 
 ## Blocked Tasks
 
@@ -1132,6 +1169,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-184 by adding an executable AI request-model audit that verifies every request schema is strict and that the audited request set is complete.
 - 2026-06-23: Completed T-183 by adding a regression that AI review-evaluation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider review behavior.
 - 2026-06-23: Completed T-182 by adding a regression that AI room narration requests reject unauthorized state-like extra fields before provider use while preserving fake-provider narration behavior.
 - 2026-06-23: Completed T-181 by making AI NPC dialogue requests reject unauthorized state-like extra fields before provider use while preserving fake-provider dialogue behavior.
@@ -1141,6 +1179,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-177 by adding fake-provider regressions that distinguish AI content-draft envelope failures from world-pack payload failures while preserving nested payload field paths.
 - 2026-06-23: Completed T-176 by making AI content-draft requests reject unauthorized state-like extra fields before provider use while preserving fake-provider draft behavior.
 - 2026-06-23: Completed T-175 by adding subprocess-fake Codex CLI provider coverage for strict content-draft response schemas and unchanged structured draft parsing.
-- 2026-06-23: Completed T-174 by adding AI content-draft and world-schema regressions that reject nested mutation-like payload fields before generated world content is accepted.
 
 Keep at most ten items here.

@@ -1,6 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
+import toefl_rpg.ai.contract as ai_contract
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import ContentDraftRequest
 from toefl_rpg.ai.contract import FakeAIProvider
@@ -185,6 +186,29 @@ def test_player_facing_response_schemas_are_strict_for_codex() -> None:
 
     for response_model in response_models:
         schema = response_model.model_json_schema()
+        assert schema["additionalProperties"] is False
+
+
+def test_ai_request_schemas_are_strict_and_audited() -> None:
+    request_models = {
+        name: model
+        for name, model in vars(ai_contract).items()
+        if isinstance(model, type)
+        and issubclass(model, ai_contract.BaseModel)
+        and name.endswith("Request")
+    }
+
+    assert set(request_models) == {
+        "ContentDraftRequest",
+        "NPCDialogueRequest",
+        "PlayerSentenceInterpretationRequest",
+        "ReviewAnswerEvaluationRequest",
+        "RoomNarrationRequest",
+        "TurnFeedbackRequest",
+        "VocabularyExplanationRequest",
+    }
+    for request_model in request_models.values():
+        schema = request_model.model_json_schema()
         assert schema["additionalProperties"] is False
 
 
