@@ -82,6 +82,32 @@ def test_draft_world_pack_rejects_malformed_provider_payload() -> None:
     assert provider.content_requests == [request]
 
 
+def test_draft_world_pack_rejects_extra_top_level_provider_fields() -> None:
+    class ExtraFieldDraftProvider(FakeAIProvider):
+        def draft_content(self, request):
+            self.content_requests.append(request)
+            return {
+                "draft_type": "world_pack",
+                "payload": minimal_world_pack_data(),
+                "xp": 999,
+            }
+
+    provider = ExtraFieldDraftProvider()
+    request = ContentDraftRequest(
+        theme="biology",
+        required_words=["organism"],
+        purpose="world_pack",
+    )
+
+    with pytest.raises(ContentDraftValidationError) as excinfo:
+        draft_world_pack(provider, request)
+
+    message = str(excinfo.value)
+    assert "Invalid AI content draft" in message
+    assert "xp" in message
+    assert provider.content_requests == [request]
+
+
 @pytest.mark.parametrize(
     ("empty_field", "expected_path"),
     [

@@ -31,5 +31,10 @@ def draft_world_pack(provider: AIProvider, request: ContentDraftRequest) -> Worl
             "World-pack draft validation requires request purpose 'world_pack'."
         )
 
-    draft = require_ai_provider(provider).draft_content(request)
+    try:
+        draft = StructuredContentDraft.model_validate(
+            require_ai_provider(provider).draft_content(request)
+        )
+    except ValidationError as exc:
+        raise ContentDraftValidationError(f"Invalid AI content draft: {exc}") from exc
     return validate_world_pack_draft(draft)
