@@ -121,13 +121,14 @@ Evidence from an in-memory playthrough:
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
 - empty turn-feedback required fields now have regression coverage proving validation failures roll back state-changing actions
 - low-confidence parser-miss retry guidance now has engine and renderer regressions proving deterministic state is preserved and retry text stays separate from AI coaching
+- empty sentence-interpretation action and reason fields now have regression coverage proving provider errors preserve deterministic state
 - parser intents and AI interpretation responses now share the same deterministic action contract from `src/toefl_rpg/engine/actions.py`
 - CLI playtests can now set `TOEFL_RPG_SAVE_PATH` to avoid the default player save slot
 - Codex CLI provider invocation now matches the installed `codex exec` flags by avoiding the unsupported `--ask-for-approval` option
 - player-facing AI response schemas now set `additionalProperties: false` for Codex structured-output compatibility, and live Codex turns have a longer default timeout with an environment override
 - documentation now distinguishes the required fake-provider CLI smoke from an optional manual live Codex smoke, both using temporary save paths
 
-Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, review messages separate AI advice from deterministic rewards and retry state, rejected review answers keep AI advice and deterministic retry text visibly distinct, empty review-evaluation required fields preserve the active review word, duplicate review-answer messages avoid extra rewards, bypass unnecessary AI evaluation, and remain distinct from normal review acceptance or rejection, review-answer corpus coverage now distinguishes deterministic checks from AI evaluation, low-confidence and malformed AI interpretation coverage protects state-preserving retry guidance and provider errors, turn-feedback display and empty-field coverage protects AI coaching labels, separate deterministic Result output, and rollback after state-changing actions, vocabulary explanation display, mismatch, and empty-field coverage protects distinct meaning, example, memory-hint lines, wrong-word rejection, and deterministic state preservation, NPC dialogue mismatch and empty-field coverage rejects wrong or blank speakers and blank lines before display, malformed room narration coverage rejects empty required fields before display, Codex CLI invocation, strict response schemas, live timeout defaults, and live-smoke documentation match the installed local `codex exec` structured-output requirements, an end-to-end test protects quest completion plus review persistence, smoke playtests can use an isolated save path, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, parser and AI action names share one deterministic contract, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, review messages separate AI advice from deterministic rewards and retry state, rejected review answers keep AI advice and deterministic retry text visibly distinct, empty review-evaluation required fields preserve the active review word, duplicate review-answer messages avoid extra rewards, bypass unnecessary AI evaluation, and remain distinct from normal review acceptance or rejection, review-answer corpus coverage now distinguishes deterministic checks from AI evaluation, low-confidence, malformed, and empty-field AI interpretation coverage protects state-preserving retry guidance and provider errors, turn-feedback display and empty-field coverage protects AI coaching labels, separate deterministic Result output, and rollback after state-changing actions, vocabulary explanation display, mismatch, and empty-field coverage protects distinct meaning, example, memory-hint lines, wrong-word rejection, and deterministic state preservation, NPC dialogue mismatch and empty-field coverage rejects wrong or blank speakers and blank lines before display, malformed room narration coverage rejects empty required fields before display, Codex CLI invocation, strict response schemas, live timeout defaults, and live-smoke documentation match the installed local `codex exec` structured-output requirements, an end-to-end test protects quest completion plus review persistence, smoke playtests can use an isolated save path, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, parser and AI action names share one deterministic action contract, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -750,7 +751,7 @@ None.
 
 ### T-160 — Add sentence-interpretation empty-field regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI parser-miss interpretation returns empty required fields.
 - **Acceptance criteria:**
@@ -762,7 +763,7 @@ None.
 
 ### T-161 — Add room narration wrong-location regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI room narration returns a different room ID than requested.
 - **Acceptance criteria:**
@@ -832,6 +833,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-160 by adding a fake-provider regression that rejects empty AI sentence-interpretation action and reason fields while preserving deterministic state.
 - 2026-06-22: Completed T-159 by adding a fake-provider regression that rejects empty AI NPC dialogue speaker and line fields while preserving deterministic state.
 - 2026-06-22: Completed T-158 by adding a fake-provider regression that rejects empty AI vocabulary-explanation meaning, example, and memory-hint fields while preserving deterministic state.
 - 2026-06-22: Completed T-157 by adding a fake-provider regression that rejects empty AI review-evaluation explanation and suggested-sentence fields while preserving the active review word.
@@ -841,6 +843,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-153 by adding a fake-provider regression that rejects AI NPC dialogue when the returned speaker differs from the requested visible NPC, with deterministic state preservation.
 - 2026-06-22: Completed T-152 by extending the learner-sentence regression corpus with a malformed parser-miss AI interpretation case that raises a clear provider error while preserving deterministic state.
 - 2026-06-22: Completed T-151 by adding a renderer regression that keeps rejected review AI advice, suggested sentence, and deterministic retry result in the Result panel, backed by the existing engine regression that preserves the active review word.
-- 2026-06-22: Completed T-150 by adding engine and renderer regressions that keep low-confidence parser-miss retry guidance in the Result output, separate from AI coaching, while preserving deterministic state and avoiding normal success feedback.
 
 Keep at most ten items here.

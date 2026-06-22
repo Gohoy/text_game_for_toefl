@@ -160,6 +160,7 @@ def test_interpretation_response_rejects_unknown_actions() -> None:
             action="teleport",
             target="fungus_grove",
             confidence=0.9,
+            reason="The action is not part of the deterministic contract.",
         )
 
 
@@ -169,6 +170,7 @@ def test_interpretation_response_accepts_shared_deterministic_actions() -> None:
             action=action,
             target="",
             confidence=0.9,
+            reason="The action is part of the deterministic contract.",
         )
         assert response.action == action
 
@@ -179,6 +181,7 @@ def test_interpretation_response_rejects_extra_state_mutation_fields() -> None:
             action="move",
             target="north",
             confidence=0.9,
+            reason="The learner asks to move north.",
             xp=100,
         )
 

@@ -93,7 +93,7 @@ class PlayerSentenceInterpretation(BaseModel):
     action: DeterministicAction
     target: str = ""
     confidence: float = Field(ge=0, le=1)
-    reason: str = ""
+    reason: str = Field(min_length=1)
 
 
 class NPCDialogueRequest(BaseModel):

@@ -485,6 +485,34 @@ def test_invalid_ai_interpretation_preserves_state() -> None:
     assert provider.interpretation_requests[0].location_id == "fungus_grove"
 
 
+@pytest.mark.parametrize("empty_field", ["action", "reason"])
+def test_empty_ai_interpretation_required_fields_preserve_state(
+    empty_field: str,
+) -> None:
+    class EmptyInterpretationProvider(FakeAIProvider):
+        def interpret_player_sentence(self, request):
+            self.interpretation_requests.append(request)
+            interpretation = {
+                "action": "collect",
+                "target": "fungus sample",
+                "confidence": 0.9,
+                "reason": "The learner asks for the visible specimen.",
+            }
+            interpretation[empty_field] = ""
+            return interpretation
+
+    provider = EmptyInterpretationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI sentence interpretation failed"):
+        engine.handle("Could you grab the specimen for my research?")
+
+    assert engine.state == before_state
+    assert provider.interpretation_requests[0].location_id == "fungus_grove"
+
+
 def test_ai_interpretation_is_not_used_when_parser_matches() -> None:
     provider = FakeAIProvider()
     engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
