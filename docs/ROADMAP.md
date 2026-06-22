@@ -109,6 +109,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers fluent but synonym-heavy incorrect target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers memorized definition-style misuse that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers target-word context mismatch that reaches AI evaluation and keeps review active without XP
+- learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1303,7 +1304,7 @@ None.
 
 ### T-201 — Add learner sentence corpus case for pronoun-like item references
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner input with references such as "it" should route when deterministic state still owns item identity and validation.
 - **Acceptance criteria:**
@@ -1315,7 +1316,7 @@ None.
 
 ### T-202 — Add learner sentence corpus case for compound action requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how sentences with multiple requested actions should route when deterministic code must execute only one validated action at a time.
 - **Acceptance criteria:**
@@ -1386,6 +1387,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-201 by adding a learner-sentence corpus regression for pronoun-like item references such as `Could you get it for Dr. Lin?`, routed through AI interpretation and deterministic collect validation.
 - 2026-06-23: Completed T-200 by adding a learner-sentence corpus regression for hedged intention movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-199 by adding a review-answer corpus regression for a fluent but off-context fungus sentence that reaches AI evaluation and keeps review active without XP.
 - 2026-06-23: Completed T-198 by adding a learner-sentence corpus regression for an indirect polite question that routes through AI interpretation and deterministic collect validation.
@@ -1395,6 +1397,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-194 by adding a negative-request learner corpus regression and parser guard so negated movement does not execute the positive action.
 - 2026-06-23: Completed T-193 by adding plain-console renderer fallback coverage for separate deterministic result and English feedback labels.
 - 2026-06-23: Completed T-192 by adding an AI interpretation provider-exception regression that explicitly preserves location, inventory, XP, quest progress, and mastery.
-- 2026-06-23: Completed T-191 by adding learner-sentence corpus coverage for permission-question movement phrasing with an explicit deterministic room transition.
 
 Keep at most ten items here.

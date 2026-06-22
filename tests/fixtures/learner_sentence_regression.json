@@ -122,6 +122,24 @@
     "expected_message_contains": "You collect fungus sample."
   },
   {
+    "id": "collect_it_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "Could you get it for Dr. Lin?",
+    "ai_interpretation": {
+      "action": "collect",
+      "target": "fungus sample",
+      "confidence": 0.74,
+      "reason": "The pronoun refers to the only visible collectible item, the fungus sample."
+    },
+    "expected_success": true,
+    "expected_inventory_contains": "fungus sample",
+    "expected_message_contains": "You collect fungus sample."
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",
