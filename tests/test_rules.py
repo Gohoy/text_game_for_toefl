@@ -848,6 +848,31 @@ def test_empty_ai_vocabulary_explanation_fields_preserve_state(
     assert provider.vocabulary_requests[0].word == "fungus"
 
 
+def test_ai_vocabulary_explanation_extra_fields_preserve_state() -> None:
+    class ExtraFieldExplanationProvider(FakeAIProvider):
+        def explain_vocabulary(self, request):
+            self.vocabulary_requests.append(request)
+            return {
+                "word": request.word,
+                "plain_meaning": "A fungus is a living growth such as mold or mushrooms.",
+                "example_sentence": "A fungus can recycle nutrients in a forest.",
+                "memory_hint": "Connect fungus with forest mushrooms.",
+                "mastered": True,
+                "xp": 100,
+            }
+
+    provider = ExtraFieldExplanationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI vocabulary explanation failed"):
+        engine.handle("explain fungus")
+
+    assert engine.state == before_state
+    assert provider.vocabulary_requests[0].word == "fungus"
+
+
 def test_invalid_ai_turn_feedback_preserves_state() -> None:
     class InvalidTurnFeedbackProvider(FakeAIProvider):
         def generate_turn_feedback(self, request):

@@ -86,6 +86,7 @@ Phase 1 is complete. Exit evidence:
 - invalid AI outputs for turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration fail clearly without leaving partial state changes
 - malformed AI turn-feedback vocabulary notes are rejected with state rollback after state-changing actions
 - empty AI vocabulary-explanation meaning, example, and memory-hint fields are rejected while preserving deterministic state
+- AI vocabulary explanations with unauthorized extra fields are rejected while preserving deterministic state
 - empty AI turn-feedback narration, feedback, and suggested-sentence fields are rejected with state rollback after state-changing actions
 - mismatched AI vocabulary explanation words are rejected before display while preserving deterministic state
 - external vocabulary importer
@@ -120,6 +121,7 @@ Evidence from an in-memory playthrough:
 - vocabulary explanation display regressions now protect distinct meaning, example, and memory-hint lines without mutating deterministic state
 - vocabulary explanation mismatch regressions now reject AI responses for the wrong word without mutating deterministic state
 - empty vocabulary-explanation required fields now have regression coverage proving provider errors preserve deterministic state
+- vocabulary-explanation extra-field regressions now prove unauthorized mutation-like fields are rejected before display
 - review answers now use a validated AI quality judgment for meaningful target-word use while deterministic code still controls review events, stages, XP, duplicate suppression, and saves
 - successful and rejected review messages now label AI advice separately from deterministic result summaries
 - review rejection display regressions now keep AI advice, suggested sentence, and deterministic retry result in the Result panel while active review state remains unchanged
@@ -845,7 +847,7 @@ None.
 
 ### T-167 — Add vocabulary explanation extra-field regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI vocabulary explanations return unauthorized state-like fields.
 - **Acceptance criteria:**
@@ -857,7 +859,7 @@ None.
 
 ### T-168 — Add sentence interpretation extra-field regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI parser-miss interpretation returns unauthorized state-like fields.
 - **Acceptance criteria:**
@@ -927,6 +929,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-167 by adding a fake-provider regression that rejects AI vocabulary explanations containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-166 by adding strict review-evaluation judgment validation and a fake-provider regression that preserves the active review word on malformed boolean output.
 - 2026-06-22: Completed T-165 by adding a fake-provider regression that rejects malformed AI room narration vocabulary notes before display while preserving deterministic state.
 - 2026-06-22: Completed T-164 by adding a fake-provider regression that rejects malformed AI NPC dialogue vocabulary notes before display while preserving deterministic state.
@@ -936,6 +939,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-160 by adding a fake-provider regression that rejects empty AI sentence-interpretation action and reason fields while preserving deterministic state.
 - 2026-06-22: Completed T-159 by adding a fake-provider regression that rejects empty AI NPC dialogue speaker and line fields while preserving deterministic state.
 - 2026-06-22: Completed T-158 by adding a fake-provider regression that rejects empty AI vocabulary-explanation meaning, example, and memory-hint fields while preserving deterministic state.
-- 2026-06-22: Completed T-157 by adding a fake-provider regression that rejects empty AI review-evaluation explanation and suggested-sentence fields while preserving the active review word.
 
 Keep at most ten items here.
