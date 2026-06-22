@@ -152,6 +152,7 @@ Evidence from an in-memory playthrough:
 - CLI playtests can now set `TOEFL_RPG_SAVE_PATH` to avoid the default player save slot
 - Codex CLI provider invocation now matches the installed `codex exec` flags by avoiding the unsupported `--ask-for-approval` option
 - player-facing AI response schemas now set `additionalProperties: false` for Codex structured-output compatibility, and live Codex turns have a longer default timeout with an environment override
+- Codex CLI structured-output schema strictness is covered for AI content-draft calls through a subprocess fake
 - documentation now distinguishes the required fake-provider CLI smoke from an optional manual live Codex smoke, both using temporary save paths
 
 Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, review messages separate AI advice from deterministic rewards and retry state, rejected review answers keep AI advice and deterministic retry text visibly distinct, empty review-evaluation required fields preserve the active review word, duplicate review-answer messages avoid extra rewards, bypass unnecessary AI evaluation, and remain distinct from normal review acceptance or rejection, review-answer corpus coverage now distinguishes deterministic checks from AI evaluation, low-confidence, malformed, and empty-field AI interpretation coverage protects state-preserving retry guidance and provider errors, turn-feedback display, empty-field, and vocabulary-note coverage protects AI coaching labels, separate deterministic Result output, and rollback after state-changing actions, vocabulary explanation display, mismatch, and empty-field coverage protects distinct meaning, example, memory-hint lines, wrong-word rejection, and deterministic state preservation, NPC dialogue mismatch, empty-field, and vocabulary-note coverage rejects wrong or malformed dialogue before display, room narration malformed, empty-field, and wrong-room coverage rejects invalid look prose before display, Codex CLI invocation, strict response schemas, live timeout defaults, and live-smoke documentation match the installed local `codex exec` structured-output requirements, an end-to-end test protects quest completion plus review persistence, smoke playtests can use an isolated save path, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, parser and AI action names share one deterministic action contract, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate that rejects malformed, cross-reference-invalid, empty required text, and unauthorized top-level fields. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
@@ -957,7 +958,7 @@ None.
 
 ### T-175 — Add Codex schema strictness coverage for content drafts
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Ensure Codex CLI structured-output schemas for content drafting stay strict after validation expansions.
 - **Acceptance criteria:**
@@ -969,7 +970,7 @@ None.
 
 ### T-176 — Add content draft request strictness regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Keep AI content-draft requests bounded to the documented prompt inputs before they reach providers.
 - **Acceptance criteria:**
@@ -1039,6 +1040,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-175 by adding subprocess-fake Codex CLI provider coverage for strict content-draft response schemas and unchanged structured draft parsing.
 - 2026-06-23: Completed T-174 by adding AI content-draft and world-schema regressions that reject nested mutation-like payload fields before generated world content is accepted.
 - 2026-06-23: Completed T-173 by validating AI content-draft envelopes before payload acceptance and rejecting unauthorized mutation-like top-level fields.
 - 2026-06-22: Completed T-172 by adding a fake-provider regression that rejects AI review evaluations containing unauthorized mutation-like fields while preserving the active review word.
@@ -1048,6 +1050,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-168 by adding a fake-provider regression that rejects parser-miss AI interpretations containing unauthorized mutation-like fields before deterministic validation while preserving state.
 - 2026-06-22: Completed T-167 by adding a fake-provider regression that rejects AI vocabulary explanations containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-166 by adding strict review-evaluation judgment validation and a fake-provider regression that preserves the active review word on malformed boolean output.
-- 2026-06-22: Completed T-165 by adding a fake-provider regression that rejects malformed AI room narration vocabulary notes before display while preserving deterministic state.
 
 Keep at most ten items here.

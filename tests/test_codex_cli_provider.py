@@ -7,6 +7,7 @@ import pytest
 from toefl_rpg.ai.codex_cli import CodexCliProvider
 from toefl_rpg.ai.codex_cli import CodexCliProviderError
 from toefl_rpg.ai.contract import AIProviderUnavailable
+from toefl_rpg.ai.contract import ContentDraftRequest
 from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
@@ -236,6 +237,48 @@ def test_codex_cli_provider_supports_review_answer_evaluation() -> None:
 
     assert response.uses_target_meaningfully
     assert "biological organism" in response.explanation
+
+
+def test_codex_cli_provider_uses_strict_schema_for_content_drafts(tmp_path) -> None:
+    captured_schema: dict[str, object] = {}
+
+    def fake_runner(command, **kwargs):
+        assert "structured content draft" in kwargs["input"]
+        assert '"purpose": "room_draft"' in kwargs["input"]
+        schema_path = Path(command[command.index("--output-schema") + 1])
+        captured_schema.update(json.loads(schema_path.read_text(encoding="utf-8")))
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            stdout=json.dumps(
+                {
+                    "draft_type": "room_draft",
+                    "payload": {
+                        "theme": "biology",
+                        "required_words": ["fungus", "symbiosis"],
+                    },
+                }
+            ),
+            stderr="",
+        )
+
+    provider = CodexCliProvider(cwd=tmp_path, runner=fake_runner)
+    request = ContentDraftRequest(
+        theme="biology",
+        required_words=["fungus", "symbiosis"],
+        purpose="room_draft",
+    )
+
+    response = provider.draft_content(request)
+
+    assert captured_schema["additionalProperties"] is False
+    assert set(captured_schema["required"]) == set(captured_schema["properties"])
+    assert captured_schema["properties"]["payload"]["type"] == "object"
+    assert response.draft_type == "room_draft"
+    assert response.payload == {
+        "theme": "biology",
+        "required_words": ["fungus", "symbiosis"],
+    }
 
 
 def test_codex_cli_provider_reports_missing_executable() -> None:
