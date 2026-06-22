@@ -96,6 +96,7 @@ Phase 1 is complete. Exit evidence:
 - renderer tests keep deterministic result text visually separate from AI coaching for successful and rejected turns
 - vocabulary explanation renderer coverage keeps explanation, example, and memory hint in the result panel without an empty feedback panel
 - AI feedback formatting has rules and renderer coverage for multiple distinct vocabulary-note lines
+- parser-miss AI interpretation provider failures preserve location, inventory, XP, quest progress, and mastery
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
@@ -1183,7 +1184,7 @@ None.
 
 ### T-192 — Add state-preservation regression for AI interpretation provider failure
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Ensure parser-miss AI interpretation failures do not mutate player state before raising a clear AI provider error.
 - **Acceptance criteria:**
@@ -1195,7 +1196,7 @@ None.
 
 ### T-193 — Add plain-console renderer regression for result and feedback labels
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Keep fallback non-Rich terminal output clear when rendering deterministic results and AI feedback.
 - **Acceptance criteria:**
@@ -1204,6 +1205,42 @@ None.
   - no live Codex CLI is required
 - **Verification:** renderer tests and full suite.
 - **Dependencies:** T-192.
+
+### T-194 — Add learner sentence corpus case for negative request phrasing
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Ensure learner phrasing such as "I do not want to..." does not accidentally execute the positive action.
+- **Acceptance criteria:**
+  - corpus includes at least one negative request sentence
+  - expected route and no-mutation outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-193.
+
+### T-195 — Add parser regression for punctuation-heavy movement input
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep common punctuation-heavy learner movement input parseable without weakening action authority.
+- **Acceptance criteria:**
+  - parser test covers at least one movement sentence with extra punctuation
+  - expected action and target are explicit
+  - no live Codex CLI is required
+- **Verification:** parser tests and full suite.
+- **Dependencies:** T-194.
+
+### T-196 — Add review answer corpus case for synonym-heavy incorrect use
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep review-answer AI evaluation coverage clear when a learner writes a fluent sentence that does not use the active target word meaningfully.
+- **Acceptance criteria:**
+  - review corpus includes a fluent but incorrect or off-target sentence
+  - fake AI evaluation keeps review active without XP
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-195.
 
 ## Blocked Tasks
 
@@ -1253,6 +1290,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-192 by adding an AI interpretation provider-exception regression that explicitly preserves location, inventory, XP, quest progress, and mastery.
 - 2026-06-23: Completed T-191 by adding learner-sentence corpus coverage for permission-question movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-190 by adding renderer coverage that keeps multiple AI vocabulary notes as distinct `Vocabulary:` lines without duplicating deterministic result text.
 - 2026-06-23: Completed T-189 by tightening renderer coverage so vocabulary explanation output stays in the result panel and no empty English Feedback panel appears.
@@ -1262,6 +1300,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-185 by adding an executable parser/AI interpretation intent-contract audit that covers every deterministic action and target convention.
 - 2026-06-23: Completed T-184 by adding an executable AI request-model audit that verifies every request schema is strict and that the audited request set is complete.
 - 2026-06-23: Completed T-183 by adding a regression that AI review-evaluation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider review behavior.
-- 2026-06-23: Completed T-182 by adding a regression that AI room narration requests reject unauthorized state-like extra fields before provider use while preserving fake-provider narration behavior.
 
 Keep at most ten items here.

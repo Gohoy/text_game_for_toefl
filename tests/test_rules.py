@@ -547,6 +547,30 @@ def test_invalid_ai_interpretation_preserves_state() -> None:
     assert provider.interpretation_requests[0].location_id == "fungus_grove"
 
 
+def test_ai_interpretation_exception_preserves_progress_fields() -> None:
+    class FailingInterpretationProvider(FakeAIProvider):
+        def interpret_player_sentence(self, request):
+            self.interpretation_requests.append(request)
+            raise RuntimeError("local AI bridge stopped")
+
+    provider = FailingInterpretationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    engine.handle("I want to collect the fungus sample")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI sentence interpretation failed"):
+        engine.handle("Could you process this specimen somehow?")
+
+    assert engine.state.current_room_id == before_state.current_room_id
+    assert engine.state.player.inventory == before_state.player.inventory
+    assert engine.state.player.xp == before_state.player.xp
+    assert engine.state.completed_tasks == before_state.completed_tasks
+    assert engine.state.vocabulary_mastery == before_state.vocabulary_mastery
+    assert engine.state == before_state
+    assert provider.interpretation_requests[0].location_id == "fungus_grove"
+
+
 @pytest.mark.parametrize("empty_field", ["action", "reason"])
 def test_empty_ai_interpretation_required_fields_preserve_state(
     empty_field: str,
