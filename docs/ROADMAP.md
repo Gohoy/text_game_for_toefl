@@ -102,7 +102,7 @@ None.
 
 ### T-105 — Define the required AI-agent runtime contract
 
-- **State:** ready
+- **State:** done
 - **Priority:** P0
 - **Goal:** Establish the required AI-agent interface before wiring live Codex CLI calls into gameplay.
 - **Scope:** Add documentation and testable interface contracts for AI narration, sentence feedback, vocabulary explanation, and structured response validation.
@@ -120,7 +120,7 @@ None.
 
 ### T-106 — Add a Codex CLI AI provider
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P0
 - **Goal:** Call the local Codex CLI through a structured provider for narration and feedback.
 - **Acceptance criteria:**
@@ -324,6 +324,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-105 by adding the required AI-agent contract, validated request/response models, a fake provider for tests, and explicit missing-provider behavior.
 - 2026-06-22: Updated project direction to make the AI agent required and central, with deterministic code retained as the authority for game-state changes.
 - 2026-06-22: Completed T-110 by adding characterization tests for the current Biology world identity, topology, content placement, enemy contract, target words, and quest steps.
 - 2026-06-22: Adopted the Codex automation documentation bundle, including the runbook, quality gates, world schema notes, learning design notes, and the `.codex/20_minute_prompt.md` scheduled prompt.

@@ -150,6 +150,7 @@ Do not mark a partially implemented feature done. Keep incomplete behavior behin
 | `docs/ROADMAP.md` | Executable current queue and phase status | Every successful or blocked automation run |
 | `docs/QUALITY_GATES.md` | Exact verification commands and definition of green | Tooling or test-command changes |
 | `docs/AUTOMATION_RUNBOOK.md` | Scheduled-run procedure and failure handling | Automation-process changes |
+| `docs/AI_AGENT_CONTRACT.md` | Required AI-provider interface and validation boundary | AI-provider contract changes |
 | `docs/WORLD_SCHEMA.md` | World-pack contracts and content rules | Schema or content-contract changes |
 | `docs/LANGUAGE_LEARNING_DESIGN.md` | Mastery, feedback, and review rules | Learning-rule changes |
 | `docs/DECISIONS.md` | Short architecture decision records | Durable or hard-to-reverse decisions |
