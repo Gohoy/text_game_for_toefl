@@ -5,11 +5,12 @@ from pathlib import Path
 from typing import Any, Optional
 
 from toefl_rpg.content.schema import World
-from toefl_rpg.engine.state import GameState, Player
+from toefl_rpg.engine.state import GameState, Player, VocabularyMastery
 
 
 DEFAULT_SAVE_PATH = Path("data/saves/slot1.json")
 SAVE_VERSION = 1
+MASTERY_VERSION = 1
 
 
 def save_game(state: GameState, path: Path = DEFAULT_SAVE_PATH) -> None:
@@ -25,6 +26,7 @@ def save_game(state: GameState, path: Path = DEFAULT_SAVE_PATH) -> None:
             "inventory": state.player.inventory,
         },
         "mastered_words": sorted(state.mastered_words),
+        "mastery": _mastery_payload(state),
         "completed_tasks": sorted(state.completed_tasks),
         "enemy_hp": state.enemy_hp,
         "defeated_enemies": sorted(state.defeated_enemies),
@@ -60,12 +62,18 @@ def load_game(world: World, path: Path = DEFAULT_SAVE_PATH) -> Optional[GameStat
         inventory=_string_list(player_payload.get("inventory")),
     )
 
+    mastered_words = set(_string_list(payload.get("mastered_words")))
+
     _restore_room_items(world, payload.get("room_items"))
     return GameState(
         world=world,
         current_room_id=current_room_id,
         player=player,
-        mastered_words=set(_string_list(payload.get("mastered_words"))),
+        mastered_words=mastered_words,
+        vocabulary_mastery=_mastery_records(
+            payload.get("mastery"),
+            mastered_words,
+        ),
         completed_tasks=set(_string_list(payload.get("completed_tasks"))),
         enemy_hp=_enemy_hp(payload.get("enemy_hp"), world),
         defeated_enemies=set(_valid_enemy_ids(payload.get("defeated_enemies"), world)),
@@ -108,3 +116,81 @@ def _enemy_hp(value: Any, world: World) -> dict[str, int]:
 
 def _valid_enemy_ids(value: Any, world: World) -> list[str]:
     return [enemy_id for enemy_id in _string_list(value) if enemy_id in world.enemies]
+
+
+def _mastery_payload(state: GameState) -> dict[str, Any]:
+    records = dict(state.vocabulary_mastery)
+    for word in state.mastered_words:
+        records.setdefault(word, _legacy_practiced_record(word))
+    return {
+        "version": MASTERY_VERSION,
+        "words": {
+            word: _mastery_record_payload(record)
+            for word, record in sorted(records.items())
+        },
+    }
+
+
+def _mastery_record_payload(record: VocabularyMastery) -> dict[str, Any]:
+    return {
+        "word": record.word,
+        "status": record.status,
+        "mastery_points": record.mastery_points,
+        "encounter_count": record.encounter_count,
+        "correct_use_count": record.correct_use_count,
+        "incorrect_use_count": record.incorrect_use_count,
+        "review_stage": record.review_stage,
+        "last_practiced_at": record.last_practiced_at,
+        "next_review_at": record.next_review_at,
+        "distinct_context_ids": sorted(record.distinct_context_ids),
+        "recent_response_fingerprints": list(record.recent_response_fingerprints),
+    }
+
+
+def _mastery_records(value: Any, mastered_words: set[str]) -> dict[str, VocabularyMastery]:
+    records: dict[str, VocabularyMastery] = {}
+    if isinstance(value, dict) and value.get("version") == MASTERY_VERSION:
+        words_payload = value.get("words")
+        if isinstance(words_payload, dict):
+            for word, record_payload in words_payload.items():
+                if isinstance(word, str) and isinstance(record_payload, dict):
+                    records[word] = _mastery_record_from_payload(word, record_payload)
+
+    for word in mastered_words:
+        records.setdefault(word, _legacy_practiced_record(word))
+    return records
+
+
+def _mastery_record_from_payload(
+    word: str,
+    payload: dict[str, Any],
+) -> VocabularyMastery:
+    saved_word = payload.get("word")
+    return VocabularyMastery(
+        word=saved_word if isinstance(saved_word, str) else word,
+        status=_string_value(payload, "status", "new"),
+        mastery_points=max(0, _int_value(payload, "mastery_points", 0)),
+        encounter_count=max(0, _int_value(payload, "encounter_count", 0)),
+        correct_use_count=max(0, _int_value(payload, "correct_use_count", 0)),
+        incorrect_use_count=max(0, _int_value(payload, "incorrect_use_count", 0)),
+        review_stage=max(0, _int_value(payload, "review_stage", 0)),
+        last_practiced_at=_optional_string(payload.get("last_practiced_at")),
+        next_review_at=_optional_string(payload.get("next_review_at")),
+        distinct_context_ids=set(_string_list(payload.get("distinct_context_ids"))),
+        recent_response_fingerprints=_string_list(
+            payload.get("recent_response_fingerprints")
+        ),
+    )
+
+
+def _legacy_practiced_record(word: str) -> VocabularyMastery:
+    return VocabularyMastery(
+        word=word,
+        status="learning",
+        mastery_points=1,
+        correct_use_count=1,
+    )
+
+
+def _optional_string(value: Any) -> Optional[str]:
+    return value if isinstance(value, str) else None

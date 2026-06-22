@@ -38,6 +38,8 @@ distinct_context_ids
 recent_response_fingerprints
 ```
 
+Implemented persistence status: saves now include a versioned `mastery` block with these fields for each persisted word, and legacy saves without the block load safe default records from the previous practiced-word set. Deterministic learning events are still the next implementation step.
+
 Recommended derived statuses:
 
 ```text
