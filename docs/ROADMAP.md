@@ -104,6 +104,7 @@ Phase 1 is complete. Exit evidence:
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
 - duplicate review answers are detected before AI review evaluation, preserving no-reward behavior while avoiding unnecessary provider calls
+- review-answer corpus covers fluent but synonym-heavy incorrect target-word use that reaches AI evaluation and keeps review active without XP
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -163,6 +164,7 @@ Evidence from an in-memory playthrough:
 - review-evaluation extra-field regressions now prove unauthorized mutation-like fields preserve the active review word
 - duplicate review-answer messages are now protected from looking like normal AI acceptance or rejection and do not grant extra XP or mastery
 - duplicate review answers now skip AI review evaluation before returning the distinct duplicate message
+- synonym-heavy review answers such as defining `fungus` as a harmless animal now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
 - empty turn-feedback required fields now have regression coverage proving validation failures roll back state-changing actions
 - malformed turn-feedback vocabulary notes now have regression coverage proving validation failures roll back state-changing actions
@@ -1235,7 +1237,7 @@ None.
 
 ### T-196 — Add review answer corpus case for synonym-heavy incorrect use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep review-answer AI evaluation coverage clear when a learner writes a fluent sentence that does not use the active target word meaningfully.
 - **Acceptance criteria:**
@@ -1244,6 +1246,43 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-195.
+
+### T-197 — Add review answer corpus case for memorized definition misuse
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Keep review evaluation coverage clear when a learner writes a grammatical definition-like sentence that names the word but does not show usable meaning in context.
+- **Acceptance criteria:**
+  - review corpus includes a fluent definition-style answer that names the active word without a meaningful TOEFL use
+  - fake AI evaluation rejects it while keeping the review active and awarding no XP
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-196.
+
+### T-198 — Add learner sentence corpus case for indirect polite questions
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Expand full-sentence input coverage for indirect polite requests such as "Would you mind..." while preserving deterministic state authority.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect polite question
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-197.
+
+### T-199 — Add review answer corpus case for context mismatch
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when the target word is used in a sentence that is fluent but unrelated to the biology context being reviewed.
+- **Acceptance criteria:**
+  - review corpus includes a full sentence that contains the active target word but mismatches the requested learning context
+  - fake AI evaluation rejects it without XP and keeps the active review word
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-198.
 
 ## Blocked Tasks
 
