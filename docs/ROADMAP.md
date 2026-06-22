@@ -682,7 +682,7 @@ None.
 
 ### T-155 — Add content draft malformed-payload regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI content drafting returns a malformed world-pack payload.
 - **Acceptance criteria:**
@@ -694,7 +694,7 @@ None.
 
 ### T-156 — Add turn-feedback empty-field regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI turn feedback returns empty required coaching fields.
 - **Acceptance criteria:**
@@ -715,6 +715,18 @@ None.
   - test uses fake providers and does not require live Codex CLI
 - **Verification:** review engine tests and full suite.
 - **Dependencies:** T-140.
+
+### T-158 — Add vocabulary explanation empty-field regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect the failure path when AI vocabulary explanations return empty required learning fields.
+- **Acceptance criteria:**
+  - empty meaning, example, or memory hint raises a clear provider error
+  - deterministic state remains unchanged
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** engine tests and full suite.
+- **Dependencies:** T-149.
 
 ## Blocked Tasks
 
@@ -764,6 +776,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-155 by adding a fake-provider regression that rejects malformed AI world-pack draft payloads through deterministic schema validation before any generated content is accepted.
 - 2026-06-22: Completed T-154 by adding a fake-provider regression that rejects AI room narration with empty required fields, preserving deterministic room state and surfacing a clear provider error.
 - 2026-06-22: Completed T-153 by adding a fake-provider regression that rejects AI NPC dialogue when the returned speaker differs from the requested visible NPC, with deterministic state preservation.
 - 2026-06-22: Completed T-152 by extending the learner-sentence regression corpus with a malformed parser-miss AI interpretation case that raises a clear provider error while preserving deterministic state.
@@ -773,6 +786,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-148 by moving duplicate review-answer detection before AI review evaluation, preserving the distinct duplicate message and no-reward behavior while proving no fake-provider review-evaluation request is sent.
 - 2026-06-22: Completed T-146 by documenting a temporary-save manual live Codex smoke command in README, distinguishing it from the required fake-provider smoke gate, and keeping automation free of paid or live Codex requirements.
 - 2026-06-22: Completed T-144 by adding engine and renderer regressions that keep AI vocabulary explanation meaning, example, and memory-hint lines visibly distinct while preserving deterministic state and avoiding an unrelated English Feedback panel.
-- 2026-06-22: Completed T-143 by adding a review duplicate-message regression that verifies repeated active review answers use a distinct duplicate message, clear the active review, and avoid extra XP, review-stage, and mastery-point gains with a fake provider.
 
 Keep at most ten items here.

@@ -56,6 +56,32 @@ def test_draft_world_pack_uses_fake_provider_and_validates_schema() -> None:
     assert provider.content_requests == [request]
 
 
+def test_draft_world_pack_rejects_malformed_provider_payload() -> None:
+    class MalformedDraftProvider(FakeAIProvider):
+        def draft_content(self, request):
+            self.content_requests.append(request)
+            return StructuredContentDraft(
+                draft_type="world_pack",
+                payload={
+                    "schema_version": 1,
+                    "world_id": "malformed_world",
+                    "title": "Malformed World",
+                },
+            )
+
+    provider = MalformedDraftProvider()
+    request = ContentDraftRequest(
+        theme="biology",
+        required_words=["organism"],
+        purpose="world_pack",
+    )
+
+    with pytest.raises(ContentDraftValidationError, match="Invalid AI world_pack draft"):
+        draft_world_pack(provider, request)
+
+    assert provider.content_requests == [request]
+
+
 def test_draft_world_pack_requires_world_pack_purpose() -> None:
     provider = FakeAIProvider()
     request = ContentDraftRequest(
