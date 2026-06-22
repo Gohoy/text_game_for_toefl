@@ -303,6 +303,29 @@ def test_vocabulary_explanation_keeps_learning_sections_distinct() -> None:
     assert provider.vocabulary_requests[0].word == "fungus"
 
 
+def test_vocabulary_explanation_rejects_mismatched_ai_word_without_mutating_state() -> None:
+    class MismatchedExplanationProvider(FakeAIProvider):
+        def explain_vocabulary(self, request):
+            self.vocabulary_requests.append(request)
+            return VocabularyExplanation(
+                word="enzyme",
+                plain_meaning="A protein that speeds up a chemical reaction.",
+                example_sentence="An enzyme helps digestion.",
+                memory_hint="Enzyme sounds like inside chemistry.",
+            )
+
+    provider = MismatchedExplanationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="different word"):
+        engine.handle("explain fungus")
+
+    assert engine.state == before_state
+    assert provider.vocabulary_requests[0].word == "fungus"
+
+
 def test_explain_practiced_vocabulary_can_work_outside_current_room() -> None:
     provider = FakeAIProvider()
     engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
