@@ -29,4 +29,16 @@ It defines:
 
 AI output must be parsed into typed models before use. Invalid or incomplete AI output must not mutate game state.
 
-The next implementation task should add a Codex CLI provider that conforms to this interface and returns validated structured responses.
+## Codex CLI Provider
+
+The first concrete provider lives in `src/toefl_rpg/ai/codex_cli.py`.
+
+It invokes:
+
+```text
+codex exec --sandbox read-only --ask-for-approval never --skip-git-repo-check --output-schema <schema> --output-last-message <output> -
+```
+
+The provider writes the relevant Pydantic JSON schema to a temporary file, sends the request as stdin, reads the final structured response, and validates it before returning a typed model.
+
+Timeouts, missing executables, non-zero exit codes, empty output, and invalid structured output are surfaced as explicit provider errors.

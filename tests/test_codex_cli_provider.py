@@ -1,0 +1,138 @@
+import json
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from toefl_rpg.ai.codex_cli import CodexCliProvider
+from toefl_rpg.ai.codex_cli import CodexCliProviderError
+from toefl_rpg.ai.contract import AIProviderUnavailable
+from toefl_rpg.ai.contract import TurnFeedbackRequest
+from toefl_rpg.ai.contract import VocabularyExplanationRequest
+
+
+def test_codex_cli_provider_builds_bounded_exec_command(tmp_path) -> None:
+    calls = []
+
+    def fake_runner(command, **kwargs):
+        calls.append((command, kwargs))
+        output_path = Path(command[command.index("--output-last-message") + 1])
+        schema_path = Path(command[command.index("--output-schema") + 1])
+        assert schema_path.exists()
+        output_path.write_text(
+            json.dumps(
+                {
+                    "narration": "You collect the sample carefully.",
+                    "sentence_feedback": "Use 'to collect' after 'want'.",
+                    "suggested_sentence": "I want to collect the fungus sample.",
+                    "vocabulary_notes": ["fungus: a simple organism."],
+                }
+            ),
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    provider = CodexCliProvider(
+        executable="codex-test",
+        timeout_seconds=7,
+        cwd=tmp_path,
+        runner=fake_runner,
+    )
+    request = TurnFeedbackRequest(
+        player_sentence="I want collect the fungus sample.",
+        location_id="fungus_grove",
+        deterministic_action="collect",
+        deterministic_result="You collect fungus sample.",
+        target_words=["fungus"],
+        practiced_words=["fungus"],
+    )
+
+    response = provider.generate_turn_feedback(request)
+
+    command, kwargs = calls[0]
+    assert command[:2] == ["codex-test", "exec"]
+    assert "--output-schema" in command
+    assert "--output-last-message" in command
+    assert "--sandbox" in command
+    assert "read-only" in command
+    assert kwargs["timeout"] == 7
+    assert kwargs["cwd"] == str(tmp_path)
+    assert kwargs["input"].startswith("You are the required AI agent")
+    assert response.suggested_sentence == "I want to collect the fungus sample."
+
+
+def test_codex_cli_provider_parses_stdout_when_output_file_is_absent() -> None:
+    def fake_runner(command, **kwargs):
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            stdout=json.dumps(
+                {
+                    "word": "mimicry",
+                    "plain_meaning": "copying another living thing's appearance",
+                    "example_sentence": "The insect uses mimicry to survive.",
+                    "memory_hint": "Mimicry means imitate.",
+                }
+            ),
+            stderr="",
+        )
+
+    provider = CodexCliProvider(runner=fake_runner)
+
+    response = provider.explain_vocabulary(
+        VocabularyExplanationRequest(word="mimicry", theme="biology")
+    )
+
+    assert response.word == "mimicry"
+    assert response.memory_hint
+
+
+def test_codex_cli_provider_reports_missing_executable() -> None:
+    def fake_runner(command, **kwargs):
+        raise FileNotFoundError("missing")
+
+    provider = CodexCliProvider(executable="missing-codex", runner=fake_runner)
+
+    with pytest.raises(AIProviderUnavailable, match="missing-codex"):
+        provider.generate_turn_feedback(
+            TurnFeedbackRequest(
+                player_sentence="I go north.",
+                location_id="research_camp",
+                deterministic_action="move",
+                deterministic_result="You go north.",
+            )
+        )
+
+
+def test_codex_cli_provider_reports_timeout() -> None:
+    def fake_runner(command, **kwargs):
+        raise subprocess.TimeoutExpired(command, timeout=kwargs["timeout"])
+
+    provider = CodexCliProvider(timeout_seconds=1, runner=fake_runner)
+
+    with pytest.raises(CodexCliProviderError, match="timed out"):
+        provider.generate_turn_feedback(
+            TurnFeedbackRequest(
+                player_sentence="I go north.",
+                location_id="research_camp",
+                deterministic_action="move",
+                deterministic_result="You go north.",
+            )
+        )
+
+
+def test_codex_cli_provider_rejects_invalid_structured_output() -> None:
+    def fake_runner(command, **kwargs):
+        return subprocess.CompletedProcess(command, 0, stdout="{}", stderr="")
+
+    provider = CodexCliProvider(runner=fake_runner)
+
+    with pytest.raises(CodexCliProviderError, match="invalid structured output"):
+        provider.generate_turn_feedback(
+            TurnFeedbackRequest(
+                player_sentence="I go north.",
+                location_id="research_camp",
+                deterministic_action="move",
+                deterministic_result="You go north.",
+            )
+        )

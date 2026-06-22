@@ -1,3 +1,5 @@
+from toefl_rpg.ai.codex_cli import CodexCliProvider
+from toefl_rpg.ai.codex_cli import CodexCliProviderError
 from toefl_rpg.ai.contract import AIProvider
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import ContentDraftRequest
@@ -12,6 +14,8 @@ from toefl_rpg.ai.contract import require_ai_provider
 __all__ = [
     "AIProvider",
     "AIProviderUnavailable",
+    "CodexCliProvider",
+    "CodexCliProviderError",
     "ContentDraftRequest",
     "FakeAIProvider",
     "StructuredContentDraft",

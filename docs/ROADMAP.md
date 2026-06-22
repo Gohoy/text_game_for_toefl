@@ -120,7 +120,7 @@ None.
 
 ### T-106 — Add a Codex CLI AI provider
 
-- **State:** ready
+- **State:** done
 - **Priority:** P0
 - **Goal:** Call the local Codex CLI through a structured provider for narration and feedback.
 - **Acceptance criteria:**
@@ -133,7 +133,7 @@ None.
 
 ### T-107 — Use AI feedback in the gameplay loop
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P0
 - **Goal:** Replace placeholder English feedback in normal play with required AI-agent feedback while preserving deterministic rewards.
 - **Acceptance criteria:**
@@ -324,6 +324,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-106 by adding a bounded Codex CLI provider that requests schema-validated JSON, handles missing executable and timeout failures, and is covered by fake-runner tests.
 - 2026-06-22: Completed T-105 by adding the required AI-agent contract, validated request/response models, a fake provider for tests, and explicit missing-provider behavior.
 - 2026-06-22: Updated project direction to make the AI agent required and central, with deterministic code retained as the authority for game-state changes.
 - 2026-06-22: Completed T-110 by adding characterization tests for the current Biology world identity, topology, content placement, enemy contract, target words, and quest steps.
