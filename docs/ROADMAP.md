@@ -78,6 +78,7 @@ Phase 1 is complete. Exit evidence:
 - review result messages separate AI coaching text from deterministic reward and retry summaries
 - rejected review answers keep AI advice, suggested sentence, and deterministic retry result visibly distinct
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
+- malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - duplicate review answers are detected before AI review evaluation, preserving no-reward behavior while avoiding unnecessary provider calls
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
@@ -123,6 +124,7 @@ Evidence from an in-memory playthrough:
 - successful and rejected review messages now label AI advice separately from deterministic result summaries
 - review rejection display regressions now keep AI advice, suggested sentence, and deterministic retry result in the Result panel while active review state remains unchanged
 - empty review-evaluation required fields now have regression coverage proving provider errors preserve the active review word
+- malformed review-evaluation judgment flags now have regression coverage proving provider errors preserve the active review word
 - duplicate review-answer messages are now protected from looking like normal AI acceptance or rejection and do not grant extra XP or mastery
 - duplicate review answers now skip AI review evaluation before returning the distinct duplicate message
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
@@ -831,7 +833,7 @@ None.
 
 ### T-166 — Add review evaluation boolean type regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI review evaluation returns a malformed judgment flag.
 - **Acceptance criteria:**
@@ -843,7 +845,7 @@ None.
 
 ### T-167 — Add vocabulary explanation extra-field regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI vocabulary explanations return unauthorized state-like fields.
 - **Acceptance criteria:**
@@ -852,6 +854,30 @@ None.
   - test uses fake providers and does not require live Codex CLI
 - **Verification:** engine tests and full suite.
 - **Dependencies:** T-158.
+
+### T-168 — Add sentence interpretation extra-field regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect the failure path when AI parser-miss interpretation returns unauthorized state-like fields.
+- **Acceptance criteria:**
+  - extra mutation-like fields raise a clear provider error before deterministic validation
+  - deterministic state remains unchanged
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** engine tests and full suite.
+- **Dependencies:** T-160.
+
+### T-169 — Add NPC dialogue extra-field regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect the failure path when AI NPC dialogue returns unauthorized state-like fields.
+- **Acceptance criteria:**
+  - extra mutation-like fields raise a clear provider error before display
+  - deterministic state remains unchanged
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** engine tests and full suite.
+- **Dependencies:** T-164.
 
 ## Blocked Tasks
 
@@ -901,6 +927,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-166 by adding strict review-evaluation judgment validation and a fake-provider regression that preserves the active review word on malformed boolean output.
 - 2026-06-22: Completed T-165 by adding a fake-provider regression that rejects malformed AI room narration vocabulary notes before display while preserving deterministic state.
 - 2026-06-22: Completed T-164 by adding a fake-provider regression that rejects malformed AI NPC dialogue vocabulary notes before display while preserving deterministic state.
 - 2026-06-22: Completed T-163 by adding a fake-provider regression that rejects malformed AI turn-feedback vocabulary notes and rolls back deterministic state after a collecting action.
@@ -910,6 +937,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-159 by adding a fake-provider regression that rejects empty AI NPC dialogue speaker and line fields while preserving deterministic state.
 - 2026-06-22: Completed T-158 by adding a fake-provider regression that rejects empty AI vocabulary-explanation meaning, example, and memory-hint fields while preserving deterministic state.
 - 2026-06-22: Completed T-157 by adding a fake-provider regression that rejects empty AI review-evaluation explanation and suggested-sentence fields while preserving the active review word.
-- 2026-06-22: Completed T-156 by adding a fake-provider regression that rejects empty AI turn-feedback narration, feedback, and suggested-sentence fields while proving state rollback after a collecting action.
 
 Keep at most ten items here.

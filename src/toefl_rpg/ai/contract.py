@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional, Protocol
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
 
 from toefl_rpg.engine.actions import DeterministicAction
 
@@ -56,7 +56,7 @@ class ReviewAnswerEvaluationRequest(BaseModel):
 class ReviewAnswerEvaluation(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    uses_target_meaningfully: bool
+    uses_target_meaningfully: StrictBool
     explanation: str = Field(min_length=1)
     suggested_sentence: str = Field(min_length=1)
 
