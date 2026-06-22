@@ -8,6 +8,8 @@ from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
+from toefl_rpg.ai.contract import RoomNarration
+from toefl_rpg.ai.contract import RoomNarrationRequest
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
@@ -148,4 +150,36 @@ def test_npc_dialogue_rejects_extra_state_mutation_fields() -> None:
             line="Collect the fungus sample.",
             vocabulary_notes=["fungus: a growth."],
             completed_tasks=["collect_fungus_sample"],
+        )
+
+
+def test_fake_ai_provider_supports_room_narration() -> None:
+    provider = FakeAIProvider()
+    request = RoomNarrationRequest(
+        location_id="fungus_grove",
+        room_name="Fungus Grove",
+        room_description="Pale mushrooms cover old roots.",
+        quest_progress="Biology Investigation 0/3",
+        exits={"south": "research_camp"},
+        visible_items=["fungus sample"],
+        visible_npcs=[],
+        visible_enemies=[],
+        target_words=["fungus", "symbiosis", "vital"],
+    )
+
+    response = provider.generate_room_narration(request)
+
+    assert response.narration
+    assert response.focus_hint
+    assert response.vocabulary_notes
+    assert provider.room_narration_requests == [request]
+
+
+def test_room_narration_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        RoomNarration(
+            narration="The grove changes shape.",
+            focus_hint="Collect the sample.",
+            vocabulary_notes=["fungus: a growth."],
+            room_id="new_room",
         )

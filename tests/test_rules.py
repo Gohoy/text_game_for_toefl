@@ -8,6 +8,7 @@ from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import FakeAIProvider
 from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
+from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.rules import GameEngine
 
@@ -212,6 +213,56 @@ def test_talk_to_visible_npc_uses_ai_dialogue_without_mutating_state() -> None:
     assert request.quest_progress.startswith("Biology Investigation 0/3")
     assert request.visible_items == ["field notebook"]
     assert set(request.target_words) == {"organism", "species", "evolve"}
+
+
+def test_look_uses_ai_room_narration_without_mutating_state() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    result = engine.handle("look")
+
+    assert result.success
+    assert "Focus:" in result.message
+    assert "Room vocabulary:" in result.message
+    assert engine.state == before_state
+    request = provider.room_narration_requests[0]
+    assert request.location_id == "fungus_grove"
+    assert request.room_name == "Fungus Grove"
+    assert "Pale mushrooms" in request.room_description
+    assert request.exits == {"south": "research_camp", "north": "mimicry_trail"}
+    assert request.visible_items == ["fungus sample"]
+    assert request.visible_npcs == []
+    assert set(request.target_words) == {"fungus", "symbiosis", "vital"}
+
+
+def test_invalid_ai_room_narration_preserves_state() -> None:
+    class InvalidRoomNarrationProvider(FakeAIProvider):
+        def generate_room_narration(self, request):
+            self.room_narration_requests.append(request)
+            return {"focus_hint": "Look around."}
+
+    provider = InvalidRoomNarrationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI room narration failed"):
+        engine.handle("look")
+
+    assert engine.state == before_state
+    assert provider.room_narration_requests[0].location_id == "fungus_grove"
+
+
+def test_ai_room_narration_cannot_return_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        RoomNarration(
+            narration="You discover a shortcut.",
+            focus_hint="Go east.",
+            vocabulary_notes=[],
+            exits={"east": "hidden_room"},
+        )
 
 
 def test_talk_rejects_absent_npc_before_dialogue_ai_call() -> None:

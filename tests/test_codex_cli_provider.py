@@ -9,6 +9,7 @@ from toefl_rpg.ai.codex_cli import CodexCliProviderError
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
+from toefl_rpg.ai.contract import RoomNarrationRequest
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
 
@@ -160,6 +161,43 @@ def test_codex_cli_provider_supports_npc_dialogue() -> None:
     assert response.speaker == "Dr. Lin"
     assert "fungus sample" in response.line
     assert response.vocabulary_notes == ["fungus: a living growth."]
+
+
+def test_codex_cli_provider_supports_room_narration() -> None:
+    def fake_runner(command, **kwargs):
+        assert "room narration" in kwargs["input"]
+        assert '"room_description": "Pale mushrooms cover old roots."' in kwargs["input"]
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            stdout=json.dumps(
+                {
+                    "narration": "Pale fungus threads wind around the roots.",
+                    "focus_hint": "The fungus sample is ready to collect.",
+                    "vocabulary_notes": ["symbiosis: living together."],
+                }
+            ),
+            stderr="",
+        )
+
+    provider = CodexCliProvider(runner=fake_runner)
+    request = RoomNarrationRequest(
+        location_id="fungus_grove",
+        room_name="Fungus Grove",
+        room_description="Pale mushrooms cover old roots.",
+        quest_progress="Biology Investigation 0/3",
+        exits={"south": "research_camp"},
+        visible_items=["fungus sample"],
+        visible_npcs=[],
+        visible_enemies=[],
+        target_words=["fungus", "symbiosis", "vital"],
+    )
+
+    response = provider.generate_room_narration(request)
+
+    assert "fungus" in response.narration
+    assert response.focus_hint == "The fungus sample is ready to collect."
+    assert response.vocabulary_notes == ["symbiosis: living together."]
 
 
 def test_codex_cli_provider_reports_missing_executable() -> None:

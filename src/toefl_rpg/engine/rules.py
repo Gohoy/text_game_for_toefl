@@ -9,6 +9,8 @@ from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
+from toefl_rpg.ai.contract import RoomNarration
+from toefl_rpg.ai.contract import RoomNarrationRequest
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanation
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
@@ -104,7 +106,7 @@ class GameEngine:
             result = self._review_prompt(feedback)
             return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "look":
-            result = TurnResult(True, "You take a careful look around.", feedback)
+            result = self._look(feedback)
             return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "move":
             result = self._move(intent, feedback)
@@ -254,6 +256,45 @@ class GameEngine:
         self.state.current_room_id = room.exits[intent.target]
         record_room_encounter(self.state)
         return TurnResult(True, f"You go {intent.target}.", feedback)
+
+    def _look(self, feedback: str) -> TurnResult:
+        room = self.state.current_room
+        provider = require_ai_provider(self.ai_provider)
+        request = RoomNarrationRequest(
+            location_id=self.state.current_room_id,
+            room_name=room.name,
+            room_description=room.description,
+            quest_progress=quest_summary(self.state.completed_tasks),
+            exits=dict(room.exits),
+            visible_items=list(room.items),
+            visible_npcs=list(room.npcs),
+            visible_enemies=[
+                self.state.world.enemy(enemy_id).name
+                for enemy_id in self.state.live_enemy_ids_in_current_room()
+            ],
+            target_words=list(room.target_words),
+        )
+        try:
+            narration = RoomNarration.model_validate(
+                provider.generate_room_narration(request)
+            )
+        except Exception as exc:
+            raise AIProviderUnavailable(f"AI room narration failed: {exc}") from exc
+
+        vocabulary_text = ""
+        if narration.vocabulary_notes:
+            vocabulary_text = "\nRoom vocabulary: " + "; ".join(
+                narration.vocabulary_notes
+            )
+        return TurnResult(
+            True,
+            (
+                f"{narration.narration}\n"
+                f"Focus: {narration.focus_hint}"
+                f"{vocabulary_text}"
+            ),
+            feedback,
+        )
 
     def _inspect(self, intent: ParsedIntent, feedback: str) -> TurnResult:
         room = self.state.current_room

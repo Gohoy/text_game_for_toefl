@@ -14,6 +14,8 @@ from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
+from toefl_rpg.ai.contract import RoomNarration
+from toefl_rpg.ai.contract import RoomNarrationRequest
 from toefl_rpg.ai.contract import StructuredContentDraft
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
@@ -62,6 +64,13 @@ class CodexCliProvider:
         return self._invoke(
             response_model=NPCDialogue,
             purpose="NPC dialogue",
+            payload=request.model_dump(),
+        )
+
+    def generate_room_narration(self, request: RoomNarrationRequest) -> RoomNarration:
+        return self._invoke(
+            response_model=RoomNarration,
+            purpose="room narration",
             payload=request.model_dump(),
         )
 

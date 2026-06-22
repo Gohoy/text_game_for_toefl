@@ -109,6 +109,28 @@ class NPCDialogue(BaseModel):
     vocabulary_notes: list[str] = Field(default_factory=list)
 
 
+class RoomNarrationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    location_id: str = Field(min_length=1)
+    room_name: str = Field(min_length=1)
+    room_description: str = Field(min_length=1)
+    quest_progress: str = Field(min_length=1)
+    exits: dict[str, str] = Field(default_factory=dict)
+    visible_items: list[str] = Field(default_factory=list)
+    visible_npcs: list[str] = Field(default_factory=list)
+    visible_enemies: list[str] = Field(default_factory=list)
+    target_words: list[str] = Field(default_factory=list)
+
+
+class RoomNarration(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    narration: str = Field(min_length=1)
+    focus_hint: str = Field(min_length=1)
+    vocabulary_notes: list[str] = Field(default_factory=list)
+
+
 class AIProvider(Protocol):
     def generate_turn_feedback(self, request: TurnFeedbackRequest) -> TurnFeedback:
         raise NotImplementedError
@@ -119,6 +141,9 @@ class AIProvider(Protocol):
         raise NotImplementedError
 
     def generate_npc_dialogue(self, request: NPCDialogueRequest) -> NPCDialogue:
+        raise NotImplementedError
+
+    def generate_room_narration(self, request: RoomNarrationRequest) -> RoomNarration:
         raise NotImplementedError
 
     def explain_vocabulary(
@@ -143,6 +168,7 @@ class FakeAIProvider:
         self.turn_feedback_requests: list[TurnFeedbackRequest] = []
         self.interpretation_requests: list[PlayerSentenceInterpretationRequest] = []
         self.dialogue_requests: list[NPCDialogueRequest] = []
+        self.room_narration_requests: list[RoomNarrationRequest] = []
         self.vocabulary_requests: list[VocabularyExplanationRequest] = []
         self.content_requests: list[ContentDraftRequest] = []
 
@@ -179,6 +205,14 @@ class FakeAIProvider:
                 "fungus: a growth that can affect an ecosystem.",
                 "microscope: a tool for seeing tiny details.",
             ],
+        )
+
+    def generate_room_narration(self, request: RoomNarrationRequest) -> RoomNarration:
+        self.room_narration_requests.append(request)
+        return RoomNarration(
+            narration=f"AI room narration for {request.room_name}.",
+            focus_hint="Notice the visible entities before choosing your next action.",
+            vocabulary_notes=[f"Target words: {', '.join(request.target_words)}."],
         )
 
     def explain_vocabulary(

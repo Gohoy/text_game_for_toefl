@@ -21,6 +21,7 @@ It defines:
 - `TurnFeedbackRequest` and `TurnFeedback` for live turn narration and sentence coaching
 - `PlayerSentenceInterpretationRequest` and `PlayerSentenceInterpretation` for proposed interpretations of open-ended player sentences
 - `NPCDialogueRequest` and `NPCDialogue` for adaptive NPC responses
+- `RoomNarrationRequest` and `RoomNarration` for adaptive room look narration
 - `VocabularyExplanationRequest` and `VocabularyExplanation` for word-level learning help
 - `ContentDraftRequest` and `StructuredContentDraft` for generated world or quest drafts
 - `AIProvider` protocol for concrete providers
@@ -30,6 +31,8 @@ It defines:
 Player sentence interpretation is advisory. The response is limited to a known deterministic action plus a proposed target and confidence score. AI cannot return HP, XP, inventory, quest, mastery, save, or map mutations through this model, and extra response fields are rejected before engine use.
 
 NPC dialogue is also display-only. The request includes the NPC, room, quest progress, visible entities, and target words. The response may include a speaker line and vocabulary notes, but it cannot return deterministic state changes.
+
+Room narration is display-only. The request includes the deterministic room description, exits, visible entities, quest progress, and target words. The response may enrich the prose and add vocabulary notes, but it cannot alter exits, items, NPCs, enemies, quest state, or rewards.
 
 ## Validation Rule
 
