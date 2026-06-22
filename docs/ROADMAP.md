@@ -82,6 +82,7 @@ Phase 1 is complete. Exit evidence:
 - rejected review answers keep AI advice, suggested sentence, and deterministic retry result visibly distinct
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
+- AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
 - duplicate review answers are detected before AI review evaluation, preserving no-reward behavior while avoiding unnecessary provider calls
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
@@ -133,6 +134,7 @@ Evidence from an in-memory playthrough:
 - review rejection display regressions now keep AI advice, suggested sentence, and deterministic retry result in the Result panel while active review state remains unchanged
 - empty review-evaluation required fields now have regression coverage proving provider errors preserve the active review word
 - malformed review-evaluation judgment flags now have regression coverage proving provider errors preserve the active review word
+- review-evaluation extra-field regressions now prove unauthorized mutation-like fields preserve the active review word
 - duplicate review-answer messages are now protected from looking like normal AI acceptance or rejection and do not grant extra XP or mastery
 - duplicate review answers now skip AI review evaluation before returning the distinct duplicate message
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
@@ -915,7 +917,7 @@ None.
 
 ### T-172 — Add review evaluation extra-field regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI review evaluation returns unauthorized state-like fields.
 - **Acceptance criteria:**
@@ -924,6 +926,42 @@ None.
   - test uses fake providers and does not require live Codex CLI
 - **Verification:** review engine tests and full suite.
 - **Dependencies:** T-166.
+
+### T-173 — Add content draft extra-field regression
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Protect the failure path when AI content drafting returns unauthorized state-like fields outside the world-pack payload.
+- **Acceptance criteria:**
+  - extra mutation-like fields raise a clear validation error before generated content is accepted
+  - deterministic schema validation remains the only acceptance gate
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** AI content draft tests and full suite.
+- **Dependencies:** T-162.
+
+### T-174 — Add content draft payload mutation-field regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect the failure path when AI world-pack drafts include unauthorized mutation-like payload fields.
+- **Acceptance criteria:**
+  - payload fields that imply player state, rewards, saves, or inventory raise clear validation errors
+  - no generated content is accepted without deterministic schema validation
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** AI content draft and world schema tests plus full suite.
+- **Dependencies:** T-173.
+
+### T-175 — Add Codex schema strictness coverage for content drafts
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Ensure Codex CLI structured-output schemas for content drafting stay strict after validation expansions.
+- **Acceptance criteria:**
+  - generated response schema for content drafts has `additionalProperties: false` where required
+  - test uses subprocess fakes and does not require live Codex CLI
+  - existing provider command behavior remains unchanged
+- **Verification:** Codex CLI provider tests and full suite.
+- **Dependencies:** T-173.
 
 ## Blocked Tasks
 
@@ -973,6 +1011,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-172 by adding a fake-provider regression that rejects AI review evaluations containing unauthorized mutation-like fields while preserving the active review word.
 - 2026-06-22: Completed T-171 by adding a fake-provider regression that rejects AI turn feedback containing unauthorized mutation-like fields and rolls back a state-changing collect action.
 - 2026-06-22: Completed T-170 by adding a fake-provider regression that rejects AI room narration containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-169 by adding a fake-provider regression that rejects AI NPC dialogue containing unauthorized mutation-like fields before display while preserving deterministic state.
@@ -982,6 +1021,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-165 by adding a fake-provider regression that rejects malformed AI room narration vocabulary notes before display while preserving deterministic state.
 - 2026-06-22: Completed T-164 by adding a fake-provider regression that rejects malformed AI NPC dialogue vocabulary notes before display while preserving deterministic state.
 - 2026-06-22: Completed T-163 by adding a fake-provider regression that rejects malformed AI turn-feedback vocabulary notes and rolls back deterministic state after a collecting action.
-- 2026-06-22: Completed T-162 by adding a fake-provider regression that rejects AI world-pack drafts with empty required title or room-description text before any generated content is accepted.
 
 Keep at most ten items here.

@@ -348,6 +348,38 @@ def test_malformed_ai_review_evaluation_judgment_preserves_active_review_state()
     assert provider.review_evaluation_requests[0].word == "fungus"
 
 
+def test_ai_review_evaluation_extra_fields_preserve_active_review_state() -> None:
+    class ExtraFieldReviewProvider(FakeAIProvider):
+        def evaluate_review_answer(self, request):
+            self.review_evaluation_requests.append(request)
+            return {
+                "uses_target_meaningfully": True,
+                "explanation": "The sentence connects the word to its role in nature.",
+                "suggested_sentence": "A fungus can be vital for forest metabolism.",
+                "xp": 100,
+                "review_stage": 3,
+            }
+
+    provider = ExtraFieldReviewProvider()
+    now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        ai_provider=provider,
+        clock=lambda: now,
+    )
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("review")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI review evaluation failed"):
+        engine.handle("A fungus can be vital for forest metabolism.")
+
+    assert engine.state == before_state
+    assert engine.state.active_review_word == "fungus"
+    assert provider.review_evaluation_requests[0].word == "fungus"
+
+
 def test_explain_visible_vocabulary_uses_ai_without_mutating_state() -> None:
     provider = FakeAIProvider()
     engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
