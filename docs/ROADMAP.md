@@ -90,6 +90,7 @@ Phase 1 is complete. Exit evidence:
 - AI review-evaluation requests reject unauthorized extra state-like fields before reaching providers
 - all AI request models have strict-schema audit coverage in the AI contract tests
 - parser and AI sentence interpretation share an executable action/target convention audit
+- learner sentence corpus covers polite deterministic commands and polite AI-interpretation fallback
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
@@ -135,6 +136,7 @@ Evidence from an in-memory playthrough:
 - AI-authored world-pack payloads with nested mutation-like fields now raise clear validation errors before generated content is accepted
 - verbose movement sentences such as `I go north to the fungus grove.` resolve through deterministic parsing
 - a learner-sentence regression corpus now captures accepted, rejected, and ambiguous sentence patterns and verifies whether each route is handled by deterministic parsing or validated AI interpretation fallback
+- polite learner commands such as `Please...` and `Could you...` are covered across deterministic parsing and AI interpretation fallback routes
 - low-confidence and unknown AI interpretation corpus cases now preserve deterministic state and show retry guidance instead of mutating the world
 - malformed parser-miss AI interpretation corpus cases now raise clear provider errors while preserving deterministic state
 - a review-answer regression corpus now captures accepted, rejected, and malformed answer cases and verifies deterministic-vs-AI evaluation routing
@@ -1100,7 +1102,7 @@ None.
 
 ### T-186 — Add learner sentence corpus case for polite command forms
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Expand full-sentence input coverage for polite learner commands such as "Could you..." and "Please...".
 - **Acceptance criteria:**
@@ -1112,7 +1114,7 @@ None.
 
 ### T-187 — Add renderer regression for AI coaching versus deterministic results
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Keep AI coaching text visually distinct from deterministic result summaries in player-facing output.
 - **Acceptance criteria:**
@@ -1170,6 +1172,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-186 by adding learner-sentence corpus coverage for polite deterministic commands and polite AI-interpretation fallback with explicit state expectations.
 - 2026-06-23: Completed T-185 by adding an executable parser/AI interpretation intent-contract audit that covers every deterministic action and target convention.
 - 2026-06-23: Completed T-184 by adding an executable AI request-model audit that verifies every request schema is strict and that the audited request set is complete.
 - 2026-06-23: Completed T-183 by adding a regression that AI review-evaluation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider review behavior.
@@ -1179,6 +1182,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-179 by making AI vocabulary-explanation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider explanation behavior.
 - 2026-06-23: Completed T-178 by making AI turn-feedback requests reject unauthorized state-like extra fields before provider use while preserving fake-provider feedback behavior.
 - 2026-06-23: Completed T-177 by adding fake-provider regressions that distinguish AI content-draft envelope failures from world-pack payload failures while preserving nested payload field paths.
-- 2026-06-23: Completed T-176 by making AI content-draft requests reject unauthorized state-like extra fields before provider use while preserving fake-provider draft behavior.
 
 Keep at most ten items here.

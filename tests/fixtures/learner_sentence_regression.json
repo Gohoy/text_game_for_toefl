@@ -14,6 +14,20 @@
     "expected_message_contains": "You go north."
   },
   {
+    "id": "please_move_deterministic",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [],
+    "sentence": "Please go north to the fungus grove.",
+    "expected_parser": {
+      "action": "move",
+      "target": "north"
+    },
+    "expected_success": true,
+    "expected_room_id": "fungus_grove",
+    "expected_message_contains": "You go north."
+  },
+  {
     "id": "collect_specimen_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

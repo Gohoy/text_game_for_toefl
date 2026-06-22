@@ -73,6 +73,16 @@ def test_learner_sentence_corpus_has_required_case_types() -> None:
     } <= categories
 
 
+def test_learner_sentence_corpus_covers_polite_command_routes() -> None:
+    polite_cases = {
+        case["route"]
+        for case in load_corpus()
+        if case["sentence"].lower().startswith(("could you", "please"))
+    }
+
+    assert {"deterministic_parser", "ai_interpretation_fallback"} <= polite_cases
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 
