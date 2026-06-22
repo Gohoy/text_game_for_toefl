@@ -1,3 +1,4 @@
+from copy import deepcopy
 from datetime import datetime, timezone
 
 import pytest
@@ -61,6 +62,71 @@ def test_ai_feedback_request_includes_reviewed_word() -> None:
 
     assert result.success
     assert provider.turn_feedback_requests[-1].practiced_words == ["fungus"]
+
+
+def test_explain_visible_vocabulary_uses_ai_without_mutating_state() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    result = engine.handle("Please explain the word fungus")
+
+    assert result.success
+    assert "fungus:" in result.message
+    assert "Example:" in result.message
+    assert "Memory hint:" in result.message
+    assert engine.state == before_state
+    assert provider.vocabulary_requests[0].word == "fungus"
+    assert provider.vocabulary_requests[0].theme == "Biology Realm"
+    assert (
+        provider.vocabulary_requests[0].learner_sentence
+        == "Please explain the word fungus"
+    )
+
+
+def test_explain_practiced_vocabulary_can_work_outside_current_room() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("go south")
+
+    result = engine.handle("explain fungus")
+
+    assert result.success
+    assert provider.vocabulary_requests[-1].word == "fungus"
+
+
+def test_explain_rejects_unknown_word_before_ai_call() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    before_state = deepcopy(engine.state)
+
+    result = engine.handle("explain astronomy")
+
+    assert not result.success
+    assert "not a Biology Realm vocabulary word" in result.message
+    assert engine.state == before_state
+    assert provider.vocabulary_requests == []
+
+
+def test_invalid_ai_explanation_preserves_state() -> None:
+    class InvalidExplanationProvider(FakeAIProvider):
+        def explain_vocabulary(self, request):
+            self.vocabulary_requests.append(request)
+            return {"word": request.word}
+
+    provider = InvalidExplanationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI vocabulary explanation failed"):
+        engine.handle("explain fungus")
+
+    assert engine.state == before_state
+    assert provider.vocabulary_requests[0].word == "fungus"
 
 
 def test_failed_ai_feedback_does_not_mutate_game_state() -> None:

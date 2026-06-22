@@ -62,6 +62,7 @@ Phase 1 is complete when:
 - deterministic review-due vocabulary selector with injected clock
 - playable `review` command for due vocabulary, full-sentence review answers, and persisted review stages
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
+- AI vocabulary explanation command for visible or practiced Biology words
 - external vocabulary importer
 - focused tests for several existing systems
 
@@ -79,7 +80,7 @@ Evidence from an in-memory playthrough:
 - one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
 - a fresh in-memory playtest also found verbose movement sentences such as `I go north to the fungus grove.` are not yet parsed as movement, confirming the next learning-loop work should keep improving structured interpretation
 
-Conclusion: continue with T-125 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order, and an end-to-end test protects quest completion plus review persistence. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: continue with T-126 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order, an end-to-end test protects quest completion plus review persistence, and visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -288,7 +289,7 @@ None.
 
 ### T-125 — Add an AI vocabulary explanation command
 
-- **State:** ready
+- **State:** done
 - **Priority:** P1
 - **Goal:** Let the player ask for a focused explanation of a visible or practiced Biology word through the AI provider.
 - **Acceptance criteria:**
@@ -300,7 +301,7 @@ None.
 
 ### T-126 — Improve structured interpretation for verbose movement
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P1
 - **Goal:** Handle common full-sentence movement phrasing such as `I go north to the fungus grove`.
 - **Acceptance criteria:**
@@ -308,7 +309,7 @@ None.
   - movement remains rejected when the selected exit is not available
   - tests cover at least one accepted verbose sentence and one rejected impossible move
 - **Verification:** parser/engine tests and CLI smoke.
-- **Dependencies:** T-130.
+- **Dependencies:** T-125.
 
 ## Blocked Tasks
 
@@ -356,6 +357,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-125 by adding an AI-backed `explain <word>` command for visible or practiced Biology vocabulary, validating requested words before provider calls, displaying structured explanations without state mutation, and preserving state on invalid AI output.
 - 2026-06-22: Completed T-130 by adding a fake-AI end-to-end Biology playthrough covering movement, vocabulary practice, due review completion, quest completion, combat, save, reload, and post-load status.
 - 2026-06-22: Completed T-123 by adding a deterministic review-due selector with an injected clock, stable due ordering, optional limiting, and regression coverage for unseen and malformed review records.
 - 2026-06-22: Completed T-122 by making mastery rewards fingerprint-based, suppressing duplicate sentence/word/context rewards, preserving no-reward repeats, and allowing the same word to earn again in a new deterministic context.
@@ -365,6 +367,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-114 by switching Biology startup from hardcoded content to the validated JSON world pack, removing the old hardcoded room/enemy definitions, preserving behavior through characterization tests, and adding package-data metadata for the pack.
 - 2026-06-22: Completed T-113 by encoding the current Biology world as `src/toefl_rpg/data/worlds/biology_realm_01.json`, including rooms, exits, items, enemies, target words, core words, and quest steps matched against the current runtime world.
 - 2026-06-22: Completed T-112 by adding `load_world_pack(path)`, actionable loader errors for missing files, invalid JSON, and schema failures, plus focused loader tests.
-- 2026-06-22: Completed T-111 by adding minimal `WorldPack` Pydantic models, duplicate room/enemy ID validation, runtime-state field rejection, conversion to the existing runtime `World`, and focused schema tests.
 
 Keep at most ten items here.

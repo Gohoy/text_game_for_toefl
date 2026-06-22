@@ -5,7 +5,10 @@ from datetime import datetime, timezone
 from typing import Callable, Optional
 
 from toefl_rpg.ai.contract import AIProvider
+from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import TurnFeedbackRequest
+from toefl_rpg.ai.contract import VocabularyExplanation
+from toefl_rpg.ai.contract import VocabularyExplanationRequest
 from toefl_rpg.ai.contract import require_ai_provider
 from toefl_rpg.content.schema import World
 from toefl_rpg.engine.combat import PLAYER_ATTACK, PLAYER_DEFENSE, calculate_damage
@@ -73,7 +76,7 @@ class GameEngine:
                 (
                     "Try full sentences: I want to go north; I want to inspect the microscope; "
                     "I want to collect the fungus sample; I want to use the microscope; "
-                    "talk to Dr. Lin; The fungus is vital for the forest."
+                    "explain fungus; talk to Dr. Lin; The fungus is vital for the forest."
                 ),
                 feedback,
             )
@@ -83,6 +86,9 @@ class GameEngine:
             return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "status":
             result = TurnResult(True, self._status_summary(), feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
+        if intent.action == "explain":
+            result = self._explain_vocabulary(intent, text, feedback)
             return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "review":
             result = self._review_prompt(feedback)
@@ -401,6 +407,14 @@ class GameEngine:
         lowered = text.lower()
         return [word for word in self.state.world.core_words if word.lower() in lowered]
 
+    def _resolve_world_word(self, target: str) -> str:
+        normalized = target.lower().strip()
+        for prefix in ("the word ", "word ", "vocabulary word ", "vocabulary "):
+            if normalized.startswith(prefix):
+                normalized = normalized.removeprefix(prefix).strip()
+                break
+        return self._find_visible_word(normalized, self.state.world.core_words)
+
     def _practice_sentence(self, text: str, feedback: str) -> Optional[TurnResult]:
         if len(text.split()) < 4:
             return None
@@ -449,6 +463,60 @@ class GameEngine:
             (
                 f"Review due: {due_text}. Write a full English sentence using "
                 f"'{review_word}' to complete the next review."
+            ),
+            feedback,
+        )
+
+    def _explain_vocabulary(
+        self,
+        intent: ParsedIntent,
+        original_text: str,
+        feedback: str,
+    ) -> TurnResult:
+        requested_word = self._resolve_world_word(intent.target)
+        if not requested_word:
+            return TurnResult(
+                False,
+                f"'{intent.target or 'that'}' is not a {self.state.world.title} vocabulary word.",
+                feedback,
+            )
+
+        explainable_words = (
+            set(self.state.current_room.target_words) | self.state.mastered_words
+        )
+        if requested_word not in explainable_words:
+            return TurnResult(
+                False,
+                (
+                    f"'{requested_word}' is in {self.state.world.title}, but it is not visible "
+                    "here or practiced yet."
+                ),
+                feedback,
+            )
+
+        provider = require_ai_provider(self.ai_provider)
+        request = VocabularyExplanationRequest(
+            word=requested_word,
+            theme=self.state.world.title,
+            learner_sentence=original_text,
+        )
+        try:
+            explanation = VocabularyExplanation.model_validate(
+                provider.explain_vocabulary(request)
+            )
+            if explanation.word.lower() != requested_word.lower():
+                raise ValueError("AI vocabulary explanation returned a different word.")
+        except Exception as exc:
+            raise AIProviderUnavailable(
+                f"AI vocabulary explanation failed: {exc}"
+            ) from exc
+
+        return TurnResult(
+            True,
+            (
+                f"{explanation.word}: {explanation.plain_meaning}\n"
+                f"Example: {explanation.example_sentence}\n"
+                f"Memory hint: {explanation.memory_hint}"
             ),
             feedback,
         )

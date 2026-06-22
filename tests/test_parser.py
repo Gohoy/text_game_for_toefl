@@ -41,3 +41,17 @@ def test_parse_review_command() -> None:
 
     assert intent.action == "review"
     assert intent.target == ""
+
+
+def test_parse_explain_command() -> None:
+    intent = parse_intent("Please explain the word fungus")
+
+    assert intent.action == "explain"
+    assert intent.target == "the word fungus"
+
+
+def test_parse_what_does_word_mean_question() -> None:
+    intent = parse_intent("What does bacteria mean?")
+
+    assert intent.action == "explain"
+    assert intent.target == "bacteria"

@@ -23,6 +23,15 @@ def parse_intent(text: str) -> ParsedIntent:
         return ParsedIntent("review")
     if normalized.startswith("review "):
         return ParsedIntent("review", normalized.removeprefix("review ").strip())
+    for prefix in ("explain ", "define "):
+        if normalized.startswith(prefix):
+            return ParsedIntent("explain", normalized.removeprefix(prefix).strip())
+        marker = f" {prefix}"
+        if marker in normalized:
+            return ParsedIntent("explain", normalized.split(marker, 1)[1].strip())
+    if normalized.startswith("what does ") and normalized.rstrip("?").endswith(" mean"):
+        target = normalized.rstrip("?").removeprefix("what does ").removesuffix(" mean")
+        return ParsedIntent("explain", target.strip())
     if normalized in {"look", "look around"}:
         return ParsedIntent("look")
 

@@ -39,6 +39,7 @@ Current supported actions include:
 - `I want to use the microscope`
 - `I attack the invasive vine`
 - `The fungus is vital for the forest.`
+- `explain fungus`
 - `review`
 - `A fungus can be vital for forest metabolism.`
 - `talk to Dr. Lin`
@@ -50,6 +51,11 @@ The current Biology Investigation quest has three deterministic steps: collect t
 After using target words in context, `review` presents due vocabulary and asks
 for a new full-sentence answer. Correct review sentences advance the persisted
 review stage and schedule the next review.
+
+Use `explain <word>` for an AI-generated explanation of a target word that is
+visible in the current room or already practiced. The explanation is displayed
+as coaching text only; deterministic state, XP, mastery, quests, and saves do
+not change because of the explanation itself.
 
 The deterministic engine still owns movement, inventory, combat, XP, quest
 completion, vocabulary rewards, and saves. AI feedback is validated before display;
