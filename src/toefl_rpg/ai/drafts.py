@@ -22,7 +22,9 @@ def validate_world_pack_draft(draft: StructuredContentDraft) -> WorldPack:
     try:
         return WorldPack.model_validate(draft.payload)
     except ValidationError as exc:
-        raise ContentDraftValidationError(f"Invalid AI world_pack draft: {exc}") from exc
+        raise ContentDraftValidationError(
+            f"Invalid AI world-pack payload: {exc}"
+        ) from exc
 
 
 def draft_world_pack(provider: AIProvider, request: ContentDraftRequest) -> WorldPack:
@@ -36,5 +38,7 @@ def draft_world_pack(provider: AIProvider, request: ContentDraftRequest) -> Worl
             require_ai_provider(provider).draft_content(request)
         )
     except ValidationError as exc:
-        raise ContentDraftValidationError(f"Invalid AI content draft: {exc}") from exc
+        raise ContentDraftValidationError(
+            f"Invalid AI content-draft envelope: {exc}"
+        ) from exc
     return validate_world_pack_draft(draft)

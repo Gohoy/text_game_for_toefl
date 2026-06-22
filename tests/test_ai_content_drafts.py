@@ -76,7 +76,7 @@ def test_draft_world_pack_rejects_malformed_provider_payload() -> None:
         purpose="world_pack",
     )
 
-    with pytest.raises(ContentDraftValidationError, match="Invalid AI world_pack draft"):
+    with pytest.raises(ContentDraftValidationError, match="world-pack payload"):
         draft_world_pack(provider, request)
 
     assert provider.content_requests == [request]
@@ -103,8 +103,31 @@ def test_draft_world_pack_rejects_extra_top_level_provider_fields() -> None:
         draft_world_pack(provider, request)
 
     message = str(excinfo.value)
-    assert "Invalid AI content draft" in message
+    assert "Invalid AI content-draft envelope" in message
     assert "xp" in message
+    assert provider.content_requests == [request]
+
+
+def test_draft_world_pack_envelope_error_identifies_content_draft_layer() -> None:
+    class EmptyEnvelopeDraftProvider(FakeAIProvider):
+        def draft_content(self, request):
+            self.content_requests.append(request)
+            return {"draft_type": "", "payload": minimal_world_pack_data()}
+
+    provider = EmptyEnvelopeDraftProvider()
+    request = ContentDraftRequest(
+        theme="biology",
+        required_words=["organism"],
+        purpose="world_pack",
+    )
+
+    with pytest.raises(ContentDraftValidationError) as excinfo:
+        draft_world_pack(provider, request)
+
+    message = str(excinfo.value)
+    assert "Invalid AI content-draft envelope" in message
+    assert "draft_type" in message
+    assert "Invalid AI world-pack payload" not in message
     assert provider.content_requests == [request]
 
 
@@ -128,9 +151,36 @@ def test_draft_world_pack_rejects_payload_mutation_fields() -> None:
         draft_world_pack(provider, request)
 
     message = str(excinfo.value)
-    assert "Invalid AI world_pack draft" in message
+    assert "Invalid AI world-pack payload" in message
+    assert "rooms.0.inventory" in message
+    assert "quest_steps.0.reward_item" in message
     assert "inventory" in message
     assert "reward_item" in message
+    assert provider.content_requests == [request]
+
+
+def test_draft_world_pack_payload_error_keeps_nested_field_path() -> None:
+    class NestedPayloadErrorDraftProvider(FakeAIProvider):
+        def draft_content(self, request):
+            self.content_requests.append(request)
+            payload = minimal_world_pack_data()
+            payload["rooms"][0]["description"] = ""
+            return StructuredContentDraft(draft_type="world_pack", payload=payload)
+
+    provider = NestedPayloadErrorDraftProvider()
+    request = ContentDraftRequest(
+        theme="biology",
+        required_words=["organism"],
+        purpose="world_pack",
+    )
+
+    with pytest.raises(ContentDraftValidationError) as excinfo:
+        draft_world_pack(provider, request)
+
+    message = str(excinfo.value)
+    assert "Invalid AI world-pack payload" in message
+    assert "rooms.0.description" in message
+    assert "Invalid AI content-draft envelope" not in message
     assert provider.content_requests == [request]
 
 
@@ -166,7 +216,7 @@ def test_draft_world_pack_rejects_empty_required_text_fields(
         draft_world_pack(provider, request)
 
     message = str(excinfo.value)
-    assert "Invalid AI world_pack draft" in message
+    assert "Invalid AI world-pack payload" in message
     assert expected_path in message
     assert provider.content_requests == [request]
 
