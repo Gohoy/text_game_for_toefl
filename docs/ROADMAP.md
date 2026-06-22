@@ -4,7 +4,7 @@
 
 - Repository initialized with planning documentation and a minimal playable Python scaffold.
 - Vocabulary source identified at `/Users/gaohongyu1/Downloads/TOEFLiBT  词以类记2.0.txt`.
-- The game can currently render Biology Realm, move between rooms, collect and use items, inspect target words, practice contextual vocabulary sentences, advance a quest, autosave progress, award XP, and provide deterministic English feedback.
+- The game can currently render Biology Realm, move between rooms, collect and use items, inspect target words, practice contextual vocabulary sentences, fight deterministic enemies, advance a quest, autosave progress, award XP, and provide deterministic English feedback.
 
 ## Next Milestones
 
@@ -30,3 +30,4 @@
 - 2026-06-20: Added a deterministic TOEFL vocabulary importer that parses external source headings into structured categories without copying the full source into the repo.
 - 2026-06-21: Added contextual free-form vocabulary sentence practice that awards mastery XP when the player uses current-room target words in a full sentence.
 - 2026-06-21: Added a deterministic language feedback module with targeted corrections for common learner sentence patterns.
+- 2026-06-22: Added deterministic combat with room enemies, fixed damage calculation, enemy defeat persistence, and combat vocabulary rewards.

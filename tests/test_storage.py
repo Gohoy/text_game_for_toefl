@@ -22,6 +22,24 @@ def test_save_and_load_restores_progress(tmp_path) -> None:
     assert "fungus sample" not in loaded.world.room("fungus_grove").items
 
 
+def test_save_and_load_restores_combat_progress(tmp_path) -> None:
+    save_path = tmp_path / "slot1.json"
+    engine = GameEngine.new_game(build_biology_realm())
+    engine.handle("go north")
+    engine.handle("go north")
+    engine.handle("I attack the invasive vine")
+    engine.handle("I attack the invasive vine")
+    engine.handle("I attack the invasive vine")
+
+    save_game(engine.state, save_path)
+    loaded = load_game(build_biology_realm(), save_path)
+
+    assert loaded is not None
+    assert loaded.enemy_hp["invasive_vine"] == 0
+    assert "invasive_vine" in loaded.defeated_enemies
+    assert loaded.live_enemy_ids_in_current_room() == []
+
+
 def test_load_missing_save_returns_none(tmp_path) -> None:
     loaded = load_game(build_biology_realm(), tmp_path / "missing.json")
 

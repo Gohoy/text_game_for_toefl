@@ -27,3 +27,10 @@ def test_parse_use_sentence() -> None:
 
     assert intent.action == "use"
     assert intent.target == "the microscope"
+
+
+def test_parse_attack_sentence() -> None:
+    intent = parse_intent("I attack the invasive vine")
+
+    assert intent.action == "attack"
+    assert intent.target == "the invasive vine"

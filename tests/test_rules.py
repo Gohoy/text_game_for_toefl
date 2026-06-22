@@ -111,3 +111,45 @@ def test_engine_returns_specific_english_feedback() -> None:
     result = engine.handle("I want go east")
 
     assert result.english_feedback == "Better English: I want to go ..."
+
+
+def test_attack_visible_enemy_uses_deterministic_damage() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+    engine.handle("go north")
+    engine.handle("go north")
+
+    result = engine.handle("I attack the invasive vine")
+
+    assert result.success
+    assert "6 damage" in result.message
+    assert engine.state.enemy_hp["invasive_vine"] == 7
+    assert engine.state.player.hp == 28
+
+
+def test_defeating_enemy_awards_xp_and_practices_words_once() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+    engine.handle("go north")
+    engine.handle("go north")
+
+    engine.handle("I attack the invasive vine")
+    engine.handle("I attack the invasive vine")
+    result = engine.handle("I attack the invasive vine")
+    xp_after_defeat = engine.state.player.xp
+    repeat_result = engine.handle("I attack the invasive vine")
+
+    assert result.success
+    assert "defeat" in result.message
+    assert "invasive_vine" in engine.state.defeated_enemies
+    assert {"mimicry", "creature", "extinction"} <= engine.state.mastered_words
+    assert xp_after_defeat == 27
+    assert not repeat_result.success
+    assert engine.state.player.xp == xp_after_defeat
+
+
+def test_cannot_attack_enemy_from_another_room() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+
+    result = engine.handle("I attack the invasive vine")
+
+    assert not result.success
+    assert "do not see" in result.message

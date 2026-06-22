@@ -54,4 +54,11 @@ def parse_intent(text: str) -> ParsedIntent:
     if " talk to " in normalized:
         return ParsedIntent("talk", normalized.split(" talk to ", 1)[1].strip())
 
+    for verb in ("attack", "strike", "hit", "fight"):
+        if normalized.startswith(verb):
+            return ParsedIntent("attack", normalized.removeprefix(verb).strip())
+        marker = f" {verb} "
+        if marker in normalized:
+            return ParsedIntent("attack", normalized.split(marker, 1)[1].strip())
+
     return ParsedIntent("unknown", normalized)

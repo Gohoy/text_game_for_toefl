@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Optional
 
 from toefl_rpg.content.schema import World
+from toefl_rpg.engine.combat import PLAYER_ATTACK, PLAYER_DEFENSE, calculate_damage
 from toefl_rpg.engine.quests import (
     ANALYZE_FUNGUS_SAMPLE,
     COLLECT_FUNGUS_SAMPLE,
@@ -54,12 +55,14 @@ class GameEngine:
             return self._use(intent, feedback)
         if intent.action == "talk":
             return self._talk(intent, feedback)
+        if intent.action == "attack":
+            return self._attack(intent, feedback)
         practice_result = self._practice_sentence(text, feedback)
         if practice_result is not None:
             return practice_result
         return TurnResult(
             False,
-            "I could not turn that sentence into a game action yet. Try: go north, inspect microscope, collect sample, talk to Dr. Lin, or write a sentence using this room's vocabulary.",
+            "I could not turn that sentence into a game action yet. Try: go north, inspect microscope, collect sample, attack the invasive vine, talk to Dr. Lin, or write a sentence using this room's vocabulary.",
             feedback,
         )
 
@@ -155,6 +158,66 @@ class GameEngine:
             ),
             feedback,
         )
+
+    def _attack(self, intent: ParsedIntent, feedback: str) -> TurnResult:
+        if self.state.player.hp <= 0:
+            return TurnResult(
+                False,
+                "You are too weak to fight. Resting is not implemented yet.",
+                feedback,
+            )
+
+        enemy_id = self._find_enemy_id(intent.target)
+        if not enemy_id:
+            return TurnResult(False, f"You do not see {intent.target or 'that enemy'} here.", feedback)
+
+        enemy = self.state.world.enemy(enemy_id)
+        current_hp = self.state.enemy_hp.get(enemy_id, enemy.hp)
+        player_damage = calculate_damage(PLAYER_ATTACK, enemy.defense)
+        current_hp = max(0, current_hp - player_damage)
+        self.state.enemy_hp[enemy_id] = current_hp
+
+        if current_hp == 0:
+            self.state.defeated_enemies.add(enemy_id)
+            self.state.player.xp += enemy.xp
+            vocab_xp = self._practice_words(enemy.target_words, 5)
+            vocab_text = (
+                f" Practiced words: {', '.join(enemy.target_words)}. XP +{vocab_xp}."
+                if vocab_xp
+                else " Its vocabulary was already practiced."
+            )
+            return TurnResult(
+                True,
+                (
+                    f"You strike {enemy.name} for {player_damage} damage and defeat it. "
+                    f"Combat XP +{enemy.xp}.{vocab_text}"
+                ),
+                feedback,
+            )
+
+        enemy_damage = calculate_damage(enemy.attack, PLAYER_DEFENSE)
+        self.state.player.hp = max(0, self.state.player.hp - enemy_damage)
+        return TurnResult(
+            True,
+            (
+                f"You strike {enemy.name} for {player_damage} damage. "
+                f"It has {current_hp}/{enemy.hp} HP left. "
+                f"{enemy.name} hits back for {enemy_damage} damage."
+            ),
+            feedback,
+        )
+
+    def _find_enemy_id(self, target: str) -> str:
+        target = target.lower()
+        for enemy_id in self.state.live_enemy_ids_in_current_room():
+            enemy = self.state.world.enemy(enemy_id)
+            candidates = [enemy_id.replace("_", " "), enemy.name.lower()]
+            if any(candidate in target or target in candidate for candidate in candidates):
+                return enemy_id
+        live_enemy_ids = self.state.live_enemy_ids_in_current_room()
+        if not target and len(live_enemy_ids) == 1:
+            return live_enemy_ids[0]
+        return ""
 
     def _find_visible_word(self, target: str, candidates: list[str]) -> str:
         target = target.lower()

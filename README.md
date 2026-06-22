@@ -24,6 +24,7 @@ Current supported actions include:
 - `I want to inspect the microscope`
 - `I want to collect the fungus sample`
 - `I want to use the microscope`
+- `I attack the invasive vine`
 - `The fungus is vital for the forest.`
 - `talk to Dr. Lin`
 - `inventory`

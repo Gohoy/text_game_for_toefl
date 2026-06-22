@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from toefl_rpg.content.schema import Room, World
+from toefl_rpg.content.schema import Enemy, Room, World
 
 
 def build_biology_realm() -> World:
@@ -59,8 +59,24 @@ def build_biology_realm() -> World:
             ),
             exits={"south": "fungus_grove"},
             items=["creature sketch"],
+            enemies=["invasive_vine"],
             target_words=["mimicry", "creature", "extinction"],
         ),
+    }
+    enemies = {
+        "invasive_vine": Enemy(
+            id="invasive_vine",
+            name="Invasive Vine",
+            description=(
+                "A fast-growing vine wraps around the trail markers and crowds out "
+                "smaller species."
+            ),
+            hp=13,
+            attack=3,
+            defense=1,
+            xp=12,
+            target_words=["mimicry", "creature", "extinction"],
+        )
     }
     return World(
         world_id="biology_realm_01",
@@ -87,4 +103,5 @@ def build_biology_realm() -> World:
             "extinction",
         ],
         rooms=rooms,
+        enemies=enemies,
     )

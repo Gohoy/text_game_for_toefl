@@ -58,7 +58,12 @@ class Renderer:
     def show_state(self, state: GameState) -> None:
         room = state.current_room
         exits = ", ".join(f"{direction}: {target}" for direction, target in room.exits.items())
+        enemies = [
+            state.world.enemy(enemy_id).name
+            for enemy_id in state.live_enemy_ids_in_current_room()
+        ]
         visible = ", ".join(room.items + room.npcs) or "nothing notable"
+        enemy_text = ", ".join(enemies) or "none"
         vocabulary = ", ".join(room.target_words) or "none"
         inventory = ", ".join(state.player.inventory) or "empty"
         mastered = ", ".join(sorted(state.mastered_words)) or "none yet"
@@ -70,9 +75,11 @@ class Renderer:
             self.console.print(room.description)
             self.console.print(f"Exits: {exits or 'none'}")
             self.console.print(f"Visible: {visible}")
+            self.console.print(f"Enemies: {enemy_text}")
             self.console.print(f"Vocabulary: {vocabulary}")
             self.console.print(f"Inventory: {inventory}")
             self.console.print(f"Quest: {quest}")
+            self.console.print(f"HP: {state.player.hp}/{state.player.max_hp}")
             self.console.print(f"XP: {state.player.xp}")
             self.console.print(f"Mastered: {mastered}")
             return
@@ -83,9 +90,11 @@ class Renderer:
         table.add_row("Location", room.name)
         table.add_row("Exits", exits or "none")
         table.add_row("Visible", visible)
+        table.add_row("Enemies", enemy_text)
         table.add_row("Vocabulary", vocabulary)
         table.add_row("Inventory", inventory)
         table.add_row("Quest", quest)
+        table.add_row("HP", f"{state.player.hp}/{state.player.max_hp}")
         table.add_row("XP", str(state.player.xp))
         table.add_row("Mastered", mastered)
 
