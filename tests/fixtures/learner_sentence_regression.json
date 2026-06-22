@@ -189,6 +189,23 @@
     "expected_message_contains": "You collect fungus sample."
   },
   {
+    "id": "vague_enemy_reference_attack_rejected",
+    "category": "rejected",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go north",
+      "go north"
+    ],
+    "sentence": "I attack the threat.",
+    "expected_parser": {
+      "action": "attack",
+      "target": "the threat"
+    },
+    "expected_success": false,
+    "expected_message_contains": "You do not see the threat here.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",

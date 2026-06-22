@@ -116,6 +116,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
 - learner sentence corpus covers overly broad location requests routed through AI fallback with no state mutation
+- learner sentence corpus covers ambiguous enemy references rejected by deterministic combat without state mutation
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1398,7 +1399,7 @@ None.
 
 ### T-208 — Add learner sentence corpus case for ambiguous enemy references
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner attack requests with vague enemy references route when deterministic combat requires a concrete visible target.
 - **Acceptance criteria:**
@@ -1411,7 +1412,7 @@ None.
 
 ### T-209 — Add learner sentence corpus case for broad tool-use requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "use the tool" route when deterministic item use requires a concrete inventory or visible target.
 - **Acceptance criteria:**
@@ -1421,6 +1422,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-208.
+
+### T-210 — Add review answer corpus case for negated target-word use
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner uses the active word in a sentence that negates or avoids demonstrating the target meaning.
+- **Acceptance criteria:**
+  - review corpus includes at least one negated target-word answer
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-209.
 
 ## Blocked Tasks
 
@@ -1470,6 +1483,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-208 by adding a learner-sentence corpus regression for ambiguous enemy references that deterministic combat rejects without state mutation.
 - 2026-06-23: Completed T-207 by adding a review-answer corpus regression for copied suggested-example reuse that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-206 by adding a broad-location learner sentence regression for `Please take me to the lab.`, routed through AI interpretation with no state mutation.
 - 2026-06-23: Completed T-205 by adding a review-answer corpus regression for metaphorical fungus use that reaches AI evaluation but keeps review active without XP.
@@ -1479,6 +1493,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-201 by adding a learner-sentence corpus regression for pronoun-like item references such as `Could you get it for Dr. Lin?`, routed through AI interpretation and deterministic collect validation.
 - 2026-06-23: Completed T-200 by adding a learner-sentence corpus regression for hedged intention movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-199 by adding a review-answer corpus regression for a fluent but off-context fungus sentence that reaches AI evaluation and keeps review active without XP.
-- 2026-06-23: Completed T-198 by adding a learner-sentence corpus regression for an indirect polite question that routes through AI interpretation and deterministic collect validation.
 
 Keep at most ten items here.
