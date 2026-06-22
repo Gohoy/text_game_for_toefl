@@ -560,6 +560,27 @@ def test_invalid_ai_dialogue_preserves_state() -> None:
     assert provider.dialogue_requests[0].npc_name == "Dr. Lin"
 
 
+def test_ai_dialogue_rejects_mismatched_speaker_without_mutating_state() -> None:
+    class MismatchedSpeakerProvider(FakeAIProvider):
+        def generate_npc_dialogue(self, request):
+            self.dialogue_requests.append(request)
+            return NPCDialogue(
+                speaker="Professor Vega",
+                line="This line came from the wrong visible NPC.",
+                vocabulary_notes=["organism: a living thing."],
+            )
+
+    provider = MismatchedSpeakerProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="different speaker"):
+        engine.handle("talk to Dr. Lin")
+
+    assert engine.state == before_state
+    assert provider.dialogue_requests[0].npc_name == "Dr. Lin"
+
+
 def test_ai_dialogue_cannot_return_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         NPCDialogue(
