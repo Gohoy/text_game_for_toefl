@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import Optional
 
@@ -11,6 +11,16 @@ class LearningEvent(str, Enum):
     WORD_ENCOUNTERED = "word_encountered"
     USAGE_CORRECT = "usage_correct"
     USAGE_INCORRECT = "usage_incorrect"
+    REVIEW_CORRECT = "review_correct"
+    REVIEW_INCORRECT = "review_incorrect"
+
+
+REVIEW_INTERVALS = (
+    timedelta(days=1),
+    timedelta(days=3),
+    timedelta(days=7),
+    timedelta(days=14),
+)
 
 
 def record_learning_event(
@@ -19,8 +29,12 @@ def record_learning_event(
     word: str,
     context_id: str,
     response_fingerprint: Optional[str] = None,
+    practiced_at: Optional[datetime] = None,
 ) -> VocabularyMastery:
     record = state.vocabulary_mastery.setdefault(word, VocabularyMastery(word=word))
+    normalized_practiced_at = (
+        _normalize_datetime(practiced_at) if practiced_at is not None else None
+    )
 
     if event == LearningEvent.WORD_ENCOUNTERED:
         record.encounter_count += 1
@@ -36,6 +50,29 @@ def record_learning_event(
         record.distinct_context_ids.add(context_id)
         if response_fingerprint:
             record.recent_response_fingerprints.append(response_fingerprint)
+    elif event == LearningEvent.REVIEW_CORRECT:
+        record.correct_use_count += 1
+        record.mastery_points += 1
+        record.review_stage += 1
+        record.distinct_context_ids.add(context_id)
+        if response_fingerprint:
+            record.recent_response_fingerprints.append(response_fingerprint)
+        if normalized_practiced_at is not None:
+            record.last_practiced_at = _format_review_time(normalized_practiced_at)
+            record.next_review_at = _format_review_time(
+                normalized_practiced_at + _next_correct_review_interval(record.review_stage)
+            )
+    elif event == LearningEvent.REVIEW_INCORRECT:
+        record.incorrect_use_count += 1
+        record.review_stage = max(0, record.review_stage - 1)
+        record.distinct_context_ids.add(context_id)
+        if response_fingerprint:
+            record.recent_response_fingerprints.append(response_fingerprint)
+        if normalized_practiced_at is not None:
+            record.last_practiced_at = _format_review_time(normalized_practiced_at)
+            record.next_review_at = _format_review_time(
+                normalized_practiced_at + timedelta(minutes=10)
+            )
 
     record.status = _derive_status(record)
     return record
@@ -62,6 +99,11 @@ def record_rewardable_usage(
     return True
 
 
+def schedule_initial_review(record: VocabularyMastery, now: datetime) -> None:
+    if record.next_review_at is None and record.correct_use_count > 0:
+        record.next_review_at = _format_review_time(_normalize_datetime(now))
+
+
 def record_room_encounter(state: GameState) -> None:
     context_id = room_context_id(state.current_room_id)
     for word in state.current_room.target_words:
@@ -80,6 +122,10 @@ def room_context_id(room_id: str) -> str:
 def response_fingerprint(sentence: str, word: str, context_id: str) -> str:
     normalized = " ".join(sentence.lower().split())
     return f"{normalized}|{word.lower()}|{context_id}"
+
+
+def review_context_id(world_id: str, word: str, review_stage: int) -> str:
+    return f"review:{world_id}:{word.lower()}:stage_{review_stage}"
 
 
 def select_due_vocabulary(
@@ -135,3 +181,12 @@ def _normalize_datetime(value: datetime) -> datetime:
     if value.tzinfo is None:
         return value.replace(tzinfo=timezone.utc)
     return value.astimezone(timezone.utc)
+
+
+def _format_review_time(value: datetime) -> str:
+    return _normalize_datetime(value).isoformat()
+
+
+def _next_correct_review_interval(review_stage: int) -> timedelta:
+    index = max(0, min(review_stage - 1, len(REVIEW_INTERVALS) - 1))
+    return REVIEW_INTERVALS[index]

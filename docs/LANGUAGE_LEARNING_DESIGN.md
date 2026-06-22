@@ -38,7 +38,7 @@ distinct_context_ids
 recent_response_fingerprints
 ```
 
-Implemented status: saves now include a versioned `mastery` block with these fields for each persisted word, and legacy saves without the block load safe default records from the previous practiced-word set. Deterministic learning events now update records for room encounters, correct practice, and incorrect wrong-context attempts. Duplicate response fingerprints suppress repeat rewards, while a new deterministic context can still earn. A clock-injected selector can identify due review words in stable order; the playable review flow remains follow-up work.
+Implemented status: saves now include a versioned `mastery` block with these fields for each persisted word, and legacy saves without the block load safe default records from the previous practiced-word set. Deterministic learning events now update records for room encounters, correct practice, incorrect wrong-context attempts, and review attempts. Duplicate response fingerprints suppress repeat rewards, while a new deterministic context can still earn. A clock-injected selector identifies due review words in stable order, and the `review` command lets the player complete a due review with a full sentence.
 
 Recommended derived statuses:
 
@@ -64,6 +64,8 @@ Use explicit events rather than updating mastery ad hoc:
 | `quest_usage_correct` | Correct use directly enables a quest action | Award a bounded mastery gain and normal quest consequence |
 | `review_correct` | Correct use after the word becomes due | Advance review stage |
 | `review_incorrect` | Incorrect due review | Reduce or hold stage and schedule a near retry |
+
+Implemented review behavior: the first correct contextual use schedules a same-session review. A correct review sentence adds one mastery point, advances the review stage, grants a small deterministic XP reward, and schedules the next review by UTC timestamp. An incorrect review keeps the active word available and schedules a near retry.
 
 The AI evaluator should explain language and propose feedback, but deterministic code decides which learning event occurred and what it changes.
 

@@ -274,3 +274,54 @@ def test_due_vocabulary_selector_ignores_unseen_words() -> None:
     )
 
     assert due_words == []
+
+
+def test_review_flow_prompts_due_word_and_advances_on_full_sentence() -> None:
+    now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        use_deterministic_feedback=True,
+        clock=lambda: now,
+    )
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+
+    prompt_result = engine.handle("review")
+
+    assert prompt_result.success
+    assert "Review due: fungus, vital" in prompt_result.message
+    assert engine.state.active_review_word == "fungus"
+
+    review_result = engine.handle("A fungus can be vital for forest metabolism.")
+
+    fungus = engine.state.vocabulary_mastery["fungus"]
+    assert review_result.success
+    assert "Review complete" in review_result.message
+    assert engine.state.active_review_word is None
+    assert fungus.review_stage == 1
+    assert fungus.mastery_points == 2
+    assert fungus.correct_use_count == 2
+    assert fungus.last_practiced_at == "2026-06-22T08:00:00+00:00"
+    assert fungus.next_review_at == "2026-06-23T08:00:00+00:00"
+    assert engine.state.player.xp == 26
+
+
+def test_review_flow_keeps_word_active_after_incorrect_sentence() -> None:
+    now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        use_deterministic_feedback=True,
+        clock=lambda: now,
+    )
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("review")
+
+    result = engine.handle("It matters.")
+
+    fungus = engine.state.vocabulary_mastery["fungus"]
+    assert not result.success
+    assert engine.state.active_review_word == "fungus"
+    assert fungus.review_stage == 0
+    assert fungus.incorrect_use_count == 1
+    assert fungus.next_review_at == "2026-06-22T08:10:00+00:00"

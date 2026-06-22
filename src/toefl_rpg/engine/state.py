@@ -36,6 +36,7 @@ class GameState:
     player: Player = field(default_factory=Player)
     mastered_words: set[str] = field(default_factory=set)
     vocabulary_mastery: dict[str, VocabularyMastery] = field(default_factory=dict)
+    active_review_word: Optional[str] = None
     completed_tasks: set[str] = field(default_factory=set)
     enemy_hp: dict[str, int] = field(default_factory=dict)
     defeated_enemies: set[str] = field(default_factory=set)

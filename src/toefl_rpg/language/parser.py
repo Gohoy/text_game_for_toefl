@@ -19,6 +19,10 @@ def parse_intent(text: str) -> ParsedIntent:
         return ParsedIntent("inventory")
     if normalized in {"status", "stats", "progress"}:
         return ParsedIntent("status")
+    if normalized in {"review", "review vocabulary", "start review"}:
+        return ParsedIntent("review")
+    if normalized.startswith("review "):
+        return ParsedIntent("review", normalized.removeprefix("review ").strip())
     if normalized in {"look", "look around"}:
         return ParsedIntent("look")
 

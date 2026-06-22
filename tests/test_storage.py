@@ -41,6 +41,7 @@ def test_new_save_contains_versioned_mastery_data(tmp_path) -> None:
 
     payload = json.loads(save_path.read_text(encoding="utf-8"))
     assert payload["mastery"]["version"] == 1
+    assert payload["active_review_word"] is None
     assert {"fungus", "symbiosis", "vital"} <= set(payload["mastery"]["words"])
     fungus_record = payload["mastery"]["words"]["fungus"]
     assert fungus_record["word"] == "fungus"
@@ -93,6 +94,18 @@ def test_load_legacy_save_without_mastery_uses_safe_defaults(tmp_path) -> None:
     assert record.correct_use_count == 1
     assert record.distinct_context_ids == set()
     assert record.recent_response_fingerprints == []
+
+
+def test_save_and_load_restores_active_review_word(tmp_path) -> None:
+    save_path = tmp_path / "slot1.json"
+    engine = new_test_engine()
+    engine.state.active_review_word = "fungus"
+
+    save_game(engine.state, save_path)
+    loaded = load_game(build_biology_realm(), save_path)
+
+    assert loaded is not None
+    assert loaded.active_review_word == "fungus"
 
 
 def test_save_and_load_restores_combat_progress(tmp_path) -> None:

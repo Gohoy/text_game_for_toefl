@@ -39,12 +39,17 @@ Current supported actions include:
 - `I want to use the microscope`
 - `I attack the invasive vine`
 - `The fungus is vital for the forest.`
+- `review`
+- `A fungus can be vital for forest metabolism.`
 - `talk to Dr. Lin`
 - `inventory`
 - `status`
 - `quit`
 
 The current Biology Investigation quest has three deterministic steps: collect the fungus sample, analyze it with the microscope, and defeat the invasive vine.
+After using target words in context, `review` presents due vocabulary and asks
+for a new full-sentence answer. Correct review sentences advance the persisted
+review stage and schedule the next review.
 
 The deterministic engine still owns movement, inventory, combat, XP, quest
 completion, vocabulary rewards, and saves. AI feedback is validated before display;

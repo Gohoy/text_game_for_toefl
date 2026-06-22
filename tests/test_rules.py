@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 import pytest
 
 from toefl_rpg.ai.contract import AIProviderUnavailable
@@ -41,6 +43,24 @@ def test_engine_uses_ai_feedback_for_runtime_sentence_feedback() -> None:
     assert provider.turn_feedback_requests[0].deterministic_action == "move"
     assert provider.turn_feedback_requests[0].deterministic_result == "You go north."
     assert provider.turn_feedback_requests[0].location_id == "research_camp"
+
+
+def test_ai_feedback_request_includes_reviewed_word() -> None:
+    provider = FakeAIProvider()
+    now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        ai_provider=provider,
+        clock=lambda: now,
+    )
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("review")
+
+    result = engine.handle("A fungus can be vital for forest metabolism.")
+
+    assert result.success
+    assert provider.turn_feedback_requests[-1].practiced_words == ["fungus"]
 
 
 def test_failed_ai_feedback_does_not_mutate_game_state() -> None:

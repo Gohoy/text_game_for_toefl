@@ -60,24 +60,25 @@ Phase 1 is complete when:
 - deterministic mastery events for encounters, correct use, and incorrect attempts
 - duplicate response fingerprints suppress repeat mastery and XP rewards
 - deterministic review-due vocabulary selector with injected clock
+- playable `review` command for due vocabulary, full-sentence review answers, and persisted review stages
 - external vocabulary importer
 - focused tests for several existing systems
 
 ## Latest Player-Role Assessment
 
-2026-06-22 assessment: the current Biology quest is playable and now routes turn feedback through the AI-provider boundary, but it is not yet a complete TOEFL learning loop.
+2026-06-22 assessment: the current Biology quest is playable and now routes turn feedback through the AI-provider boundary, but it still needs stronger AI-assisted interpretation and explanation to become a complete TOEFL learning loop.
 
 Evidence from an in-memory playthrough:
 
 - the three-step Biology quest can be completed through movement, collecting the fungus sample, using the microscope, and defeating the invasive vine
 - the game rewards contextual sentences such as `The harmless creature uses mimicry to avoid extinction.`
 - sentence feedback now comes from a configured provider in normal runtime, with fake-provider smoke coverage for automation
-- vocabulary learning is mostly word spotting; the game does not ask the player to prove meaning, choose a correct usage, compare wrong/right examples, or recall words later
+- vocabulary learning now includes same-session delayed review through `review`, but the correctness check is still a simple deterministic full-sentence/word-use gate
 - narrative and NPC text are static, so repeated play does not feel conversational or adaptive
 - one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
 - a fresh in-memory playtest also found verbose movement sentences such as `I go north to the fungus grove.` are not yet parsed as movement, confirming the next learning-loop work should keep improving structured interpretation
 
-Conclusion: continue with T-124 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, and a clock-injected selector can identify due review words in stable order. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: continue with T-130 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, and a playable review command advances due words in stable order. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -262,7 +263,7 @@ None.
 
 ### T-124 — Add one playable review flow
 
-- **State:** ready
+- **State:** done
 - **Priority:** P1
 - **Goal:** Let the player review due Biology words through the terminal.
 - **Acceptance criteria:**
@@ -274,7 +275,7 @@ None.
 
 ### T-130 — Add an end-to-end Biology completion test
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P1
 - **Goal:** Script a new game through quest completion and one review outcome.
 - **Acceptance criteria:**
@@ -283,6 +284,30 @@ None.
   - test runs with a fake AI provider and no paid API access
 - **Verification:** end-to-end test and full suite.
 - **Dependencies:** T-124.
+
+### T-125 — Add an AI vocabulary explanation command
+
+- **State:** planned
+- **Priority:** P1
+- **Goal:** Let the player ask for a focused explanation of a visible or practiced Biology word through the AI provider.
+- **Acceptance criteria:**
+  - command validates that the requested word is known in the current world before calling AI
+  - AI explanation output is structured and displayed without mutating deterministic game state
+  - missing or invalid AI output fails clearly and preserves state
+- **Verification:** provider/request tests, parser/engine tests, CLI smoke with fake provider.
+- **Dependencies:** T-130.
+
+### T-126 — Improve structured interpretation for verbose movement
+
+- **State:** planned
+- **Priority:** P1
+- **Goal:** Handle common full-sentence movement phrasing such as `I go north to the fungus grove`.
+- **Acceptance criteria:**
+  - parser or validated AI interpretation maps verbose direction sentences to deterministic move intents
+  - movement remains rejected when the selected exit is not available
+  - tests cover at least one accepted verbose sentence and one rejected impossible move
+- **Verification:** parser/engine tests and CLI smoke.
+- **Dependencies:** T-130.
 
 ## Blocked Tasks
 

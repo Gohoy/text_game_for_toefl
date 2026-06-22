@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Optional
+from datetime import datetime, timezone
+from typing import Callable, Optional
 
 from toefl_rpg.ai.contract import AIProvider
 from toefl_rpg.ai.contract import TurnFeedbackRequest
@@ -12,8 +13,11 @@ from toefl_rpg.engine.mastery import LearningEvent
 from toefl_rpg.engine.mastery import record_learning_event
 from toefl_rpg.engine.mastery import record_rewardable_usage
 from toefl_rpg.engine.mastery import record_room_encounter
+from toefl_rpg.engine.mastery import review_context_id
 from toefl_rpg.engine.mastery import response_fingerprint
 from toefl_rpg.engine.mastery import room_context_id
+from toefl_rpg.engine.mastery import schedule_initial_review
+from toefl_rpg.engine.mastery import select_due_vocabulary
 from toefl_rpg.engine.quests import (
     ANALYZE_FUNGUS_SAMPLE,
     CLEAR_INVASIVE_VINE,
@@ -21,7 +25,7 @@ from toefl_rpg.engine.quests import (
     quest_summary,
     step_for_task,
 )
-from toefl_rpg.engine.state import GameState, TurnResult
+from toefl_rpg.engine.state import GameState, TurnResult, VocabularyMastery
 from toefl_rpg.language.feedback import evaluate_english
 from toefl_rpg.language.parser import ParsedIntent, parse_intent
 
@@ -32,10 +36,12 @@ class GameEngine:
         state: GameState,
         ai_provider: Optional[AIProvider] = None,
         use_deterministic_feedback: bool = False,
+        clock: Optional[Callable[[], datetime]] = None,
     ) -> None:
         self.state = state
         self.ai_provider = ai_provider
         self.use_deterministic_feedback = use_deterministic_feedback
+        self._clock = clock or (lambda: datetime.now(timezone.utc))
 
     @classmethod
     def new_game(
@@ -43,6 +49,7 @@ class GameEngine:
         world: World,
         ai_provider: Optional[AIProvider] = None,
         use_deterministic_feedback: bool = False,
+        clock: Optional[Callable[[], datetime]] = None,
     ) -> "GameEngine":
         state = GameState(world=world, current_room_id=world.start_room_id)
         record_room_encounter(state)
@@ -50,6 +57,7 @@ class GameEngine:
             state,
             ai_provider=ai_provider,
             use_deterministic_feedback=use_deterministic_feedback,
+            clock=clock,
         )
 
     def handle(self, text: str) -> TurnResult:
@@ -76,6 +84,9 @@ class GameEngine:
         if intent.action == "status":
             result = TurnResult(True, self._status_summary(), feedback)
             return self._with_turn_feedback(text, intent, result, before_state)
+        if intent.action == "review":
+            result = self._review_prompt(feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "look":
             result = TurnResult(True, "You take a careful look around.", feedback)
             return self._with_turn_feedback(text, intent, result, before_state)
@@ -97,6 +108,9 @@ class GameEngine:
         if intent.action == "attack":
             result = self._attack(intent, feedback)
             return self._with_turn_feedback(text, intent, result, before_state)
+        if self.state.active_review_word:
+            review_result = self._review_sentence(text, feedback)
+            return self._with_turn_feedback(text, intent, review_result, before_state)
         practice_result = self._practice_sentence(text, feedback)
         if practice_result is not None:
             return self._with_turn_feedback(text, intent, practice_result, before_state)
@@ -129,7 +143,7 @@ class GameEngine:
             deterministic_action=intent.action,
             deterministic_result=result.message,
             target_words=before_state.current_room.target_words,
-            practiced_words=sorted(self.state.mastered_words - before_state.mastered_words),
+            practiced_words=self._changed_mastery_words(before_state),
         )
         try:
             feedback = provider.generate_turn_feedback(request)
@@ -163,6 +177,20 @@ class GameEngine:
         ]
         lines.extend(f"Vocabulary: {note}" for note in vocabulary_notes)
         return "\n".join(lines)
+
+    def _changed_mastery_words(self, before_state: GameState) -> list[str]:
+        changed_words = set(self.state.mastered_words - before_state.mastered_words)
+        for word, record in self.state.vocabulary_mastery.items():
+            before_record = before_state.vocabulary_mastery.get(word)
+            if before_record is None:
+                continue
+            if (
+                record.mastery_points != before_record.mastery_points
+                or record.correct_use_count != before_record.correct_use_count
+                or record.review_stage != before_record.review_stage
+            ):
+                changed_words.add(word)
+        return sorted(changed_words)
 
     def _move(self, intent: ParsedIntent, feedback: str) -> TurnResult:
         room = self.state.current_room
@@ -363,6 +391,7 @@ class GameEngine:
                 reward_sentence,
             ):
                 continue
+            schedule_initial_review(self.state.vocabulary_mastery[word], self._clock())
             self.state.mastered_words.add(word)
             self.state.player.xp += xp_each
             gained_xp += xp_each
@@ -399,6 +428,84 @@ class GameEngine:
         return TurnResult(
             True,
             f"You used already-practiced vocabulary in context: {words_text}.",
+            feedback,
+        )
+
+    def _review_prompt(self, feedback: str) -> TurnResult:
+        due_words = select_due_vocabulary(self.state, self._clock(), limit=5)
+        if not due_words:
+            self.state.active_review_word = None
+            return TurnResult(
+                True,
+                "No vocabulary is due for review yet. Use target words in context to schedule review.",
+                feedback,
+            )
+
+        review_word = due_words[0]
+        self.state.active_review_word = review_word
+        due_text = ", ".join(due_words)
+        return TurnResult(
+            True,
+            (
+                f"Review due: {due_text}. Write a full English sentence using "
+                f"'{review_word}' to complete the next review."
+            ),
+            feedback,
+        )
+
+    def _review_sentence(self, text: str, feedback: str) -> TurnResult:
+        word = self.state.active_review_word
+        if not word:
+            return TurnResult(False, "No review word is active.", feedback)
+
+        record = self.state.vocabulary_mastery.setdefault(word, VocabularyMastery(word=word))
+        context_id = review_context_id(self.state.world.world_id, word, record.review_stage)
+        fingerprint = response_fingerprint(text, word, context_id)
+        is_full_sentence = len(text.split()) >= 4
+        uses_word = word.lower() in text.lower()
+        if not is_full_sentence or not uses_word:
+            record_learning_event(
+                self.state,
+                LearningEvent.REVIEW_INCORRECT,
+                word,
+                context_id,
+                fingerprint,
+                practiced_at=self._clock(),
+            )
+            return TurnResult(
+                False,
+                (
+                    f"Review needs another try: write a full sentence that uses '{word}' "
+                    "clearly in context."
+                ),
+                feedback,
+            )
+
+        if fingerprint in record.recent_response_fingerprints:
+            self.state.active_review_word = None
+            return TurnResult(
+                True,
+                f"You already completed this review for '{word}' with that sentence.",
+                feedback,
+            )
+
+        record_learning_event(
+            self.state,
+            LearningEvent.REVIEW_CORRECT,
+            word,
+            context_id,
+            fingerprint,
+            practiced_at=self._clock(),
+        )
+        self.state.mastered_words.add(word)
+        self.state.player.xp += 10
+        self.state.active_review_word = None
+        return TurnResult(
+            True,
+            (
+                f"Review complete: '{word}' was used in a full sentence. "
+                f"Review stage {record.review_stage}. XP +10."
+            ),
             feedback,
         )
 
