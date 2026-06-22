@@ -156,6 +156,22 @@ def test_learner_sentence_corpus_covers_indirect_polite_questions() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_hedged_intention_phrasing() -> None:
+    hedged_cases = [
+        case
+        for case in load_corpus()
+        if case["sentence"].lower().startswith("i think i should")
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] in {"deterministic_parser", "ai_interpretation_fallback"}
+        and case["expected_success"] is True
+        and "expected_room_id" in case
+        for case in hedged_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 

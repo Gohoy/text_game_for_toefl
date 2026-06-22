@@ -56,6 +56,20 @@
     "expected_message_contains": "You go north."
   },
   {
+    "id": "think_should_move_deterministic",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [],
+    "sentence": "I think I should go north to the fungus grove.",
+    "expected_parser": {
+      "action": "move",
+      "target": "north"
+    },
+    "expected_success": true,
+    "expected_room_id": "fungus_grove",
+    "expected_message_contains": "You go north."
+  },
+  {
     "id": "negative_move_request_no_action",
     "category": "unknown_interpretation",
     "route": "ai_interpretation_fallback",
