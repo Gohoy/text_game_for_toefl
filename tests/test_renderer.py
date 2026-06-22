@@ -134,7 +134,7 @@ def test_renderer_keeps_review_rejection_lines_in_result_panel() -> None:
     assert output.count("Result: Review needs another try.") == 1
 
 
-def test_renderer_keeps_vocabulary_explanation_lines_in_result_panel() -> None:
+def test_renderer_keeps_vocabulary_explanation_in_result_without_feedback_panel() -> None:
     console = Console(record=True, width=100, color_system=None)
     renderer = Renderer(console)
     result = TurnResult(
@@ -150,7 +150,16 @@ def test_renderer_keeps_vocabulary_explanation_lines_in_result_panel() -> None:
 
     output = console.export_text()
     assert "Result" in output
-    assert "English Feedback" not in output
+    assert output.count("English Feedback") == 0
+    assert output.index("Result") < output.index(
+        "fungus: A living growth such as mold or mushrooms."
+    )
+    assert output.index("Result") < output.index(
+        "Example: A fungus can recycle nutrients in a forest."
+    )
+    assert output.index("Result") < output.index(
+        "Memory hint: Connect fungus with forest mushrooms."
+    )
     assert "fungus: A living growth such as mold or mushrooms." in output
     assert "Example: A fungus can recycle nutrients in a forest." in output
     assert "Memory hint: Connect fungus with forest mushrooms." in output

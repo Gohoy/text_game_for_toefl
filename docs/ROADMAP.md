@@ -93,6 +93,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers polite deterministic commands and polite AI-interpretation fallback
 - learner sentence corpus covers desire-based movement phrasing with explicit deterministic state expectations
 - renderer tests keep deterministic result text visually separate from AI coaching for successful and rejected turns
+- vocabulary explanation renderer coverage keeps explanation, example, and memory hint in the result panel without an empty feedback panel
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
@@ -1141,7 +1142,7 @@ None.
 
 ### T-189 — Add renderer regression for vocabulary explanation output boundaries
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep vocabulary explanation result text separate from turn-level AI coaching and avoid showing an empty feedback panel.
 - **Acceptance criteria:**
@@ -1153,7 +1154,7 @@ None.
 
 ### T-190 — Add AI feedback formatting regression for multiple vocabulary notes
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Ensure multiple AI vocabulary notes stay readable and separate in the English feedback text.
 - **Acceptance criteria:**
@@ -1212,6 +1213,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-189 by tightening renderer coverage so vocabulary explanation output stays in the result panel and no empty English Feedback panel appears.
 - 2026-06-23: Completed T-188 by adding learner-sentence corpus coverage for desire-based movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-187 by adding a renderer regression that keeps rejected deterministic action results separate from AI narration and suggestions.
 - 2026-06-23: Completed T-186 by adding learner-sentence corpus coverage for polite deterministic commands and polite AI-interpretation fallback with explicit state expectations.
@@ -1221,6 +1223,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-182 by adding a regression that AI room narration requests reject unauthorized state-like extra fields before provider use while preserving fake-provider narration behavior.
 - 2026-06-23: Completed T-181 by making AI NPC dialogue requests reject unauthorized state-like extra fields before provider use while preserving fake-provider dialogue behavior.
 - 2026-06-23: Completed T-180 by adding a regression that parser-miss AI interpretation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider interpretation behavior.
-- 2026-06-23: Completed T-179 by making AI vocabulary-explanation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider explanation behavior.
 
 Keep at most ten items here.
