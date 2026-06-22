@@ -75,6 +75,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_context_mismatch",
+    "category": "rejected",
+    "sentence": "A fungus can improve quarterly revenue in a financial portfolio.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence contains the target word but uses it in an unrelated finance context.",
+      "suggested_sentence": "A fungus can recycle nutrients in a forest ecosystem."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",

@@ -107,6 +107,7 @@ Phase 1 is complete. Exit evidence:
 - duplicate review answers are detected before AI review evaluation, preserving no-reward behavior while avoiding unnecessary provider calls
 - review-answer corpus covers fluent but synonym-heavy incorrect target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers memorized definition-style misuse that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers target-word context mismatch that reaches AI evaluation and keeps review active without XP
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1276,7 +1277,7 @@ None.
 
 ### T-199 — Add review answer corpus case for context mismatch
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when the target word is used in a sentence that is fluent but unrelated to the biology context being reviewed.
 - **Acceptance criteria:**
@@ -1288,7 +1289,7 @@ None.
 
 ### T-200 — Add learner sentence corpus case for hedged intention phrasing
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Expand full-sentence input coverage for learner hedges such as "I think I should..." while preserving deterministic state authority.
 - **Acceptance criteria:**
@@ -1359,6 +1360,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-199 by adding a review-answer corpus regression for a fluent but off-context fungus sentence that reaches AI evaluation and keeps review active without XP.
 - 2026-06-23: Completed T-198 by adding a learner-sentence corpus regression for an indirect polite question that routes through AI interpretation and deterministic collect validation.
 - 2026-06-23: Completed T-197 by adding a review-answer corpus regression for memorized definition-style misuse that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-196 by adding a review-answer corpus regression for synonym-heavy incorrect target-word use that reaches AI evaluation but keeps review active without XP.
@@ -1368,6 +1370,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-192 by adding an AI interpretation provider-exception regression that explicitly preserves location, inventory, XP, quest progress, and mastery.
 - 2026-06-23: Completed T-191 by adding learner-sentence corpus coverage for permission-question movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-190 by adding renderer coverage that keeps multiple AI vocabulary notes as distinct `Vocabulary:` lines without duplicating deterministic result text.
-- 2026-06-23: Completed T-189 by tightening renderer coverage so vocabulary explanation output stays in the result panel and no empty English Feedback panel appears.
 
 Keep at most ten items here.
