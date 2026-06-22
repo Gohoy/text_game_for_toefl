@@ -10,6 +10,7 @@ from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.ai.contract import RoomNarration
+from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.rules import GameEngine
 
@@ -68,6 +69,39 @@ def test_engine_uses_ai_feedback_for_runtime_sentence_feedback() -> None:
     assert provider.turn_feedback_requests[0].deterministic_action == "move"
     assert provider.turn_feedback_requests[0].deterministic_result == "You go north."
     assert provider.turn_feedback_requests[0].location_id == "research_camp"
+
+
+def test_ai_turn_feedback_display_keeps_coaching_sections_distinct() -> None:
+    class StructuredFeedbackProvider(FakeAIProvider):
+        def generate_turn_feedback(self, request):
+            self.turn_feedback_requests.append(request)
+            return TurnFeedback(
+                narration="The grove stays damp while you collect the sample.",
+                sentence_feedback="Use a clear verb after 'I want'.",
+                suggested_sentence="I want to collect the fungus sample.",
+                vocabulary_notes=[
+                    "fungus: a growth that can affect an ecosystem.",
+                    "vital: necessary for survival.",
+                ],
+            )
+
+    provider = StructuredFeedbackProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.state.current_room_id = "fungus_grove"
+
+    result = engine.handle("I want to collect fungus sample")
+
+    assert result.success
+    assert "You collect fungus sample." in result.message
+    assert result.message not in result.english_feedback
+    assert result.english_feedback.splitlines() == [
+        "Narration: The grove stays damp while you collect the sample.",
+        "Feedback: Use a clear verb after 'I want'.",
+        "Try: I want to collect the fungus sample.",
+        "Vocabulary: fungus: a growth that can affect an ecosystem.",
+        "Vocabulary: vital: necessary for survival.",
+    ]
+    assert provider.turn_feedback_requests[0].deterministic_result == result.message
 
 
 def test_ai_feedback_request_includes_reviewed_word() -> None:

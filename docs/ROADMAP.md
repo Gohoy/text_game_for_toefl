@@ -93,13 +93,14 @@ Evidence from an in-memory playthrough:
 - verbose movement sentences such as `I go north to the fungus grove.` resolve through deterministic parsing
 - a learner-sentence regression corpus now captures accepted, rejected, and ambiguous sentence patterns and verifies whether each route is handled by deterministic parsing or validated AI interpretation fallback
 - a review-answer regression corpus now captures accepted, rejected, and malformed answer cases and verifies deterministic-vs-AI evaluation routing
+- turn-feedback display regressions now protect labeled AI narration, sentence feedback, suggested sentence, vocabulary notes, and separate deterministic Result output
 - review answers now use a validated AI quality judgment for meaningful target-word use while deterministic code still controls review events, stages, XP, duplicate suppression, and saves
 - successful and rejected review messages now label AI advice separately from deterministic result summaries
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
 - parser intents and AI interpretation responses now share the same deterministic action contract from `src/toefl_rpg/engine/actions.py`
 - CLI playtests can now set `TOEFL_RPG_SAVE_PATH` to avoid the default player save slot
 
-Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, review messages separate AI advice from deterministic rewards and retry state, review-answer corpus coverage now distinguishes deterministic checks from AI evaluation, an end-to-end test protects quest completion plus review persistence, smoke playtests can use an isolated save path, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, parser and AI action names share one deterministic contract, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, review messages separate AI advice from deterministic rewards and retry state, review-answer corpus coverage now distinguishes deterministic checks from AI evaluation, turn-feedback display coverage protects AI coaching labels and separate deterministic Result output, an end-to-end test protects quest completion plus review persistence, smoke playtests can use an isolated save path, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, parser and AI action names share one deterministic contract, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -493,7 +494,7 @@ None.
 
 ### T-141 — Add turn-feedback display regression cases
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the player-facing shape of AI turn feedback without depending on exact prose.
 - **Acceptance criteria:**
@@ -505,7 +506,7 @@ None.
 
 ### T-142 — Add low-confidence interpretation corpus cases
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Capture ambiguous learner commands where AI interpretation should decline rather than mutate state.
 - **Acceptance criteria:**
@@ -526,6 +527,18 @@ None.
   - test uses fake providers and does not require live Codex CLI
 - **Verification:** review engine tests and full suite.
 - **Dependencies:** T-140.
+
+### T-144 — Add vocabulary explanation display regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect the player-facing shape of AI vocabulary explanations without depending on exact prose.
+- **Acceptance criteria:**
+  - explanation output keeps meaning, example, and memory hint visibly distinct
+  - deterministic state remains unchanged after explanation display
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** engine/renderer tests and full suite.
+- **Dependencies:** T-125.
 
 ## Blocked Tasks
 
@@ -575,6 +588,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-141 by adding engine and renderer regressions that keep AI narration, sentence feedback, suggested sentence, and vocabulary notes visibly separated from deterministic Result output.
 - 2026-06-22: Completed T-140 by adding review-answer corpus fixtures for AI-accepted, deterministic-rejected, AI-rejected, and malformed AI evaluation cases, with tests proving which answers stop before AI and which reach validated review evaluation.
 - 2026-06-22: Completed T-139 by adding `TOEFL_RPG_SAVE_PATH` for CLI load/autosave isolation, documenting smoke usage with a temporary save file, and preserving the default `data/saves/slot1.json` behavior for normal play.
 - 2026-06-22: Completed T-138 by formatting review answer messages with separate `AI advice`, `Try`, and deterministic `Result` lines while preserving review stage, XP, duplicate suppression, active-review state, and existing turn feedback behavior.
@@ -584,6 +598,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-134 by adding a reusable learner-sentence regression corpus with accepted, rejected, and ambiguous cases, plus tests that distinguish direct deterministic parser handling from validated AI interpretation fallback without live Codex or paid API calls.
 - 2026-06-22: Completed T-133 by checking Phase 1 exit criteria against implemented Biology gameplay, AI-provider contracts, JSON world validation, mastery persistence, review flow, save compatibility, and the fake-provider end-to-end test suite; roadmap status now moves to Phase 2 language-feedback reliability.
 - 2026-06-22: Completed T-132 by adding `validate_world_pack_draft()` and `draft_world_pack()` for AI-authored world-pack drafts, reusing the deterministic `WorldPack` schema to reject unsupported draft types, missing references, duplicate IDs, and runtime-state fields before generated content can be used.
-- 2026-06-22: Completed T-131 by adding structured AI room narration requests and responses, routing `look` through the AI provider, validating narration before display, and preserving deterministic room, quest, XP, inventory, mastery, and save state.
 
 Keep at most ten items here.
