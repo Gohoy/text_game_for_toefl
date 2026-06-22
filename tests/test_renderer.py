@@ -1,7 +1,16 @@
 from rich.console import Console
 
+import toefl_rpg.cli.renderer as renderer_module
 from toefl_rpg.cli.renderer import Renderer
 from toefl_rpg.engine.state import TurnResult
+
+
+class RecordingPlainConsole:
+    def __init__(self) -> None:
+        self.lines: list[str] = []
+
+    def print(self, value: object = "") -> None:
+        self.lines.append(str(value))
 
 
 def test_renderer_shows_result_and_english_feedback_as_separate_panels() -> None:
@@ -30,6 +39,30 @@ def test_renderer_shows_result_and_english_feedback_as_separate_panels() -> None
         "English Feedback"
     )
     assert output.count("You collect the fungus sample.") == 1
+
+
+def test_plain_console_result_and_feedback_keep_separate_labels(monkeypatch) -> None:
+    monkeypatch.setattr(renderer_module, "Panel", None)
+    console = RecordingPlainConsole()
+    renderer = Renderer(console)
+    result = TurnResult(
+        success=False,
+        message="You cannot go north from here.",
+        english_feedback=(
+            "Narration: AI narration for move.\n"
+            "Feedback: Try a reachable direction."
+        ),
+    )
+
+    renderer.show_result(result)
+
+    assert console.lines == [
+        "Result: You cannot go north from here.",
+        "English Feedback: Narration: AI narration for move.\n"
+        "Feedback: Try a reachable direction.",
+    ]
+    assert console.lines[0].startswith("Result:")
+    assert console.lines[1].startswith("English Feedback:")
 
 
 def test_renderer_keeps_multiple_vocabulary_notes_distinct_in_feedback() -> None:

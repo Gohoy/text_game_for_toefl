@@ -96,6 +96,7 @@ Phase 1 is complete. Exit evidence:
 - renderer tests keep deterministic result text visually separate from AI coaching for successful and rejected turns
 - vocabulary explanation renderer coverage keeps explanation, example, and memory hint in the result panel without an empty feedback panel
 - AI feedback formatting has rules and renderer coverage for multiple distinct vocabulary-note lines
+- plain-console renderer fallback keeps deterministic results and English feedback under separate labels
 - parser-miss AI interpretation provider failures preserve location, inventory, XP, quest progress, and mastery
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
@@ -1196,7 +1197,7 @@ None.
 
 ### T-193 — Add plain-console renderer regression for result and feedback labels
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep fallback non-Rich terminal output clear when rendering deterministic results and AI feedback.
 - **Acceptance criteria:**
@@ -1208,7 +1209,7 @@ None.
 
 ### T-194 — Add learner sentence corpus case for negative request phrasing
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Ensure learner phrasing such as "I do not want to..." does not accidentally execute the positive action.
 - **Acceptance criteria:**
@@ -1290,6 +1291,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-193 by adding plain-console renderer fallback coverage for separate deterministic result and English feedback labels.
 - 2026-06-23: Completed T-192 by adding an AI interpretation provider-exception regression that explicitly preserves location, inventory, XP, quest progress, and mastery.
 - 2026-06-23: Completed T-191 by adding learner-sentence corpus coverage for permission-question movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-190 by adding renderer coverage that keeps multiple AI vocabulary notes as distinct `Vocabulary:` lines without duplicating deterministic result text.
@@ -1299,6 +1301,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-186 by adding learner-sentence corpus coverage for polite deterministic commands and polite AI-interpretation fallback with explicit state expectations.
 - 2026-06-23: Completed T-185 by adding an executable parser/AI interpretation intent-contract audit that covers every deterministic action and target convention.
 - 2026-06-23: Completed T-184 by adding an executable AI request-model audit that verifies every request schema is strict and that the audited request set is complete.
-- 2026-06-23: Completed T-183 by adding a regression that AI review-evaluation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider review behavior.
 
 Keep at most ten items here.
