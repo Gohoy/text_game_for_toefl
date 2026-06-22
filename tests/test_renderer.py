@@ -32,6 +32,37 @@ def test_renderer_shows_result_and_english_feedback_as_separate_panels() -> None
     assert output.count("You collect the fungus sample.") == 1
 
 
+def test_renderer_keeps_multiple_vocabulary_notes_distinct_in_feedback() -> None:
+    console = Console(record=True, width=100, color_system=None)
+    renderer = Renderer(console)
+    result = TurnResult(
+        success=True,
+        message="You collect the fungus sample.",
+        english_feedback=(
+            "Narration: The grove stays damp.\n"
+            "Feedback: Use a clear verb after 'I want'.\n"
+            "Try: I want to collect the fungus sample.\n"
+            "Vocabulary: fungus: a growth that can affect an ecosystem.\n"
+            "Vocabulary: vital: necessary for survival."
+        ),
+    )
+
+    renderer.show_result(result)
+
+    output = console.export_text()
+    assert output.index("You collect the fungus sample.") < output.index(
+        "English Feedback"
+    )
+    assert output.index("Vocabulary: fungus: a growth") > output.index(
+        "English Feedback"
+    )
+    assert output.index("Vocabulary: vital: necessary") > output.index(
+        "Vocabulary: fungus: a growth"
+    )
+    assert output.count("Vocabulary:") == 2
+    assert output.count("You collect the fungus sample.") == 1
+
+
 def test_renderer_keeps_parser_miss_retry_guidance_in_result_panel() -> None:
     console = Console(record=True, width=100, color_system=None)
     renderer = Renderer(console)

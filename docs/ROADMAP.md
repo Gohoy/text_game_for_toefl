@@ -94,6 +94,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers desire-based movement phrasing with explicit deterministic state expectations
 - renderer tests keep deterministic result text visually separate from AI coaching for successful and rejected turns
 - vocabulary explanation renderer coverage keeps explanation, example, and memory hint in the result panel without an empty feedback panel
+- AI feedback formatting has rules and renderer coverage for multiple distinct vocabulary-note lines
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
@@ -1154,7 +1155,7 @@ None.
 
 ### T-190 — Add AI feedback formatting regression for multiple vocabulary notes
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Ensure multiple AI vocabulary notes stay readable and separate in the English feedback text.
 - **Acceptance criteria:**
@@ -1164,6 +1165,43 @@ None.
   - no live Codex CLI is required
 - **Verification:** rules or renderer tests plus full suite.
 - **Dependencies:** T-189.
+
+### T-191 — Add learner sentence corpus case for permission-question phrasing
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Expand full-sentence input coverage for learner permission questions such as "Can I..." or "May I..." while keeping deterministic state authority.
+- **Acceptance criteria:**
+  - corpus includes at least one accepted permission-question action sentence
+  - expected parser route or AI fallback route is explicit
+  - expected state mutation remains deterministic and explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-190.
+
+### T-192 — Add state-preservation regression for AI interpretation provider failure
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Ensure parser-miss AI interpretation failures do not mutate player state before raising a clear AI provider error.
+- **Acceptance criteria:**
+  - test covers an AI interpretation exception or malformed response during an otherwise actionable sentence
+  - player location, inventory, XP, quest progress, and mastery remain unchanged
+  - no live Codex CLI is required
+- **Verification:** rules tests and full suite.
+- **Dependencies:** T-191.
+
+### T-193 — Add plain-console renderer regression for result and feedback labels
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep fallback non-Rich terminal output clear when rendering deterministic results and AI feedback.
+- **Acceptance criteria:**
+  - renderer test covers `Panel is None` fallback behavior or an equivalent plain-console path
+  - deterministic result text and English feedback keep separate labels
+  - no live Codex CLI is required
+- **Verification:** renderer tests and full suite.
+- **Dependencies:** T-192.
 
 ## Blocked Tasks
 
@@ -1213,6 +1251,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-190 by adding renderer coverage that keeps multiple AI vocabulary notes as distinct `Vocabulary:` lines without duplicating deterministic result text.
 - 2026-06-23: Completed T-189 by tightening renderer coverage so vocabulary explanation output stays in the result panel and no empty English Feedback panel appears.
 - 2026-06-23: Completed T-188 by adding learner-sentence corpus coverage for desire-based movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-187 by adding a renderer regression that keeps rejected deterministic action results separate from AI narration and suggestions.
@@ -1222,6 +1261,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-183 by adding a regression that AI review-evaluation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider review behavior.
 - 2026-06-23: Completed T-182 by adding a regression that AI room narration requests reject unauthorized state-like extra fields before provider use while preserving fake-provider narration behavior.
 - 2026-06-23: Completed T-181 by making AI NPC dialogue requests reject unauthorized state-like extra fields before provider use while preserving fake-provider dialogue behavior.
-- 2026-06-23: Completed T-180 by adding a regression that parser-miss AI interpretation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider interpretation behavior.
 
 Keep at most ten items here.
