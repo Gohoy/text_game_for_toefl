@@ -285,6 +285,29 @@ def test_fake_ai_provider_supports_npc_dialogue() -> None:
     assert provider.dialogue_requests == [request]
 
 
+def test_npc_dialogue_request_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        NPCDialogueRequest(
+            npc_name="Dr. Lin",
+            location_id="research_camp",
+            room_name="Research Camp",
+            quest_progress="Biology Investigation 0/3",
+            visible_items=["field notebook"],
+            visible_npcs=["Dr. Lin"],
+            visible_enemies=[],
+            target_words=["organism", "species", "evolve"],
+            xp=100,
+            inventory=["fungus sample"],
+            quest_completed=True,
+        )
+
+    message = str(exc_info.value)
+    assert "xp" in message
+    assert "inventory" in message
+    assert "quest_completed" in message
+    assert "Extra inputs are not permitted" in message
+
+
 def test_npc_dialogue_rejects_extra_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         NPCDialogue(
