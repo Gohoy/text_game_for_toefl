@@ -65,7 +65,7 @@ Use explicit events rather than updating mastery ad hoc:
 | `review_correct` | Correct use after the word becomes due | Advance review stage |
 | `review_incorrect` | Incorrect due review | Reduce or hold stage and schedule a near retry |
 
-Implemented review behavior: the first correct contextual use schedules a same-session review. A correct review sentence adds one mastery point, advances the review stage, grants a small deterministic XP reward, and schedules the next review by UTC timestamp. An incorrect review keeps the active word available and schedules a near retry.
+Implemented review behavior: the first correct contextual use schedules a same-session review. In normal runtime, a review answer must pass deterministic minimum checks and a validated AI review evaluation for meaningful target-word use before deterministic code records `review_correct`. A correct review sentence adds one mastery point, advances the review stage, grants a small deterministic XP reward, and schedules the next review by UTC timestamp. An incorrect or AI-rejected review keeps the active word available and schedules a near retry.
 
 The AI evaluator should explain language and propose feedback, but deterministic code decides which learning event occurred and what it changes.
 

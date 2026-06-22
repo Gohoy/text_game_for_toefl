@@ -2,7 +2,7 @@
 
 ## Purpose
 
-AI is a required runtime collaborator for the target TOEFL RPG. The agent provides live narration, sentence feedback, vocabulary explanation, NPC dialogue, and structured content drafts.
+AI is a required runtime collaborator for the target TOEFL RPG. The agent provides live narration, sentence feedback, review answer evaluation, vocabulary explanation, NPC dialogue, and structured content drafts.
 
 Deterministic code remains authoritative for state changes: HP, XP, combat, inventory, quest completion, mastery, save/load, and validation.
 
@@ -23,6 +23,7 @@ It defines:
 - `NPCDialogueRequest` and `NPCDialogue` for adaptive NPC responses
 - `RoomNarrationRequest` and `RoomNarration` for adaptive room look narration
 - `VocabularyExplanationRequest` and `VocabularyExplanation` for word-level learning help
+- `ReviewAnswerEvaluationRequest` and `ReviewAnswerEvaluation` for AI-assisted review answer quality checks
 - `ContentDraftRequest` and `StructuredContentDraft` for generated world or quest drafts
 - `AIProvider` protocol for concrete providers
 - `FakeAIProvider` for tests
@@ -33,6 +34,8 @@ Player sentence interpretation is advisory. The response is limited to a known d
 NPC dialogue is also display-only. The request includes the NPC, room, quest progress, visible entities, and target words. The response may include a speaker line and vocabulary notes, but it cannot return deterministic state changes.
 
 Room narration is display-only. The request includes the deterministic room description, exits, visible entities, quest progress, and target words. The response may enrich the prose and add vocabulary notes, but it cannot alter exits, items, NPCs, enemies, quest state, or rewards.
+
+Review answer evaluation is advisory but required in normal runtime. The request includes the target word, learner sentence, world theme, and current review stage. The response may say whether the sentence uses the target word meaningfully and may provide a correction, but it cannot advance review state, grant XP, suppress duplicates, mutate saves, or complete quests. Deterministic code still applies the review event and rewards only after the response validates and the sentence passes deterministic minimum checks.
 
 ## Validation Rule
 

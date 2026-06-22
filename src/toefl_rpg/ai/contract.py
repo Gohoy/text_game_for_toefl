@@ -38,6 +38,23 @@ class VocabularyExplanation(BaseModel):
     memory_hint: str = Field(min_length=1)
 
 
+class ReviewAnswerEvaluationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    word: str = Field(min_length=1)
+    learner_sentence: str = Field(min_length=1)
+    theme: str = Field(min_length=1)
+    review_stage: int = Field(ge=0)
+
+
+class ReviewAnswerEvaluation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    uses_target_meaningfully: bool
+    explanation: str = Field(min_length=1)
+    suggested_sentence: str = Field(min_length=1)
+
+
 class ContentDraftRequest(BaseModel):
     theme: str = Field(min_length=1)
     required_words: list[str] = Field(min_length=1)
@@ -151,6 +168,11 @@ class AIProvider(Protocol):
     ) -> VocabularyExplanation:
         raise NotImplementedError
 
+    def evaluate_review_answer(
+        self, request: ReviewAnswerEvaluationRequest
+    ) -> ReviewAnswerEvaluation:
+        raise NotImplementedError
+
     def draft_content(self, request: ContentDraftRequest) -> StructuredContentDraft:
         raise NotImplementedError
 
@@ -170,6 +192,7 @@ class FakeAIProvider:
         self.dialogue_requests: list[NPCDialogueRequest] = []
         self.room_narration_requests: list[RoomNarrationRequest] = []
         self.vocabulary_requests: list[VocabularyExplanationRequest] = []
+        self.review_evaluation_requests: list[ReviewAnswerEvaluationRequest] = []
         self.content_requests: list[ContentDraftRequest] = []
 
     def generate_turn_feedback(self, request: TurnFeedbackRequest) -> TurnFeedback:
@@ -224,6 +247,18 @@ class FakeAIProvider:
             plain_meaning=f"{request.word} explained for {request.theme}.",
             example_sentence=f"The {request.theme} example uses {request.word}.",
             memory_hint=f"Connect {request.word} to {request.theme}.",
+        )
+
+    def evaluate_review_answer(
+        self, request: ReviewAnswerEvaluationRequest
+    ) -> ReviewAnswerEvaluation:
+        self.review_evaluation_requests.append(request)
+        uses_word = request.word.lower() in request.learner_sentence.lower()
+        is_full_sentence = len(request.learner_sentence.split()) >= 4
+        return ReviewAnswerEvaluation(
+            uses_target_meaningfully=uses_word and is_full_sentence,
+            explanation="Fake AI review evaluation checks sentence length and target word use.",
+            suggested_sentence=request.learner_sentence,
         )
 
     def draft_content(self, request: ContentDraftRequest) -> StructuredContentDraft:

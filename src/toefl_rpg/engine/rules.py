@@ -9,6 +9,8 @@ from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
+from toefl_rpg.ai.contract import ReviewAnswerEvaluation
+from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import RoomNarrationRequest
 from toefl_rpg.ai.contract import TurnFeedbackRequest
@@ -660,6 +662,41 @@ class GameEngine:
                 feedback,
             )
 
+        if not self.use_deterministic_feedback:
+            provider = require_ai_provider(self.ai_provider)
+            request = ReviewAnswerEvaluationRequest(
+                word=word,
+                learner_sentence=text,
+                theme=self.state.world.title,
+                review_stage=record.review_stage,
+            )
+            try:
+                evaluation = ReviewAnswerEvaluation.model_validate(
+                    provider.evaluate_review_answer(request)
+                )
+            except Exception as exc:
+                raise AIProviderUnavailable(
+                    f"AI review evaluation failed: {exc}"
+                ) from exc
+
+            if not evaluation.uses_target_meaningfully:
+                record_learning_event(
+                    self.state,
+                    LearningEvent.REVIEW_INCORRECT,
+                    word,
+                    context_id,
+                    fingerprint,
+                    practiced_at=self._clock(),
+                )
+                return TurnResult(
+                    False,
+                    (
+                        f"Review needs another try: {evaluation.explanation} "
+                        f"Try: {evaluation.suggested_sentence}"
+                    ),
+                    feedback,
+                )
+
         if fingerprint in record.recent_response_fingerprints:
             self.state.active_review_word = None
             return TurnResult(
@@ -682,7 +719,7 @@ class GameEngine:
         return TurnResult(
             True,
             (
-                f"Review complete: '{word}' was used in a full sentence. "
+                f"Review complete: AI accepted the review sentence for '{word}'. "
                 f"Review stage {record.review_stage}. XP +10."
             ),
             feedback,

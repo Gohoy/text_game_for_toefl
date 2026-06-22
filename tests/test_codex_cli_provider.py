@@ -9,6 +9,7 @@ from toefl_rpg.ai.codex_cli import CodexCliProviderError
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
+from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarrationRequest
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
@@ -198,6 +199,37 @@ def test_codex_cli_provider_supports_room_narration() -> None:
     assert "fungus" in response.narration
     assert response.focus_hint == "The fungus sample is ready to collect."
     assert response.vocabulary_notes == ["symbiosis: living together."]
+
+
+def test_codex_cli_provider_supports_review_answer_evaluation() -> None:
+    def fake_runner(command, **kwargs):
+        assert "review answer evaluation" in kwargs["input"]
+        assert '"word": "fungus"' in kwargs["input"]
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            stdout=json.dumps(
+                {
+                    "uses_target_meaningfully": True,
+                    "explanation": "The sentence uses fungus as a biological organism.",
+                    "suggested_sentence": "A fungus can recycle nutrients in a forest.",
+                }
+            ),
+            stderr="",
+        )
+
+    provider = CodexCliProvider(runner=fake_runner)
+    request = ReviewAnswerEvaluationRequest(
+        word="fungus",
+        learner_sentence="A fungus can recycle nutrients in a forest.",
+        theme="Biology Realm",
+        review_stage=0,
+    )
+
+    response = provider.evaluate_review_answer(request)
+
+    assert response.uses_target_meaningfully
+    assert "biological organism" in response.explanation
 
 
 def test_codex_cli_provider_reports_missing_executable() -> None:

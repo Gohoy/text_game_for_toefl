@@ -5,7 +5,7 @@ A CLI text RPG for learning TOEFL vocabulary through themed worlds, free-form En
 The project is designed around a strict boundary:
 
 - A local AI agent is a required core part of the intended game experience.
-- AI generates live room narration, NPC dialogue, richer sentence feedback, vocabulary explanations, and structured content drafts.
+- AI generates live room narration, NPC dialogue, richer sentence feedback, review answer evaluation, vocabulary explanations, and structured content drafts.
 - Code controls game rules, state, validation, combat, progress, and saves.
 
 See [docs/OVERVIEW_STRUCTURE_PLAN.md](docs/OVERVIEW_STRUCTURE_PLAN.md) for the full structure plan.
@@ -20,8 +20,10 @@ Normal play uses the local Codex CLI as the required AI provider for turn narrat
 and sentence feedback. When the deterministic parser cannot understand a
 sentence, the AI provider may propose a structured action; the deterministic
 engine still validates visible rooms, items, enemies, quest state, XP, and
-inventory before anything changes. The executable defaults to `codex`; override
-it with `TOEFL_RPG_CODEX_EXECUTABLE` when needed.
+inventory before anything changes. Review answers are also evaluated through the
+AI provider for meaningful target-word use, while deterministic code still
+controls review stage, XP, duplicate suppression, and saves. The executable
+defaults to `codex`; override it with `TOEFL_RPG_CODEX_EXECUTABLE` when needed.
 
 For deterministic smoke tests without a live Codex call, opt into the fake test
 provider explicitly:
@@ -54,8 +56,10 @@ Current supported actions include:
 
 The current Biology Investigation quest has three deterministic steps: collect the fungus sample, analyze it with the microscope, and defeat the invasive vine.
 After using target words in context, `review` presents due vocabulary and asks
-for a new full-sentence answer. Correct review sentences advance the persisted
-review stage and schedule the next review.
+for a new full-sentence answer. In normal play, the AI provider judges whether
+the answer uses the target word meaningfully; deterministic code then applies
+the review result, advances persisted review stage, and schedules the next
+review.
 
 Use `explain <word>` for an AI-generated explanation of a target word that is
 visible in the current room or already practiced. The explanation is displayed

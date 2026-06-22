@@ -8,6 +8,8 @@ from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
+from toefl_rpg.ai.contract import ReviewAnswerEvaluation
+from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import RoomNarrationRequest
 from toefl_rpg.ai.contract import TurnFeedback
@@ -182,4 +184,31 @@ def test_room_narration_rejects_extra_state_mutation_fields() -> None:
             focus_hint="Collect the sample.",
             vocabulary_notes=["fungus: a growth."],
             room_id="new_room",
+        )
+
+
+def test_fake_ai_provider_supports_review_answer_evaluation() -> None:
+    provider = FakeAIProvider()
+    request = ReviewAnswerEvaluationRequest(
+        word="fungus",
+        learner_sentence="A fungus can be vital for forest metabolism.",
+        theme="Biology Realm",
+        review_stage=0,
+    )
+
+    response = provider.evaluate_review_answer(request)
+
+    assert response.uses_target_meaningfully
+    assert response.explanation
+    assert response.suggested_sentence == request.learner_sentence
+    assert provider.review_evaluation_requests == [request]
+
+
+def test_review_answer_evaluation_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        ReviewAnswerEvaluation(
+            uses_target_meaningfully=True,
+            explanation="The sentence uses fungus correctly.",
+            suggested_sentence="A fungus can be vital for forest metabolism.",
+            xp=100,
         )

@@ -8,6 +8,7 @@ from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import FakeAIProvider
 from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
+from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.rules import GameEngine
@@ -85,6 +86,93 @@ def test_ai_feedback_request_includes_reviewed_word() -> None:
 
     assert result.success
     assert provider.turn_feedback_requests[-1].practiced_words == ["fungus"]
+
+
+def test_review_answer_uses_ai_quality_judgment_before_reward() -> None:
+    provider = FakeAIProvider()
+    now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        ai_provider=provider,
+        clock=lambda: now,
+    )
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("review")
+
+    result = engine.handle("A fungus can be vital for forest metabolism.")
+
+    fungus = engine.state.vocabulary_mastery["fungus"]
+    assert result.success
+    assert "AI accepted the review sentence" in result.message
+    assert engine.state.active_review_word is None
+    assert fungus.review_stage == 1
+    assert fungus.mastery_points == 2
+    assert engine.state.player.xp == 26
+    assert provider.review_evaluation_requests[0].word == "fungus"
+    assert (
+        provider.review_evaluation_requests[0].learner_sentence
+        == "A fungus can be vital for forest metabolism."
+    )
+
+
+def test_review_answer_ai_rejection_keeps_word_active_without_reward() -> None:
+    class RejectingReviewProvider(FakeAIProvider):
+        def evaluate_review_answer(self, request):
+            self.review_evaluation_requests.append(request)
+            return ReviewAnswerEvaluation(
+                uses_target_meaningfully=False,
+                explanation="The sentence names the word but does not show its meaning.",
+                suggested_sentence="A fungus can decompose wood in a forest.",
+            )
+
+    provider = RejectingReviewProvider()
+    now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        ai_provider=provider,
+        clock=lambda: now,
+    )
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("review")
+
+    result = engine.handle("The word fungus appears in my sentence.")
+
+    fungus = engine.state.vocabulary_mastery["fungus"]
+    assert not result.success
+    assert "Review needs another try" in result.message
+    assert "The sentence names the word" in result.message
+    assert engine.state.active_review_word == "fungus"
+    assert fungus.review_stage == 0
+    assert fungus.mastery_points == 1
+    assert fungus.incorrect_use_count == 1
+    assert engine.state.player.xp == 16
+
+
+def test_invalid_ai_review_evaluation_preserves_state() -> None:
+    class InvalidReviewProvider(FakeAIProvider):
+        def evaluate_review_answer(self, request):
+            self.review_evaluation_requests.append(request)
+            return {"explanation": "Missing the required judgment."}
+
+    provider = InvalidReviewProvider()
+    now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        ai_provider=provider,
+        clock=lambda: now,
+    )
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("review")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI review evaluation failed"):
+        engine.handle("A fungus can be vital for forest metabolism.")
+
+    assert engine.state == before_state
+    assert provider.review_evaluation_requests[0].word == "fungus"
 
 
 def test_explain_visible_vocabulary_uses_ai_without_mutating_state() -> None:

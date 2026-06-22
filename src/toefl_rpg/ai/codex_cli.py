@@ -14,6 +14,8 @@ from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
+from toefl_rpg.ai.contract import ReviewAnswerEvaluation
+from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import RoomNarrationRequest
 from toefl_rpg.ai.contract import StructuredContentDraft
@@ -80,6 +82,15 @@ class CodexCliProvider:
         return self._invoke(
             response_model=VocabularyExplanation,
             purpose="vocabulary explanation",
+            payload=request.model_dump(),
+        )
+
+    def evaluate_review_answer(
+        self, request: ReviewAnswerEvaluationRequest
+    ) -> ReviewAnswerEvaluation:
+        return self._invoke(
+            response_model=ReviewAnswerEvaluation,
+            purpose="review answer evaluation",
             payload=request.model_dump(),
         )
 

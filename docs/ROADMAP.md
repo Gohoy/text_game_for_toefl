@@ -66,7 +66,7 @@ Phase 1 is complete. Exit evidence:
 - deterministic mastery events for encounters, correct use, and incorrect attempts
 - duplicate response fingerprints suppress repeat mastery and XP rewards
 - deterministic review-due vocabulary selector with injected clock
-- playable `review` command for due vocabulary, full-sentence review answers, and persisted review stages
+- playable `review` command for due vocabulary, AI-assisted full-sentence review answer evaluation, and persisted review stages
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
 - external vocabulary importer
@@ -81,16 +81,17 @@ Evidence from an in-memory playthrough:
 - the three-step Biology quest can be completed through movement, collecting the fungus sample, using the microscope, and defeating the invasive vine
 - the game rewards contextual sentences such as `The harmless creature uses mimicry to avoid extinction.`
 - sentence feedback now comes from a configured provider in normal runtime, with fake-provider smoke coverage for automation
-- vocabulary learning now includes same-session delayed review through `review`, but the correctness check is still a simple deterministic full-sentence/word-use gate
+- vocabulary learning now includes same-session delayed review through `review`, with normal runtime answers checked by a validated AI review evaluator before deterministic mastery and XP changes are applied
 - a fake-provider playtest can now interpret `Could you grab the specimen for my research?` as collecting the visible fungus sample, while deterministic validation still rejects invented targets such as `crystal sample`
 - `talk to Dr. Lin` now requests validated AI dialogue without mutating quest state, XP, inventory, saves, or mastery
 - `look` now requests validated AI room narration without mutating exits, items, NPCs, enemies, quest state, XP, inventory, saves, or mastery
 - AI-authored world-pack drafts must validate as `WorldPack` before they can be reviewed as usable content
 - verbose movement sentences such as `I go north to the fungus grove.` resolve through deterministic parsing
 - a learner-sentence regression corpus now captures accepted, rejected, and ambiguous sentence patterns and verifies whether each route is handled by deterministic parsing or validated AI interpretation fallback
+- review answers now use a validated AI quality judgment for meaningful target-word use while deterministic code still controls review events, stages, XP, duplicate suppression, and saves
 - CLI playtests still use the default save path, so automation should prefer in-memory playthroughs until a configurable smoke-test save path is added
 
-Conclusion: proceed to Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order, an end-to-end test protects quest completion plus review persistence, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, an end-to-end test protects quest completion plus review persistence, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -412,7 +413,7 @@ None.
 
 ### T-135 — Improve review answer quality checks
 
-- **State:** ready
+- **State:** done
 - **Priority:** P1
 - **Goal:** Replace the simple review word-use gate with a validated AI-assisted quality judgment while code keeps mastery rewards authoritative.
 - **Acceptance criteria:**
@@ -433,6 +434,30 @@ None.
   - fake providers are used; no live Codex CLI call is required
 - **Verification:** AI contract tests, engine tests, full suite.
 - **Dependencies:** T-134.
+
+### T-137 — Centralize deterministic action names
+
+- **State:** planned
+- **Priority:** P1
+- **Goal:** Keep parser actions, AI interpretation actions, and engine dispatch names aligned through one shared contract.
+- **Acceptance criteria:**
+  - deterministic action literals are defined in one importable place
+  - parser and AI interpretation validation use the same action set where practical
+  - behavior remains unchanged for existing commands and learner-sentence corpus cases
+- **Verification:** parser tests, AI contract tests, engine tests, full suite.
+- **Dependencies:** T-136.
+
+### T-138 — Separate review coaching text from reward summaries
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Make review result messages easier to read by keeping AI coaching text distinct from deterministic reward and scheduling summaries.
+- **Acceptance criteria:**
+  - successful and rejected review messages clearly separate AI advice from deterministic reward/state results
+  - turn feedback still appears through the existing AI feedback channel
+  - no mastery, XP, duplicate suppression, or save behavior changes
+- **Verification:** review engine tests, CLI smoke with fake provider, full suite.
+- **Dependencies:** T-135.
 
 ## Blocked Tasks
 
@@ -457,7 +482,7 @@ Use this format when needed:
 
 - normalize parser intent structures
 - separate deterministic action authority from AI coaching text
-- add regression corpora for common learner sentences
+- expand regression corpora for common learner sentences
 - validate AI feedback shape and failure modes
 
 ## Future Phases
@@ -482,6 +507,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-135 by adding a validated AI review-answer evaluation contract, routing normal review answers through it, preserving deterministic ownership of review stage, XP, duplicate suppression, and saves, and documenting the updated AI-assisted review rule.
 - 2026-06-22: Completed T-134 by adding a reusable learner-sentence regression corpus with accepted, rejected, and ambiguous cases, plus tests that distinguish direct deterministic parser handling from validated AI interpretation fallback without live Codex or paid API calls.
 - 2026-06-22: Completed T-133 by checking Phase 1 exit criteria against implemented Biology gameplay, AI-provider contracts, JSON world validation, mastery persistence, review flow, save compatibility, and the fake-provider end-to-end test suite; roadmap status now moves to Phase 2 language-feedback reliability.
 - 2026-06-22: Completed T-132 by adding `validate_world_pack_draft()` and `draft_world_pack()` for AI-authored world-pack drafts, reusing the deterministic `WorldPack` schema to reject unsupported draft types, missing references, duplicate IDs, and runtime-state fields before generated content can be used.
@@ -491,6 +517,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-127 by adding advisory `PlayerSentenceInterpretationRequest` and `PlayerSentenceInterpretation` models, restricting AI-proposed actions to deterministic engine actions, forbidding extra state-mutation fields, and wiring fake/Codex providers through validated schemas.
 - 2026-06-22: Completed T-126 by parsing verbose directional sentences such as `I go north to the fungus grove.` into deterministic move intents while preserving engine-side exit validation for impossible movement.
 - 2026-06-22: Completed T-125 by adding an AI-backed `explain <word>` command for visible or practiced Biology vocabulary, validating requested words before provider calls, displaying structured explanations without state mutation, and preserving state on invalid AI output.
-- 2026-06-22: Completed T-130 by adding a fake-AI end-to-end Biology playthrough covering movement, vocabulary practice, due review completion, quest completion, combat, save, reload, and post-load status.
 
 Keep at most ten items here.
