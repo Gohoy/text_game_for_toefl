@@ -638,6 +638,30 @@ def test_ai_dialogue_rejects_mismatched_speaker_without_mutating_state() -> None
     assert provider.dialogue_requests[0].npc_name == "Dr. Lin"
 
 
+@pytest.mark.parametrize("empty_field", ["speaker", "line"])
+def test_empty_ai_dialogue_fields_preserve_state(empty_field: str) -> None:
+    class EmptyDialogueProvider(FakeAIProvider):
+        def generate_npc_dialogue(self, request):
+            self.dialogue_requests.append(request)
+            dialogue = {
+                "speaker": request.npc_name,
+                "line": "Use respiration clues to track the organism.",
+                "vocabulary_notes": ["respiration: the process of using oxygen."],
+            }
+            dialogue[empty_field] = ""
+            return dialogue
+
+    provider = EmptyDialogueProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI NPC dialogue failed"):
+        engine.handle("talk to Dr. Lin")
+
+    assert engine.state == before_state
+    assert provider.dialogue_requests[0].npc_name == "Dr. Lin"
+
+
 def test_ai_dialogue_cannot_return_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         NPCDialogue(
