@@ -1,12 +1,70 @@
 from typing import get_args
 
+import pytest
+
+from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.engine.actions import DETERMINISTIC_ACTIONS
 from toefl_rpg.engine.actions import DeterministicAction
 from toefl_rpg.language.parser import parse_intent
 
 
+INTENT_TARGET_CONTRACT_CASES = [
+    ("help", "help", ""),
+    ("go north", "move", "north"),
+    ("look", "look", ""),
+    ("inspect microscope", "inspect", "microscope"),
+    ("collect fungus sample", "collect", "fungus sample"),
+    ("use microscope", "use", "microscope"),
+    ("talk to Dr. Lin", "talk", "dr. lin"),
+    ("attack invasive vine", "attack", "invasive vine"),
+    ("review vocabulary", "review", ""),
+    ("explain fungus", "explain", "fungus"),
+    ("inventory", "inventory", ""),
+    ("status", "status", ""),
+    ("quit", "quit", ""),
+    ("sing a song", "unknown", "sing a song"),
+]
+
+
 def test_shared_action_contract_matches_literal_type() -> None:
     assert DETERMINISTIC_ACTIONS == get_args(DeterministicAction)
+
+
+def test_intent_target_contract_covers_every_shared_action() -> None:
+    documented_actions = tuple(case[1] for case in INTENT_TARGET_CONTRACT_CASES)
+
+    assert documented_actions == DETERMINISTIC_ACTIONS
+
+
+@pytest.mark.parametrize(
+    ("sentence", "expected_action", "expected_target"),
+    INTENT_TARGET_CONTRACT_CASES,
+)
+def test_parser_target_conventions_for_shared_actions(
+    sentence: str, expected_action: DeterministicAction, expected_target: str
+) -> None:
+    intent = parse_intent(sentence)
+
+    assert intent.action == expected_action
+    assert intent.target == expected_target
+
+
+@pytest.mark.parametrize(
+    ("sentence", "expected_action", "expected_target"),
+    INTENT_TARGET_CONTRACT_CASES,
+)
+def test_ai_interpretation_target_conventions_match_parser_contract(
+    sentence: str, expected_action: DeterministicAction, expected_target: str
+) -> None:
+    response = PlayerSentenceInterpretation(
+        action=expected_action,
+        target=expected_target,
+        confidence=0.9,
+        reason=f"Interpret {sentence!r} using the shared deterministic contract.",
+    )
+
+    assert response.action == expected_action
+    assert response.target == expected_target
 
 
 def test_parser_outputs_only_shared_deterministic_actions() -> None:

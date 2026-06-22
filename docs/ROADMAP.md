@@ -89,6 +89,7 @@ Phase 1 is complete. Exit evidence:
 - rejected review answers keep AI advice, suggested sentence, and deterministic retry result visibly distinct
 - AI review-evaluation requests reject unauthorized extra state-like fields before reaching providers
 - all AI request models have strict-schema audit coverage in the AI contract tests
+- parser and AI sentence interpretation share an executable action/target convention audit
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
@@ -1087,7 +1088,7 @@ None.
 
 ### T-185 — Audit parser intent shape consistency
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Ensure deterministic parser intents and AI interpretation results continue to share the same action vocabulary and target conventions.
 - **Acceptance criteria:**
@@ -1099,7 +1100,7 @@ None.
 
 ### T-186 — Add learner sentence corpus case for polite command forms
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Expand full-sentence input coverage for polite learner commands such as "Could you..." and "Please...".
 - **Acceptance criteria:**
@@ -1169,6 +1170,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-185 by adding an executable parser/AI interpretation intent-contract audit that covers every deterministic action and target convention.
 - 2026-06-23: Completed T-184 by adding an executable AI request-model audit that verifies every request schema is strict and that the audited request set is complete.
 - 2026-06-23: Completed T-183 by adding a regression that AI review-evaluation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider review behavior.
 - 2026-06-23: Completed T-182 by adding a regression that AI room narration requests reject unauthorized state-like extra fields before provider use while preserving fake-provider narration behavior.
@@ -1178,6 +1180,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-178 by making AI turn-feedback requests reject unauthorized state-like extra fields before provider use while preserving fake-provider feedback behavior.
 - 2026-06-23: Completed T-177 by adding fake-provider regressions that distinguish AI content-draft envelope failures from world-pack payload failures while preserving nested payload field paths.
 - 2026-06-23: Completed T-176 by making AI content-draft requests reject unauthorized state-like extra fields before provider use while preserving fake-provider draft behavior.
-- 2026-06-23: Completed T-175 by adding subprocess-fake Codex CLI provider coverage for strict content-draft response schemas and unchanged structured draft parsing.
 
 Keep at most ten items here.
