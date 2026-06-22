@@ -393,6 +393,25 @@ def test_fake_ai_provider_supports_review_answer_evaluation() -> None:
     assert provider.review_evaluation_requests == [request]
 
 
+def test_review_answer_evaluation_request_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        ReviewAnswerEvaluationRequest(
+            word="fungus",
+            learner_sentence="A fungus can be vital for forest metabolism.",
+            theme="Biology Realm",
+            review_stage=0,
+            xp=100,
+            inventory=["fungus sample"],
+            review_stage_override=5,
+        )
+
+    message = str(exc_info.value)
+    assert "xp" in message
+    assert "inventory" in message
+    assert "review_stage_override" in message
+    assert "Extra inputs are not permitted" in message
+
+
 def test_review_answer_evaluation_rejects_extra_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         ReviewAnswerEvaluation(

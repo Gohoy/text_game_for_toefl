@@ -87,6 +87,7 @@ Phase 1 is complete. Exit evidence:
 - playable `review` command for due vocabulary, AI-assisted full-sentence review answer evaluation, and persisted review stages
 - review result messages separate AI coaching text from deterministic reward and retry summaries
 - rejected review answers keep AI advice, suggested sentence, and deterministic retry result visibly distinct
+- AI review-evaluation requests reject unauthorized extra state-like fields before reaching providers
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
@@ -1061,7 +1062,7 @@ None.
 
 ### T-183 — Add review-evaluation request strictness regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep review-evaluation prompts bounded to the active review word and learner answer before they reach providers.
 - **Acceptance criteria:**
@@ -1073,7 +1074,7 @@ None.
 
 ### T-184 — Audit remaining AI request strictness coverage
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Confirm every AI request model has explicit strictness coverage or a documented reason for not needing it.
 - **Acceptance criteria:**
@@ -1131,6 +1132,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-183 by adding a regression that AI review-evaluation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider review behavior.
 - 2026-06-23: Completed T-182 by adding a regression that AI room narration requests reject unauthorized state-like extra fields before provider use while preserving fake-provider narration behavior.
 - 2026-06-23: Completed T-181 by making AI NPC dialogue requests reject unauthorized state-like extra fields before provider use while preserving fake-provider dialogue behavior.
 - 2026-06-23: Completed T-180 by adding a regression that parser-miss AI interpretation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider interpretation behavior.
@@ -1140,6 +1142,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-176 by making AI content-draft requests reject unauthorized state-like extra fields before provider use while preserving fake-provider draft behavior.
 - 2026-06-23: Completed T-175 by adding subprocess-fake Codex CLI provider coverage for strict content-draft response schemas and unchanged structured draft parsing.
 - 2026-06-23: Completed T-174 by adding AI content-draft and world-schema regressions that reject nested mutation-like payload fields before generated world content is accepted.
-- 2026-06-23: Completed T-173 by validating AI content-draft envelopes before payload acceptance and rejecting unauthorized mutation-like top-level fields.
 
 Keep at most ten items here.
