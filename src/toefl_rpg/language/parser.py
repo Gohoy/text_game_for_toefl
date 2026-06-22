@@ -42,15 +42,22 @@ def parse_intent(text: str) -> ParsedIntent:
     if any(marker in padded for marker in negative_markers):
         return ParsedIntent("unknown", normalized)
 
+    movement_text = " ".join(
+        normalized.translate(str.maketrans({",": " ", ";": " ", ":": " "})).split()
+    )
+    movement_padded = f" {movement_text} "
     for direction in ("north", "south", "east", "west"):
-        if normalized == direction or normalized.endswith(f" go {direction}"):
-            return ParsedIntent("move", direction)
-        if normalized.startswith(f"go {direction}") or f" to the {direction}" in normalized:
+        if movement_text == direction or movement_text.endswith(f" go {direction}"):
             return ParsedIntent("move", direction)
         if (
-            f" go {direction} " in padded
-            or f" walk {direction} " in padded
-            or f" move {direction} " in padded
+            movement_text.startswith(f"go {direction}")
+            or f" to the {direction}" in movement_text
+        ):
+            return ParsedIntent("move", direction)
+        if (
+            f" go {direction} " in movement_padded
+            or f" walk {direction} " in movement_padded
+            or f" move {direction} " in movement_padded
         ):
             return ParsedIntent("move", direction)
 

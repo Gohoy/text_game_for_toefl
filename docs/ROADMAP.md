@@ -94,6 +94,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers desire-based movement phrasing with explicit deterministic state expectations
 - learner sentence corpus covers permission-question movement phrasing with explicit deterministic state expectations
 - learner sentence corpus covers negative request phrasing so negated movement does not execute the positive action
+- parser movement matching tolerates common separator punctuation in full-sentence movement input
 - renderer tests keep deterministic result text visually separate from AI coaching for successful and rejected turns
 - vocabulary explanation renderer coverage keeps explanation, example, and memory hint in the result panel without an empty feedback panel
 - AI feedback formatting has rules and renderer coverage for multiple distinct vocabulary-note lines
@@ -1222,7 +1223,7 @@ None.
 
 ### T-195 — Add parser regression for punctuation-heavy movement input
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep common punctuation-heavy learner movement input parseable without weakening action authority.
 - **Acceptance criteria:**
@@ -1234,7 +1235,7 @@ None.
 
 ### T-196 — Add review answer corpus case for synonym-heavy incorrect use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Keep review-answer AI evaluation coverage clear when a learner writes a fluent sentence that does not use the active target word meaningfully.
 - **Acceptance criteria:**
@@ -1292,6 +1293,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-195 by adding a parser regression and movement matching support for punctuation-heavy learner input such as `I want to go north, please!!!`.
 - 2026-06-23: Completed T-194 by adding a negative-request learner corpus regression and parser guard so negated movement does not execute the positive action.
 - 2026-06-23: Completed T-193 by adding plain-console renderer fallback coverage for separate deterministic result and English feedback labels.
 - 2026-06-23: Completed T-192 by adding an AI interpretation provider-exception regression that explicitly preserves location, inventory, XP, quest progress, and mastery.
@@ -1301,6 +1303,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-188 by adding learner-sentence corpus coverage for desire-based movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-187 by adding a renderer regression that keeps rejected deterministic action results separate from AI narration and suggestions.
 - 2026-06-23: Completed T-186 by adding learner-sentence corpus coverage for polite deterministic commands and polite AI-interpretation fallback with explicit state expectations.
-- 2026-06-23: Completed T-185 by adding an executable parser/AI interpretation intent-contract audit that covers every deterministic action and target convention.
 
 Keep at most ten items here.

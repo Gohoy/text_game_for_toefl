@@ -103,6 +103,13 @@ def test_parse_verbose_movement_to_named_room() -> None:
     assert intent.target == "north"
 
 
+def test_parse_punctuation_heavy_movement_sentence() -> None:
+    intent = parse_intent("I want to go north, please!!!")
+
+    assert intent.action == "move"
+    assert intent.target == "north"
+
+
 def test_parse_inspect_sentence() -> None:
     intent = parse_intent("I want to inspect the microscope")
 
