@@ -19,15 +19,16 @@ A minimal world pack contains:
   "difficulty": "A2-B1",
   "start_room_id": "field_station",
   "core_words": ["organism", "symbiosis", "metabolism"],
+  "items": ["field notebook"],
+  "npcs": ["Dr. Lin"],
   "rooms": [],
-  "npcs": [],
-  "items": [],
   "enemies": [],
+  "quest_task_ids": ["collect_sample"],
   "quests": []
 }
 ```
 
-The current minimal Pydantic pack contract is implemented by `WorldPack`, `WorldPackRoom`, `WorldPackEnemy`, and `WorldPackQuestStep` in `src/toefl_rpg/content/schema.py`. This document explains the stable contract and validation rules.
+The current minimal Pydantic pack contract is implemented by `WorldPack`, `WorldPackRoom`, `WorldPackEnemy`, and `WorldPackQuestStep` in `src/toefl_rpg/content/schema.py`. It also includes simple top-level item, NPC, and quest task ID namespaces so room placements and quest steps can be checked before runtime conversion. This document explains the stable contract and validation rules.
 
 ## Stable ID Rules
 
@@ -67,6 +68,8 @@ tags
 ```
 
 Runtime changes such as collected items or defeated enemies belong in player/world state, not by mutating the source JSON.
+
+Current implementation note: room `items` and `npcs` are references to top-level string namespaces. They preserve the current runtime display names for compatibility. A future schema can promote them to object records with separate stable IDs, names, descriptions, and tags.
 
 ## Item Contract
 
@@ -140,13 +143,15 @@ practice_word_in_context
 
 Quest content supplies IDs and parameters. Engine code evaluates completion.
 
+Current implementation note: `quest_task_ids` declares the deterministic quest task namespace, and every `quest_steps[].id` must reference that namespace.
+
 ## Cross-Reference Validation
 
 Validation must reject:
 
 - exits pointing to missing rooms
 - placements pointing to missing items, NPCs, or enemies
-- quest objectives pointing to missing IDs
+- quest steps pointing to missing quest task IDs
 - duplicate IDs
 - start rooms that do not exist
 - core or room target words that violate the word format contract
@@ -164,7 +169,7 @@ Example:
 rooms[river_bank].exits.east references missing room "old_lab"
 ```
 
-The first implemented pack model validates required fields, forbids runtime-state fields, and rejects duplicate room, enemy, and quest-step IDs. Cross-reference validation is intentionally a follow-up task.
+The pack model validates required fields, forbids runtime-state fields, rejects duplicate room, item, NPC, enemy, quest task, and quest-step IDs, and rejects missing start-room, exit, placement, and quest-task references.
 
 World packs are loaded through `load_world_pack(path)` in `src/toefl_rpg/content/loader.py`. Loader failures are reported as `WorldPackLoadError` with messages for missing files, invalid JSON locations, and schema validation details.
 

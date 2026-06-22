@@ -13,6 +13,8 @@ def minimal_world_pack_data() -> dict:
         "difficulty": "A2",
         "start_room_id": "start_room",
         "core_words": ["organism"],
+        "items": ["field notebook"],
+        "npcs": ["Dr. Lin"],
         "rooms": [
             {
                 "id": "start_room",
@@ -37,6 +39,7 @@ def minimal_world_pack_data() -> dict:
                 "target_words": ["organism"],
             }
         ],
+        "quest_task_ids": ["collect_sample"],
         "quest_steps": [
             {
                 "id": "collect_sample",
@@ -84,6 +87,61 @@ def test_world_pack_rejects_duplicate_enemy_ids() -> None:
     data["enemies"].append({**data["enemies"][0], "name": "Duplicate Enemy"})
 
     with pytest.raises(ValidationError, match="duplicate enemy id: test_enemy"):
+        WorldPack.model_validate(data)
+
+
+def test_world_pack_rejects_missing_start_room_reference() -> None:
+    data = minimal_world_pack_data()
+    data["start_room_id"] = "missing_room"
+
+    with pytest.raises(
+        ValidationError,
+        match='world.start_room_id references missing room "missing_room"',
+    ):
+        WorldPack.model_validate(data)
+
+
+def test_world_pack_rejects_missing_exit_room_reference() -> None:
+    data = minimal_world_pack_data()
+    data["rooms"][0]["exits"]["east"] = "missing_room"
+
+    with pytest.raises(
+        ValidationError,
+        match='rooms\\[start_room\\]\\.exits\\.east references missing room "missing_room"',
+    ):
+        WorldPack.model_validate(data)
+
+
+def test_world_pack_rejects_missing_item_reference() -> None:
+    data = minimal_world_pack_data()
+    data["rooms"][0]["items"].append("missing specimen")
+
+    with pytest.raises(
+        ValidationError,
+        match='rooms\\[start_room\\]\\.items references missing item "missing specimen"',
+    ):
+        WorldPack.model_validate(data)
+
+
+def test_world_pack_rejects_missing_enemy_reference() -> None:
+    data = minimal_world_pack_data()
+    data["rooms"][0]["enemies"].append("missing_enemy")
+
+    with pytest.raises(
+        ValidationError,
+        match='rooms\\[start_room\\]\\.enemies references missing enemy "missing_enemy"',
+    ):
+        WorldPack.model_validate(data)
+
+
+def test_world_pack_rejects_missing_quest_task_reference() -> None:
+    data = minimal_world_pack_data()
+    data["quest_steps"][0]["id"] = "missing_quest_task"
+
+    with pytest.raises(
+        ValidationError,
+        match='quest_steps\\[missing_quest_task\\]\\.id references missing quest task "missing_quest_task"',
+    ):
         WorldPack.model_validate(data)
 
 

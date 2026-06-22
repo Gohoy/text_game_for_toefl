@@ -71,8 +71,9 @@ Evidence from an in-memory playthrough:
 - vocabulary learning is mostly word spotting; the game does not ask the player to prove meaning, choose a correct usage, compare wrong/right examples, or recall words later
 - narrative and NPC text are static, so repeated play does not feel conversational or adaptive
 - one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
+- a fresh in-memory playtest also found verbose movement sentences such as `I go north to the fungus grove.` are not yet parsed as movement, confirming the next learning-loop work should keep improving structured interpretation
 
-Conclusion: continue with T-115 next. Biology startup now uses the validated JSON pack without changing player-visible behavior. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: continue with T-120 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, and cross-reference validation now rejects bad content before runtime conversion. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -198,7 +199,7 @@ None.
 
 ### T-115 — Validate cross-references
 
-- **State:** ready
+- **State:** done
 - **Priority:** P0
 - **Goal:** Reject exits, item references, enemy references, and quest references that point to missing IDs.
 - **Acceptance criteria:**
@@ -209,7 +210,7 @@ None.
 
 ### T-120 — Add a persisted vocabulary mastery record
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P1
 - **Goal:** Represent per-word learning state explicitly and save it.
 - **Acceptance criteria:**
@@ -325,6 +326,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-115 by validating world-pack start-room, exit, item, NPC, enemy, and quest-task references before runtime conversion, with focused missing-reference tests and updated Biology pack namespaces.
 - 2026-06-22: Completed T-114 by switching Biology startup from hardcoded content to the validated JSON world pack, removing the old hardcoded room/enemy definitions, preserving behavior through characterization tests, and adding package-data metadata for the pack.
 - 2026-06-22: Completed T-113 by encoding the current Biology world as `src/toefl_rpg/data/worlds/biology_realm_01.json`, including rooms, exits, items, enemies, target words, core words, and quest steps matched against the current runtime world.
 - 2026-06-22: Completed T-112 by adding `load_world_pack(path)`, actionable loader errors for missing files, invalid JSON, and schema failures, plus focused loader tests.
@@ -336,5 +338,3 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-110 by adding characterization tests for the current Biology world identity, topology, content placement, enemy contract, target words, and quest steps.
 
 Keep at most ten items here.
-
-- Established the initial playable Biology CLI, deterministic systems, vocabulary practice, autosave, importer, language feedback, combat, and quest integration.

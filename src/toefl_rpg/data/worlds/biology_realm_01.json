@@ -23,6 +23,15 @@
     "creature",
     "extinction"
   ],
+  "items": [
+    "field notebook",
+    "microscope",
+    "glass slide",
+    "vaccine vial",
+    "fungus sample",
+    "creature sketch"
+  ],
+  "npcs": ["Dr. Lin"],
   "rooms": [
     {
       "id": "research_camp",
@@ -99,6 +108,11 @@
       "xp": 12,
       "target_words": ["mimicry", "creature", "extinction"]
     }
+  ],
+  "quest_task_ids": [
+    "collect_fungus_sample",
+    "analyze_fungus_sample",
+    "clear_invasive_vine"
   ],
   "quest_steps": [
     {
