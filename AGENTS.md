@@ -7,7 +7,7 @@ Agent-specific files such as `CLAUDE.md` should point here instead of duplicatin
 
 ## Mission
 
-Build a complete, locally playable CLI text RPG that teaches TOEFL vocabulary through themed worlds, full-sentence English input, quests, combat, exploration, feedback, and spaced review.
+Build a complete CLI text RPG that teaches TOEFL vocabulary through themed worlds, full-sentence English input, AI-agent narration and feedback, quests, combat, exploration, and spaced review.
 
 The repository must remain runnable after every coherent change.
 
@@ -18,7 +18,8 @@ The repository must remain runnable after every coherent change.
 - Vocabulary is taught through context, action, memory, and consequence.
 - Each world explores one subject deeply before the project expands to another subject.
 - Text-native presentation is preferred: Rich panels, tables, ASCII maps, and concise descriptions.
-- The core game must not require a paid AI service or network access.
+- A local AI agent is required for the intended game experience. The primary target is Codex CLI or an equivalent local agent bridge.
+- The project should avoid paid API requirements by default, but it is not an offline-only game.
 - The full source vocabulary file must not be committed to this repository.
 
 Primary local vocabulary source:
@@ -29,15 +30,16 @@ Primary local vocabulary source:
 
 Importer tests must use small repository fixtures and must not depend on this user-local path.
 
-## Deterministic Boundary
+## AI-Agent Boundary
 
-AI may propose or generate:
+AI is a required runtime collaborator for:
 
 - narrative descriptions
 - NPC dialogue
-- grammar feedback drafts
+- grammar and sentence feedback
 - vocabulary explanations and examples
 - quest and world-pack drafts
+- structured interpretation of open-ended player sentences
 
 Deterministic code owns:
 
@@ -50,6 +52,8 @@ Deterministic code owns:
 - content validation and cross-reference checks
 
 Rule: **AI may suggest; code decides.**
+
+The game should fail clearly when the required AI agent is unavailable, except in tests where fake providers are used for deterministic verification. Do not replace core AI interaction with a permanent deterministic-only fallback.
 
 ## Repository Direction
 

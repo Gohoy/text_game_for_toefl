@@ -1,10 +1,11 @@
 # TOEFL Text RPG
 
-A CLI text RPG for learning TOEFL vocabulary through themed worlds, free-form English actions, quests, deterministic combat, and spaced review.
+A CLI text RPG for learning TOEFL vocabulary through themed worlds, free-form English actions, AI-driven narration and feedback, quests, deterministic combat, and spaced review.
 
 The project is designed around a strict boundary:
 
-- AI helps generate structured content, language feedback, and narrative.
+- A local AI agent is a required core part of the intended game experience.
+- AI generates live narrative, richer sentence feedback, vocabulary explanations, and structured content drafts.
 - Code controls game rules, state, validation, combat, progress, and saves.
 
 See [docs/OVERVIEW_STRUCTURE_PLAN.md](docs/OVERVIEW_STRUCTURE_PLAN.md) for the full structure plan.
@@ -33,7 +34,7 @@ Current supported actions include:
 
 The current Biology Investigation quest has three deterministic steps: collect the fungus sample, analyze it with the microscope, and defeat the invasive vine.
 
-The game gives deterministic English feedback for common patterns such as `I want go...`, `I want collect...`, and `talk researcher`.
+The current implementation still uses deterministic placeholder English feedback for common patterns such as `I want go...`, `I want collect...`, and `talk researcher`. The roadmap now treats Codex/AI-agent feedback as a required core feature, not an optional add-on.
 
 Progress is autosaved after each handled turn:
 

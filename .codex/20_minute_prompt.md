@@ -1,5 +1,7 @@
 Continue `text_game_for_toefl` autonomously for exactly one small, coherent increment.
 
+Important product direction: AI is a required core part of this game, not an optional add-on. Build toward a Codex CLI or equivalent local AI-agent runtime for live narration, sentence feedback, vocabulary explanations, and structured content drafting. Deterministic code still owns authoritative state, validation, XP, combat, quest completion, mastery, and saves.
+
 Follow the repository as the source of truth:
 
 1. Read `AGENTS.md`, `docs/ROADMAP.md`, `docs/QUALITY_GATES.md`, and `docs/AUTOMATION_RUNBOOK.md`.

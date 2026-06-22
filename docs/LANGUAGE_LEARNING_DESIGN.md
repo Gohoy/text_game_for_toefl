@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This document defines the deterministic learning loop for TOEFL vocabulary. The goal is not merely to display target words, but to make the player encounter, understand, use, revisit, and retain them through gameplay.
+This document defines the learning loop for TOEFL vocabulary. The goal is not merely to display target words, but to make the player encounter, understand, use, revisit, and retain them through AI-agent-supported gameplay.
 
-This document defines learning rules. Narrative wording may vary, but mastery updates must remain deterministic and testable.
+AI feedback is required for the intended game experience. Narrative wording and language coaching may vary, but mastery updates must remain deterministic and testable.
 
 ## Learning Loop
 
@@ -63,7 +63,7 @@ Use explicit events rather than updating mastery ad hoc:
 | `review_correct` | Correct use after the word becomes due | Advance review stage |
 | `review_incorrect` | Incorrect due review | Reduce or hold stage and schedule a near retry |
 
-The evaluator may explain language, but deterministic code decides which event occurred and what it changes.
+The AI evaluator should explain language and propose feedback, but deterministic code decides which learning event occurred and what it changes.
 
 ## MVP Mastery Rule
 
@@ -114,7 +114,7 @@ A new reward becomes possible when at least one of these changes meaningfully:
 - delayed review stage
 - sentence semantics as judged by deterministic rules or a validated evaluator result
 
-Do not use an unvalidated AI judgment as the sole authority for reward.
+Do not use an unvalidated AI judgment as the sole authority for reward. AI feedback is required for coaching quality, but reward authority stays in validated code paths.
 
 ## Review Scheduling
 

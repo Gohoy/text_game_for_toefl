@@ -2,11 +2,12 @@
 
 ## Goal
 
-Build a complete playable CLI text RPG for TOEFL vocabulary learning. The player explores themed worlds, types full English sentences as actions, receives language feedback, and masters TOEFL words through quests, combat, exploration, and review.
+Build a complete playable CLI text RPG for TOEFL vocabulary learning. The player explores themed worlds, types full English sentences as actions, receives AI-agent language feedback, and masters TOEFL words through quests, combat, exploration, and review.
 
-The game should be AI-assisted but not AI-chaotic:
+The game is AI-agent-first but not AI-chaotic:
 
-- AI generates narrative text, NPC dialogue, quests, examples, explanations, and structured world content.
+- A local AI agent is required for the intended player experience.
+- AI generates live narrative text, NPC dialogue, sentence feedback, vocabulary examples, explanations, and structured world content drafts.
 - Code owns deterministic game rules such as HP, damage, XP, inventory, quest state, vocabulary mastery, save/load, and validation.
 
 ## Source Vocabulary
@@ -89,11 +90,11 @@ text_game_for_toefl/
 ```text
 1. Show current room, visible NPCs/items/enemies, active task, and mini-map.
 2. Player types a full English sentence.
-3. Parser extracts intent, target, item, direction, and vocabulary usage.
-4. Rule engine checks whether the action is possible.
-5. Deterministic systems update state: HP, XP, inventory, quest flags, mastery.
-6. Language evaluator gives concise feedback and a natural corrected sentence.
-7. Narrator prints the result and next task.
+3. Parser extracts a basic deterministic intent when possible.
+4. AI agent interprets open-ended language, drafts feedback, and proposes narration in a structured format.
+5. Rule engine validates whether the action is possible.
+6. Deterministic systems update state: HP, XP, inventory, quest flags, mastery.
+7. Validated AI feedback and narration are printed with the deterministic result.
 8. Save progress automatically.
 ```
 
@@ -109,9 +110,9 @@ XP +10
 Words practiced: sample, polluted
 ```
 
-## AI Boundary
+## AI-Agent Boundary
 
-AI may generate:
+AI is required to generate or enrich:
 
 - room descriptions
 - NPC dialogue
@@ -122,7 +123,7 @@ AI may generate:
 - world packs in JSON
 - combat narration after code calculates results
 
-AI must not decide:
+AI must not be the final authority for:
 
 - damage numbers
 - hit chance
@@ -154,7 +155,7 @@ Minimum world pack:
 }
 ```
 
-The first playable version should include one handcrafted world pack before relying on AI generation. This keeps the game testable.
+The first data-driven version should include one handcrafted world pack before relying on generated world packs. This keeps content validation testable while the AI-agent runtime is added.
 
 ## First Playable Milestone
 
@@ -211,4 +212,3 @@ A recurring Codex automation should continue the project in small, verifiable in
 8. Leave a short progress note in `docs/ROADMAP.md`.
 
 The automation should avoid large rewrites and should keep the game playable after every run.
-

@@ -105,7 +105,7 @@ Record only durable architectural decisions. Do not add routine implementation n
 7. Add deterministic review scheduling and one playable review flow.
 8. Add an end-to-end Biology completion test.
 9. Improve language feedback behind stable interfaces.
-10. Add optional AI adapters with deterministic fallback.
+10. Add the required AI-agent adapter with structured validation and fake providers for tests.
 11. Add a second world only after the Biology loop is complete.
 
 This sequence minimizes rework: content expansion follows stable rules, rather than forcing rules to chase generated content.

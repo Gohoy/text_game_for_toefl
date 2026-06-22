@@ -21,17 +21,20 @@ Rules:
 
 ## Current Phase
 
-**Phase 1 — Stabilize a data-driven Biology learning loop**
+**Phase 1 — Stabilize an AI-centered Biology learning loop**
 
-The project already has a playable Biology CLI with movement, items, a three-step quest, deterministic combat, autosave, vocabulary sentence practice, XP, and deterministic English feedback.
+The project already has a playable Biology CLI with movement, items, a three-step quest, deterministic combat, autosave, vocabulary sentence practice, XP, and deterministic placeholder English feedback.
 
-The current goal is to convert the working demo into a validated, data-driven, test-protected learning loop before adding more worlds or required AI behavior.
+The current goal is to make AI-agent interaction a required core part of the Biology loop while preserving deterministic authority over game state, rewards, saves, and validation.
 
 ## Phase 1 Exit Criteria
 
 Phase 1 is complete when:
 
 - current Biology behavior is protected by characterization or integration tests
+- a required AI-agent interface exists for narration, sentence feedback, vocabulary explanations, and structured content drafts
+- missing AI-agent configuration fails clearly in player runtime paths
+- tests can use fake AI providers without network or paid API access
 - Biology world content loads from a validated JSON world pack
 - content references are checked deterministically
 - vocabulary mastery has an explicit persisted model
@@ -50,10 +53,29 @@ Phase 1 is complete when:
 - deterministic combat
 - a three-step Biology Investigation quest
 - contextual target-word practice
-- deterministic English corrections for common learner patterns
+- deterministic placeholder English corrections for common learner patterns
 - JSON autosave and load
 - external vocabulary importer
 - focused tests for several existing systems
+
+## Latest Player-Role Assessment
+
+2026-06-22 assessment: the current Biology quest is playable but not yet a compelling or reliable TOEFL learning game.
+
+Evidence from an in-memory playthrough:
+
+- the three-step Biology quest can be completed through movement, collecting the fungus sample, using the microscope, and defeating the invasive vine
+- the game rewards contextual sentences such as `The harmless creature uses mimicry to avoid extinction.`
+- sentence feedback is deterministic and shallow, usually limited to `Good: you used a full sentence.`
+- vocabulary learning is mostly word spotting; the game does not ask the player to prove meaning, choose a correct usage, compare wrong/right examples, or recall words later
+- narrative and NPC text are static, so repeated play does not feel conversational or adaptive
+- one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
+
+Conclusion: continue with T-105 next. The next development work should define the required AI-agent runtime contract before adding more content. The AI layer must provide sentence feedback, vocabulary explanation, and adaptive narration, while deterministic code remains the authority for state changes and rewards.
+
+## Required AI Direction
+
+AI is not optional for the target product. The game should use Codex CLI or an equivalent local AI-agent bridge for live narration, rich sentence feedback, vocabulary explanations, NPC dialogue, and structured content drafting. Deterministic code remains the final authority for parser fallbacks, rule validation, HP, XP, inventory, quest completion, mastery, save/load, and schema validation.
 
 ## Active Task
 
@@ -78,9 +100,53 @@ None.
 
 ## Planned Queue
 
-### T-111 — Define the minimal world-pack schema
+### T-105 — Define the required AI-agent runtime contract
 
 - **State:** ready
+- **Priority:** P0
+- **Goal:** Establish the required AI-agent interface before wiring live Codex CLI calls into gameplay.
+- **Scope:** Add documentation and testable interface contracts for AI narration, sentence feedback, vocabulary explanation, and structured response validation.
+- **Acceptance criteria:**
+  - runtime design states that AI is required for player-facing narration and feedback
+  - tests can use a fake provider without network or paid API calls
+  - missing provider behavior is specified as a clear runtime configuration error, not silent deterministic fallback
+  - deterministic rule engine remains authoritative for game-state changes
+- **Verification:**
+  - documentation path checks
+  - focused interface tests if code is added
+  - `python3 -m pytest -q`
+- **Non-goals:** No live subprocess call to Codex CLI in this task.
+- **Dependencies:** T-110.
+
+### T-106 — Add a Codex CLI AI provider
+
+- **State:** planned
+- **Priority:** P0
+- **Goal:** Call the local Codex CLI through a structured provider for narration and feedback.
+- **Acceptance criteria:**
+  - provider invokes Codex CLI through a bounded subprocess adapter
+  - output is parsed as structured data and validated before display
+  - timeouts and missing executable errors are user-readable
+  - tests cover command construction and validation with fakes
+- **Verification:** focused provider tests and full suite.
+- **Dependencies:** T-105.
+
+### T-107 — Use AI feedback in the gameplay loop
+
+- **State:** planned
+- **Priority:** P0
+- **Goal:** Replace placeholder English feedback in normal play with required AI-agent feedback while preserving deterministic rewards.
+- **Acceptance criteria:**
+  - player sentence feedback comes from the AI provider in runtime
+  - deterministic fallback grammar rules are retained only for tests or explicit development mode
+  - invalid AI output does not mutate game state
+  - CLI smoke documents AI configuration requirements
+- **Verification:** parser/feedback tests, provider tests, CLI smoke with fake provider.
+- **Dependencies:** T-106.
+
+### T-111 — Define the minimal world-pack schema
+
+- **State:** planned
 - **Priority:** P0
 - **Goal:** Add Pydantic models for the fields already required by the current Biology world.
 - **Acceptance criteria:**
@@ -90,8 +156,8 @@ None.
 - **Verification:**
   - focused schema tests
   - full test suite
-- **Non-goals:** Cross-reference validation and AI generation.
-- **Dependencies:** T-110.
+- **Non-goals:** Cross-reference validation and generated world content.
+- **Dependencies:** T-107.
 
 ### T-112 — Add a JSON world-pack loader
 
@@ -208,7 +274,7 @@ None.
 - **Acceptance criteria:**
   - test covers movement, collect, use, combat, quest completion, practice, save, and reload
   - test asserts state, not exact decorative prose
-  - test runs without network access
+  - test runs with a fake AI provider and no paid API access
 - **Verification:** end-to-end test and full suite.
 - **Dependencies:** T-124.
 
@@ -231,12 +297,12 @@ Use this format when needed:
 
 ## Future Phases
 
-### Phase 2 — Language feedback reliability
+### Phase 2 — AI language feedback reliability
 
 - normalize parser intent structures
-- separate action parsing from grammar feedback
+- separate deterministic action authority from AI coaching text
 - add regression corpora for common learner sentences
-- preserve deterministic fallback behavior without AI
+- validate AI feedback shape and failure modes
 
 ### Phase 3 — Content authoring and import
 
@@ -245,12 +311,12 @@ Use this format when needed:
 - add authoring diagnostics and content linting
 - keep the full source vocabulary outside the repository
 
-### Phase 4 — Optional AI assistance
+### Phase 4 — AI content generation expansion
 
-- define provider-neutral interfaces
+- expand provider-neutral interfaces
 - require structured outputs and validation
-- add cache and deterministic fallback
-- keep the game fully playable without credentials
+- add cache and clear regeneration rules
+- support generated world-pack drafts without giving AI authority over state
 
 ### Phase 5 — Second complete world
 
@@ -258,6 +324,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Updated project direction to make the AI agent required and central, with deterministic code retained as the authority for game-state changes.
 - 2026-06-22: Completed T-110 by adding characterization tests for the current Biology world identity, topology, content placement, enemy contract, target words, and quest steps.
 - 2026-06-22: Adopted the Codex automation documentation bundle, including the runbook, quality gates, world schema notes, learning design notes, and the `.codex/20_minute_prompt.md` scheduled prompt.
 
