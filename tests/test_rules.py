@@ -226,6 +226,7 @@ def test_duplicate_review_answer_has_distinct_message_without_reward() -> None:
     assert engine.state.player.xp == before_xp
     assert fungus.review_stage == before_stage
     assert fungus.mastery_points == before_mastery_points
+    assert provider.review_evaluation_requests == []
 
 
 def test_invalid_ai_review_evaluation_preserves_state() -> None:

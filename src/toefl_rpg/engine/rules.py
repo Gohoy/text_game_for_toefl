@@ -668,6 +668,14 @@ class GameEngine:
                 feedback,
             )
 
+        if fingerprint in record.recent_response_fingerprints:
+            self.state.active_review_word = None
+            return TurnResult(
+                True,
+                f"You already completed this review for '{word}' with that sentence.",
+                feedback,
+            )
+
         review_advice = ""
         if not self.use_deterministic_feedback:
             provider = require_ai_provider(self.ai_provider)
@@ -705,14 +713,6 @@ class GameEngine:
                     ),
                     feedback,
                 )
-
-        if fingerprint in record.recent_response_fingerprints:
-            self.state.active_review_word = None
-            return TurnResult(
-                True,
-                f"You already completed this review for '{word}' with that sentence.",
-                feedback,
-            )
 
         record_learning_event(
             self.state,
