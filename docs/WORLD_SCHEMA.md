@@ -166,6 +166,8 @@ rooms[river_bank].exits.east references missing room "old_lab"
 
 The first implemented pack model validates required fields, forbids runtime-state fields, and rejects duplicate room and enemy IDs. Cross-reference validation is intentionally a follow-up task.
 
+World packs are loaded through `load_world_pack(path)` in `src/toefl_rpg/content/loader.py`. Loader failures are reported as `WorldPackLoadError` with messages for missing files, invalid JSON locations, and schema validation details.
+
 ## Schema Evolution
 
 Every world pack has `schema_version`.
