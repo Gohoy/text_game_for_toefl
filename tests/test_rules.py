@@ -139,9 +139,11 @@ def test_defeating_enemy_awards_xp_and_practices_words_once() -> None:
 
     assert result.success
     assert "defeat" in result.message
+    assert "Quest updated" in result.message
     assert "invasive_vine" in engine.state.defeated_enemies
+    assert "clear_invasive_vine" in engine.state.completed_tasks
     assert {"mimicry", "creature", "extinction"} <= engine.state.mastered_words
-    assert xp_after_defeat == 27
+    assert xp_after_defeat == 42
     assert not repeat_result.success
     assert engine.state.player.xp == xp_after_defeat
 
@@ -153,3 +155,24 @@ def test_cannot_attack_enemy_from_another_room() -> None:
 
     assert not result.success
     assert "do not see" in result.message
+
+
+def test_full_biology_quest_can_be_completed() -> None:
+    engine = GameEngine.new_game(build_biology_realm())
+
+    engine.handle("go north")
+    engine.handle("I want to collect the fungus sample")
+    engine.handle("go south")
+    engine.handle("go east")
+    engine.handle("I want to use the microscope")
+    engine.handle("go west")
+    engine.handle("go north")
+    engine.handle("go north")
+    engine.handle("I attack the invasive vine")
+    engine.handle("I attack the invasive vine")
+    engine.handle("I attack the invasive vine")
+    result = engine.handle("status")
+
+    assert result.success
+    assert "Biology Investigation 3/3" in result.message
+    assert "quest complete" in result.message

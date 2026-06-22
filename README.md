@@ -31,6 +31,8 @@ Current supported actions include:
 - `status`
 - `quit`
 
+The current Biology Investigation quest has three deterministic steps: collect the fungus sample, analyze it with the microscope, and defeat the invasive vine.
+
 The game gives deterministic English feedback for common patterns such as `I want go...`, `I want collect...`, and `talk researcher`.
 
 Progress is autosaved after each handled turn:

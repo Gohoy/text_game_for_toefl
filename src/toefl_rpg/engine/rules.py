@@ -6,6 +6,7 @@ from toefl_rpg.content.schema import World
 from toefl_rpg.engine.combat import PLAYER_ATTACK, PLAYER_DEFENSE, calculate_damage
 from toefl_rpg.engine.quests import (
     ANALYZE_FUNGUS_SAMPLE,
+    CLEAR_INVASIVE_VINE,
     COLLECT_FUNGUS_SAMPLE,
     quest_summary,
     step_for_task,
@@ -154,7 +155,8 @@ class GameEngine:
             True,
             (
                 f"{npc} says: Start by collecting a fungus sample in the grove. "
-                "Then bring it back to the microscope tent and describe what you observe."
+                "Then analyze it under the microscope and clear the invasive vine "
+                "on the mimicry trail."
             ),
             feedback,
         )
@@ -181,6 +183,9 @@ class GameEngine:
             self.state.defeated_enemies.add(enemy_id)
             self.state.player.xp += enemy.xp
             vocab_xp = self._practice_words(enemy.target_words, 5)
+            quest_text = ""
+            if enemy_id == "invasive_vine":
+                quest_text = self._complete_task(CLEAR_INVASIVE_VINE)
             vocab_text = (
                 f" Practiced words: {', '.join(enemy.target_words)}. XP +{vocab_xp}."
                 if vocab_xp
@@ -191,6 +196,7 @@ class GameEngine:
                 (
                     f"You strike {enemy.name} for {player_damage} damage and defeat it. "
                     f"Combat XP +{enemy.xp}.{vocab_text}"
+                    f"{quest_text}"
                 ),
                 feedback,
             )

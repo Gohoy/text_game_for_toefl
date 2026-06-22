@@ -6,6 +6,7 @@ from typing import Optional
 
 COLLECT_FUNGUS_SAMPLE = "collect_fungus_sample"
 ANALYZE_FUNGUS_SAMPLE = "analyze_fungus_sample"
+CLEAR_INVASIVE_VINE = "clear_invasive_vine"
 
 
 @dataclass(frozen=True)
@@ -28,6 +29,12 @@ BIOLOGY_STEPS = [
         title="Analyze the sample",
         objective="Bring the fungus sample to the Microscope Tent and use the microscope.",
         xp=20,
+    ),
+    QuestStep(
+        id=CLEAR_INVASIVE_VINE,
+        title="Clear the invasive vine",
+        objective="Go to the Mimicry Trail and defeat the invasive vine.",
+        xp=15,
     ),
 ]
 
