@@ -104,6 +104,7 @@ Evidence from an in-memory playthrough:
 - duplicate review-answer messages are now protected from looking like normal AI acceptance or rejection and do not grant extra XP or mastery
 - duplicate review answers now skip AI review evaluation before returning the distinct duplicate message
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
+- low-confidence parser-miss retry guidance now has engine and renderer regressions proving deterministic state is preserved and retry text stays separate from AI coaching
 - parser intents and AI interpretation responses now share the same deterministic action contract from `src/toefl_rpg/engine/actions.py`
 - CLI playtests can now set `TOEFL_RPG_SAVE_PATH` to avoid the default player save slot
 - Codex CLI provider invocation now matches the installed `codex exec` flags by avoiding the unsupported `--ask-for-approval` option
@@ -613,7 +614,7 @@ None.
 
 ### T-150 — Add parser-miss retry display regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the player-facing retry guidance when AI interpretation declines or cannot confidently parse a learner sentence.
 - **Acceptance criteria:**
@@ -625,7 +626,7 @@ None.
 
 ### T-151 — Add review AI rejection display regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect the player-facing shape of AI review rejection feedback without depending on exact prose.
 - **Acceptance criteria:**
@@ -695,6 +696,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-150 by adding engine and renderer regressions that keep low-confidence parser-miss retry guidance in the Result output, separate from AI coaching, while preserving deterministic state and avoiding normal success feedback.
 - 2026-06-22: Completed T-149 by adding a fake-provider regression that rejects AI vocabulary explanations for the wrong word with a clear provider error while preserving deterministic state.
 - 2026-06-22: Completed T-148 by moving duplicate review-answer detection before AI review evaluation, preserving the distinct duplicate message and no-reward behavior while proving no fake-provider review-evaluation request is sent.
 - 2026-06-22: Completed T-146 by documenting a temporary-save manual live Codex smoke command in README, distinguishing it from the required fake-provider smoke gate, and keeping automation free of paid or live Codex requirements.
@@ -704,6 +706,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-142 by extending the learner-sentence corpus with explicit low-confidence and unknown AI interpretation cases that preserve state and require clear retry guidance while deterministic parser hits still bypass AI interpretation.
 - 2026-06-22: Completed T-145 by removing the unsupported `--ask-for-approval` option from the Codex CLI provider command, adding a command-shape regression assertion, and updating the AI agent contract command example.
 - 2026-06-22: Completed T-141 by adding engine and renderer regressions that keep AI narration, sentence feedback, suggested sentence, and vocabulary notes visibly separated from deterministic Result output.
-- 2026-06-22: Completed T-140 by adding review-answer corpus fixtures for AI-accepted, deterministic-rejected, AI-rejected, and malformed AI evaluation cases, with tests proving which answers stop before AI and which reach validated review evaluation.
 
 Keep at most ten items here.

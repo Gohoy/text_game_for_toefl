@@ -107,6 +107,35 @@ def test_ai_turn_feedback_display_keeps_coaching_sections_distinct() -> None:
     assert provider.turn_feedback_requests[0].deterministic_result == result.message
 
 
+def test_low_confidence_ai_interpretation_shows_retry_guidance_without_state_change() -> None:
+    class LowConfidenceProvider(FakeAIProvider):
+        def interpret_player_sentence(self, request):
+            self.interpretation_requests.append(request)
+            return PlayerSentenceInterpretation(
+                action="collect",
+                target="fungus sample",
+                confidence=0.2,
+                reason="The request is too vague to map safely.",
+            )
+
+    provider = LowConfidenceProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    result = engine.handle("Could you handle the thing for me?")
+
+    assert not result.success
+    assert (
+        result.message
+        == "I could not confidently turn that sentence into a game action. "
+        "Try a clearer sentence for collect."
+    )
+    assert engine.state == before_state
+    assert provider.turn_feedback_requests[-1].deterministic_action == "unknown"
+    assert provider.turn_feedback_requests[-1].deterministic_result == result.message
+
+
 def test_ai_feedback_request_includes_reviewed_word() -> None:
     provider = FakeAIProvider()
     now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)

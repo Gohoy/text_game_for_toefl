@@ -32,6 +32,39 @@ def test_renderer_shows_result_and_english_feedback_as_separate_panels() -> None
     assert output.count("You collect the fungus sample.") == 1
 
 
+def test_renderer_keeps_parser_miss_retry_guidance_in_result_panel() -> None:
+    console = Console(record=True, width=100, color_system=None)
+    renderer = Renderer(console)
+    result = TurnResult(
+        success=False,
+        message=(
+            "I could not confidently turn that sentence into a game action. "
+            "Try a clearer sentence for collect."
+        ),
+        english_feedback=(
+            "Narration: AI narration for unknown.\n"
+            "Feedback: AI feedback: your sentence is understandable.\n"
+            "Try: Could you handle the thing for me?\n"
+            "Vocabulary: Practiced: no target word."
+        ),
+    )
+
+    renderer.show_result(result)
+
+    output = console.export_text()
+    assert "Result" in output
+    assert "English Feedback" in output
+    assert "Try a clearer sentence for" in output
+    assert "collect." in output
+    assert output.index("Try a clearer sentence for") < output.index(
+        "English Feedback"
+    )
+    assert output.index("Narration: AI narration for unknown.") > output.index(
+        "English Feedback"
+    )
+    assert output.count("Try a clearer sentence for") == 1
+
+
 def test_renderer_keeps_vocabulary_explanation_lines_in_result_panel() -> None:
     console = Console(record=True, width=100, color_system=None)
     renderer = Renderer(console)
