@@ -62,7 +62,12 @@ class ReviewCorpusAIProvider(FakeAIProvider):
 def test_learner_sentence_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_corpus()}
 
-    assert {"accepted", "rejected", "ambiguous"} <= categories
+    assert {
+        "accepted",
+        "rejected",
+        "low_confidence",
+        "unknown_interpretation",
+    } <= categories
 
 
 def test_review_answer_corpus_has_required_case_types() -> None:
@@ -99,7 +104,7 @@ def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
         assert engine.state.current_room_id == case["expected_room_id"]
     if "expected_inventory_contains" in case:
         assert case["expected_inventory_contains"] in engine.state.player.inventory
-    if case["category"] in {"rejected", "ambiguous"}:
+    if case.get("expected_state_unchanged") or case["category"] == "rejected":
         assert engine.state == before_state
 
 

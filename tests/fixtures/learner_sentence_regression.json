@@ -49,8 +49,8 @@
     "expected_message_contains": "cannot collect crystal sample here"
   },
   {
-    "id": "unclear_thing_ai_ambiguous",
-    "category": "ambiguous",
+    "id": "unclear_thing_ai_low_confidence",
+    "category": "low_confidence",
     "route": "ai_interpretation_fallback",
     "setup_commands": [
       "go north"
@@ -63,6 +63,25 @@
       "reason": "The command is too vague to map confidently."
     },
     "expected_success": false,
-    "expected_message_contains": "could not confidently"
+    "expected_message_contains": "Try a clearer sentence for collect.",
+    "expected_state_unchanged": true
+  },
+  {
+    "id": "unknown_request_ai_declines",
+    "category": "unknown_interpretation",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "Could you make this situation better?",
+    "ai_interpretation": {
+      "action": "unknown",
+      "target": "",
+      "confidence": 0,
+      "reason": "The sentence does not name a concrete game action."
+    },
+    "expected_success": false,
+    "expected_message_contains": "I could not turn that sentence into a game action yet.",
+    "expected_state_unchanged": true
   }
 ]
