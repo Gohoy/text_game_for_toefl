@@ -3,9 +3,16 @@ from toefl_rpg.engine.rules import GameEngine
 from toefl_rpg.engine.storage import load_game, save_game
 
 
+def new_test_engine() -> GameEngine:
+    return GameEngine.new_game(
+        build_biology_realm(),
+        use_deterministic_feedback=True,
+    )
+
+
 def test_save_and_load_restores_progress(tmp_path) -> None:
     save_path = tmp_path / "slot1.json"
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
     engine.handle("go north")
     engine.handle("I want to collect the fungus sample")
     engine.handle("go south")
@@ -24,7 +31,7 @@ def test_save_and_load_restores_progress(tmp_path) -> None:
 
 def test_save_and_load_restores_combat_progress(tmp_path) -> None:
     save_path = tmp_path / "slot1.json"
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
     engine.handle("go north")
     engine.handle("go north")
     engine.handle("I attack the invasive vine")

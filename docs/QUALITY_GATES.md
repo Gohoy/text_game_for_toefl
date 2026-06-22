@@ -21,13 +21,14 @@ Run this when changing application startup, command parsing, rendering, movement
 
 ```bash
 printf "look\nstatus\nquit\n" \
-  | PYTHONPATH=src python3 -m toefl_rpg
+  | TOEFL_RPG_AI_PROVIDER=fake PYTHONPATH=src python3 -m toefl_rpg
 ```
 
 The process must:
 
 - start successfully
 - accept scripted input
+- use the explicit fake AI provider instead of making a live Codex call
 - show no traceback
 - terminate successfully
 

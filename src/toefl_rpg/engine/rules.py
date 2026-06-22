@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from typing import Optional
 
+from toefl_rpg.ai.contract import AIProvider
+from toefl_rpg.ai.contract import TurnFeedbackRequest
+from toefl_rpg.ai.contract import require_ai_provider
 from toefl_rpg.content.schema import World
 from toefl_rpg.engine.combat import PLAYER_ATTACK, PLAYER_DEFENSE, calculate_damage
 from toefl_rpg.engine.quests import (
@@ -17,21 +21,38 @@ from toefl_rpg.language.parser import ParsedIntent, parse_intent
 
 
 class GameEngine:
-    def __init__(self, state: GameState) -> None:
+    def __init__(
+        self,
+        state: GameState,
+        ai_provider: Optional[AIProvider] = None,
+        use_deterministic_feedback: bool = False,
+    ) -> None:
         self.state = state
+        self.ai_provider = ai_provider
+        self.use_deterministic_feedback = use_deterministic_feedback
 
     @classmethod
-    def new_game(cls, world: World) -> "GameEngine":
-        return cls(GameState(world=world, current_room_id=world.start_room_id))
+    def new_game(
+        cls,
+        world: World,
+        ai_provider: Optional[AIProvider] = None,
+        use_deterministic_feedback: bool = False,
+    ) -> "GameEngine":
+        return cls(
+            GameState(world=world, current_room_id=world.start_room_id),
+            ai_provider=ai_provider,
+            use_deterministic_feedback=use_deterministic_feedback,
+        )
 
     def handle(self, text: str) -> TurnResult:
         intent = parse_intent(text)
-        feedback = evaluate_english(text)
-
+        feedback = ""
+        before_state = deepcopy(self.state)
         if intent.action == "quit":
-            return TurnResult(True, "Progress saved. Goodbye.", feedback, True)
+            result = TurnResult(True, "Progress saved. Goodbye.", feedback, True)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "help":
-            return TurnResult(
+            result = TurnResult(
                 True,
                 (
                     "Try full sentences: I want to go north; I want to inspect the microscope; "
@@ -40,32 +61,100 @@ class GameEngine:
                 ),
                 feedback,
             )
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "inventory":
-            return TurnResult(True, self._inventory_summary(), feedback)
+            result = TurnResult(True, self._inventory_summary(), feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "status":
-            return TurnResult(True, self._status_summary(), feedback)
+            result = TurnResult(True, self._status_summary(), feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "look":
-            return TurnResult(True, "You take a careful look around.", feedback)
+            result = TurnResult(True, "You take a careful look around.", feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "move":
-            return self._move(intent, feedback)
+            result = self._move(intent, feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "inspect":
-            return self._inspect(intent, feedback)
+            result = self._inspect(intent, feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "collect":
-            return self._collect(intent, feedback)
+            result = self._collect(intent, feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "use":
-            return self._use(intent, feedback)
+            result = self._use(intent, feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "talk":
-            return self._talk(intent, feedback)
+            result = self._talk(intent, feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         if intent.action == "attack":
-            return self._attack(intent, feedback)
+            result = self._attack(intent, feedback)
+            return self._with_turn_feedback(text, intent, result, before_state)
         practice_result = self._practice_sentence(text, feedback)
         if practice_result is not None:
-            return practice_result
-        return TurnResult(
+            return self._with_turn_feedback(text, intent, practice_result, before_state)
+        result = TurnResult(
             False,
             "I could not turn that sentence into a game action yet. Try: go north, inspect microscope, collect sample, attack the invasive vine, talk to Dr. Lin, or write a sentence using this room's vocabulary.",
             feedback,
         )
+        return self._with_turn_feedback(text, intent, result, before_state)
+
+    def _with_turn_feedback(
+        self,
+        text: str,
+        intent: ParsedIntent,
+        result: TurnResult,
+        before_state: GameState,
+    ) -> TurnResult:
+        if self.use_deterministic_feedback:
+            return TurnResult(
+                result.success,
+                result.message,
+                evaluate_english(text),
+                result.should_quit,
+            )
+
+        provider = require_ai_provider(self.ai_provider)
+        request = TurnFeedbackRequest(
+            player_sentence=text,
+            location_id=before_state.current_room_id,
+            deterministic_action=intent.action,
+            deterministic_result=result.message,
+            target_words=before_state.current_room.target_words,
+            practiced_words=sorted(self.state.mastered_words - before_state.mastered_words),
+        )
+        try:
+            feedback = provider.generate_turn_feedback(request)
+        except Exception:
+            self.state = before_state
+            raise
+
+        return TurnResult(
+            result.success,
+            result.message,
+            self._format_ai_feedback(
+                feedback.narration,
+                feedback.sentence_feedback,
+                feedback.suggested_sentence,
+                feedback.vocabulary_notes,
+            ),
+            result.should_quit,
+        )
+
+    def _format_ai_feedback(
+        self,
+        narration: str,
+        sentence_feedback: str,
+        suggested_sentence: str,
+        vocabulary_notes: list[str],
+    ) -> str:
+        lines = [
+            f"Narration: {narration}",
+            f"Feedback: {sentence_feedback}",
+            f"Try: {suggested_sentence}",
+        ]
+        lines.extend(f"Vocabulary: {note}" for note in vocabulary_notes)
+        return "\n".join(lines)
 
     def _move(self, intent: ParsedIntent, feedback: str) -> TurnResult:
         room = self.state.current_room

@@ -1,9 +1,20 @@
+import pytest
+
+from toefl_rpg.ai.contract import AIProviderUnavailable
+from toefl_rpg.ai.contract import FakeAIProvider
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.rules import GameEngine
 
 
+def new_test_engine() -> GameEngine:
+    return GameEngine.new_game(
+        build_biology_realm(),
+        use_deterministic_feedback=True,
+    )
+
+
 def test_move_between_rooms() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
 
     result = engine.handle("I want to go to the east")
 
@@ -11,8 +22,48 @@ def test_move_between_rooms() -> None:
     assert engine.state.current_room_id == "microscope_tent"
 
 
-def test_inspecting_core_word_grants_xp_once_per_turn() -> None:
+def test_runtime_requires_ai_provider_for_turn_feedback() -> None:
     engine = GameEngine.new_game(build_biology_realm())
+
+    with pytest.raises(AIProviderUnavailable):
+        engine.handle("look")
+
+
+def test_engine_uses_ai_feedback_for_runtime_sentence_feedback() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+
+    result = engine.handle("I want to go north")
+
+    assert result.success
+    assert "AI feedback:" in result.english_feedback
+    assert "Good: you used a full sentence." not in result.english_feedback
+    assert provider.turn_feedback_requests[0].deterministic_action == "move"
+    assert provider.turn_feedback_requests[0].deterministic_result == "You go north."
+    assert provider.turn_feedback_requests[0].location_id == "research_camp"
+
+
+def test_failed_ai_feedback_does_not_mutate_game_state() -> None:
+    class FailingAIProvider:
+        def generate_turn_feedback(self, request):
+            raise RuntimeError("invalid provider output")
+
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=FailingAIProvider())
+    engine.state.current_room_id = "fungus_grove"
+
+    with pytest.raises(RuntimeError, match="invalid provider output"):
+        engine.handle("I want to collect the fungus sample")
+
+    assert engine.state.current_room_id == "fungus_grove"
+    assert engine.state.player.inventory == []
+    assert "fungus sample" in engine.state.current_room.items
+    assert engine.state.player.xp == 0
+    assert engine.state.completed_tasks == set()
+    assert engine.state.mastered_words == set()
+
+
+def test_inspecting_core_word_grants_xp_once_per_turn() -> None:
+    engine = new_test_engine()
     engine.handle("go east")
 
     result = engine.handle("I want to inspect the microscope")
@@ -23,7 +74,7 @@ def test_inspecting_core_word_grants_xp_once_per_turn() -> None:
 
 
 def test_collect_visible_item_adds_it_to_inventory() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
     engine.handle("go north")
 
     result = engine.handle("I want to collect the fungus sample")
@@ -35,7 +86,7 @@ def test_collect_visible_item_adds_it_to_inventory() -> None:
 
 
 def test_use_microscope_requires_sample() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
     engine.handle("go east")
 
     result = engine.handle("I want to use the microscope")
@@ -45,7 +96,7 @@ def test_use_microscope_requires_sample() -> None:
 
 
 def test_use_microscope_with_sample_practices_words() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
     engine.handle("go north")
     engine.handle("I want to collect the fungus sample")
     engine.handle("go south")
@@ -58,7 +109,7 @@ def test_use_microscope_with_sample_practices_words() -> None:
 
 
 def test_biology_quest_progress_awards_xp_once() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
     engine.handle("go north")
 
     collect_result = engine.handle("I want to collect the fungus sample")
@@ -81,7 +132,7 @@ def test_biology_quest_progress_awards_xp_once() -> None:
 
 
 def test_freeform_sentence_practices_contextual_room_words_once() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
     engine.handle("go north")
 
     result = engine.handle("The fungus is vital for the old forest.")
@@ -97,7 +148,7 @@ def test_freeform_sentence_practices_contextual_room_words_once() -> None:
 
 
 def test_freeform_sentence_must_use_current_room_vocabulary() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
 
     result = engine.handle("The microscope shows a bacterial strain.")
 
@@ -106,7 +157,7 @@ def test_freeform_sentence_must_use_current_room_vocabulary() -> None:
 
 
 def test_engine_returns_specific_english_feedback() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
 
     result = engine.handle("I want go east")
 
@@ -114,7 +165,7 @@ def test_engine_returns_specific_english_feedback() -> None:
 
 
 def test_attack_visible_enemy_uses_deterministic_damage() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
     engine.handle("go north")
     engine.handle("go north")
 
@@ -127,7 +178,7 @@ def test_attack_visible_enemy_uses_deterministic_damage() -> None:
 
 
 def test_defeating_enemy_awards_xp_and_practices_words_once() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
     engine.handle("go north")
     engine.handle("go north")
 
@@ -149,7 +200,7 @@ def test_defeating_enemy_awards_xp_and_practices_words_once() -> None:
 
 
 def test_cannot_attack_enemy_from_another_room() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
 
     result = engine.handle("I attack the invasive vine")
 
@@ -158,7 +209,7 @@ def test_cannot_attack_enemy_from_another_room() -> None:
 
 
 def test_full_biology_quest_can_be_completed() -> None:
-    engine = GameEngine.new_game(build_biology_realm())
+    engine = new_test_engine()
 
     engine.handle("go north")
     engine.handle("I want to collect the fungus sample")

@@ -16,6 +16,18 @@ See [docs/OVERVIEW_STRUCTURE_PLAN.md](docs/OVERVIEW_STRUCTURE_PLAN.md) for the f
 PYTHONPATH=src python3 -m toefl_rpg
 ```
 
+Normal play uses the local Codex CLI as the required AI provider for turn narration
+and sentence feedback. The executable defaults to `codex`; override it with
+`TOEFL_RPG_CODEX_EXECUTABLE` when needed.
+
+For deterministic smoke tests without a live Codex call, opt into the fake test
+provider explicitly:
+
+```bash
+printf "look\nstatus\nquit\n" \
+  | TOEFL_RPG_AI_PROVIDER=fake PYTHONPATH=src python3 -m toefl_rpg
+```
+
 Current supported actions include:
 
 - `help`
@@ -34,7 +46,9 @@ Current supported actions include:
 
 The current Biology Investigation quest has three deterministic steps: collect the fungus sample, analyze it with the microscope, and defeat the invasive vine.
 
-The current implementation still uses deterministic placeholder English feedback for common patterns such as `I want go...`, `I want collect...`, and `talk researcher`. The roadmap now treats Codex/AI-agent feedback as a required core feature, not an optional add-on.
+The deterministic engine still owns movement, inventory, combat, XP, quest
+completion, vocabulary rewards, and saves. AI feedback is validated before display;
+if the provider fails during a turn, the game state is not advanced.
 
 Progress is autosaved after each handled turn:
 

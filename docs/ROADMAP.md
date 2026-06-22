@@ -23,7 +23,7 @@ Rules:
 
 **Phase 1 — Stabilize an AI-centered Biology learning loop**
 
-The project already has a playable Biology CLI with movement, items, a three-step quest, deterministic combat, autosave, vocabulary sentence practice, XP, and deterministic placeholder English feedback.
+The project already has a playable Biology CLI with movement, items, a three-step quest, deterministic combat, autosave, vocabulary sentence practice, XP, and AI-backed turn feedback through a required provider.
 
 The current goal is to make AI-agent interaction a required core part of the Biology loop while preserving deterministic authority over game state, rewards, saves, and validation.
 
@@ -53,25 +53,26 @@ Phase 1 is complete when:
 - deterministic combat
 - a three-step Biology Investigation quest
 - contextual target-word practice
-- deterministic placeholder English corrections for common learner patterns
+- AI-backed turn narration and sentence feedback through Codex CLI or the explicit fake test provider
+- deterministic placeholder English corrections retained only for tests/development
 - JSON autosave and load
 - external vocabulary importer
 - focused tests for several existing systems
 
 ## Latest Player-Role Assessment
 
-2026-06-22 assessment: the current Biology quest is playable but not yet a compelling or reliable TOEFL learning game.
+2026-06-22 assessment: the current Biology quest is playable and now routes turn feedback through the AI-provider boundary, but it is not yet a complete TOEFL learning loop.
 
 Evidence from an in-memory playthrough:
 
 - the three-step Biology quest can be completed through movement, collecting the fungus sample, using the microscope, and defeating the invasive vine
 - the game rewards contextual sentences such as `The harmless creature uses mimicry to avoid extinction.`
-- sentence feedback is deterministic and shallow, usually limited to `Good: you used a full sentence.`
+- sentence feedback now comes from a configured provider in normal runtime, with fake-provider smoke coverage for automation
 - vocabulary learning is mostly word spotting; the game does not ask the player to prove meaning, choose a correct usage, compare wrong/right examples, or recall words later
 - narrative and NPC text are static, so repeated play does not feel conversational or adaptive
 - one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
 
-Conclusion: continue with T-105 next. The next development work should define the required AI-agent runtime contract before adding more content. The AI layer must provide sentence feedback, vocabulary explanation, and adaptive narration, while deterministic code remains the authority for state changes and rewards.
+Conclusion: continue with T-111 next. The next development work should move current Biology content toward a validated world-pack schema before adding more content. AI feedback is now wired into the turn loop, while deterministic code remains the authority for state changes and rewards.
 
 ## Required AI Direction
 
@@ -133,7 +134,7 @@ None.
 
 ### T-107 — Use AI feedback in the gameplay loop
 
-- **State:** ready
+- **State:** done
 - **Priority:** P0
 - **Goal:** Replace placeholder English feedback in normal play with required AI-agent feedback while preserving deterministic rewards.
 - **Acceptance criteria:**
@@ -146,7 +147,7 @@ None.
 
 ### T-111 — Define the minimal world-pack schema
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P0
 - **Goal:** Add Pydantic models for the fields already required by the current Biology world.
 - **Acceptance criteria:**
@@ -324,6 +325,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-107 by routing normal turn feedback through the required AI provider, keeping deterministic feedback behind explicit test/development paths, rolling back state on AI feedback failure, and documenting fake-provider CLI smoke.
 - 2026-06-22: Completed T-106 by adding a bounded Codex CLI provider that requests schema-validated JSON, handles missing executable and timeout failures, and is covered by fake-runner tests.
 - 2026-06-22: Completed T-105 by adding the required AI-agent contract, validated request/response models, a fake provider for tests, and explicit missing-provider behavior.
 - 2026-06-22: Updated project direction to make the AI agent required and central, with deterministic code retained as the authority for game-state changes.
