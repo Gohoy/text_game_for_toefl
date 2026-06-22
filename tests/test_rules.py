@@ -12,6 +12,8 @@ from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.content.sample_world import build_biology_realm
+from toefl_rpg.engine.mastery import response_fingerprint
+from toefl_rpg.engine.mastery import review_context_id
 from toefl_rpg.engine.rules import GameEngine
 
 
@@ -187,6 +189,42 @@ def test_review_answer_ai_rejection_keeps_word_active_without_reward() -> None:
     assert fungus.mastery_points == 1
     assert fungus.incorrect_use_count == 1
     assert engine.state.player.xp == 16
+
+
+def test_duplicate_review_answer_has_distinct_message_without_reward() -> None:
+    provider = FakeAIProvider()
+    now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)
+    sentence = "A fungus can be vital for forest metabolism."
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        ai_provider=provider,
+        clock=lambda: now,
+    )
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("review")
+    fungus = engine.state.vocabulary_mastery["fungus"]
+    duplicate_fingerprint = response_fingerprint(
+        sentence,
+        "fungus",
+        review_context_id(engine.state.world.world_id, "fungus", fungus.review_stage),
+    )
+    fungus.recent_response_fingerprints.append(duplicate_fingerprint)
+    before_xp = engine.state.player.xp
+    before_stage = fungus.review_stage
+    before_mastery_points = fungus.mastery_points
+
+    result = engine.handle(sentence)
+
+    assert result.success
+    assert "already completed this review" in result.message
+    assert "Result: Review complete" not in result.message
+    assert "Result: Review needs another try" not in result.message
+    assert "AI advice:" not in result.message
+    assert engine.state.active_review_word is None
+    assert engine.state.player.xp == before_xp
+    assert fungus.review_stage == before_stage
+    assert fungus.mastery_points == before_mastery_points
 
 
 def test_invalid_ai_review_evaluation_preserves_state() -> None:
