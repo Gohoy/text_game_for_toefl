@@ -1024,6 +1024,34 @@ def test_malformed_ai_turn_feedback_vocabulary_notes_preserve_state_after_state_
     )
 
 
+def test_ai_turn_feedback_extra_fields_preserve_state_after_state_change() -> None:
+    class ExtraFieldTurnFeedbackProvider(FakeAIProvider):
+        def generate_turn_feedback(self, request):
+            self.turn_feedback_requests.append(request)
+            return {
+                "narration": "The grove reacts to your careful fieldwork.",
+                "sentence_feedback": "Your sentence clearly states the intended action.",
+                "suggested_sentence": "I want to collect the fungus sample.",
+                "vocabulary_notes": ["fungus: a living growth."],
+                "inventory": ["fungus sample"],
+                "xp": 100,
+            }
+
+    provider = ExtraFieldTurnFeedbackProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.state.current_room_id = "fungus_grove"
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI turn feedback failed"):
+        engine.handle("I want to collect the fungus sample")
+
+    assert engine.state == before_state
+    assert provider.turn_feedback_requests[0].deterministic_action == "collect"
+    assert provider.turn_feedback_requests[0].deterministic_result.startswith(
+        "You collect fungus sample."
+    )
+
+
 def test_inspecting_core_word_grants_xp_once_per_turn() -> None:
     engine = new_test_engine()
     engine.handle("go east")

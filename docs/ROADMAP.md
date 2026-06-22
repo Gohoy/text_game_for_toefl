@@ -88,6 +88,7 @@ Phase 1 is complete. Exit evidence:
 - AI vocabulary explanation command for visible or practiced Biology words
 - invalid AI outputs for turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration fail clearly without leaving partial state changes
 - malformed AI turn-feedback vocabulary notes are rejected with state rollback after state-changing actions
+- AI turn feedback with unauthorized extra fields is rejected with state rollback after state-changing actions
 - empty AI vocabulary-explanation meaning, example, and memory-hint fields are rejected while preserving deterministic state
 - AI vocabulary explanations with unauthorized extra fields are rejected while preserving deterministic state
 - empty AI turn-feedback narration, feedback, and suggested-sentence fields are rejected with state rollback after state-changing actions
@@ -137,6 +138,7 @@ Evidence from an in-memory playthrough:
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
 - empty turn-feedback required fields now have regression coverage proving validation failures roll back state-changing actions
 - malformed turn-feedback vocabulary notes now have regression coverage proving validation failures roll back state-changing actions
+- turn-feedback extra-field regressions now prove unauthorized mutation-like fields roll back state-changing actions
 - low-confidence parser-miss retry guidance now has engine and renderer regressions proving deterministic state is preserved and retry text stays separate from AI coaching
 - empty sentence-interpretation action and reason fields now have regression coverage proving provider errors preserve deterministic state
 - sentence-interpretation extra-field regressions now prove unauthorized mutation-like fields are rejected before deterministic validation
@@ -901,7 +903,7 @@ None.
 
 ### T-171 — Add turn feedback extra-field regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI turn feedback returns unauthorized state-like fields after a deterministic action.
 - **Acceptance criteria:**
@@ -913,7 +915,7 @@ None.
 
 ### T-172 — Add review evaluation extra-field regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI review evaluation returns unauthorized state-like fields.
 - **Acceptance criteria:**
@@ -971,6 +973,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-171 by adding a fake-provider regression that rejects AI turn feedback containing unauthorized mutation-like fields and rolls back a state-changing collect action.
 - 2026-06-22: Completed T-170 by adding a fake-provider regression that rejects AI room narration containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-169 by adding a fake-provider regression that rejects AI NPC dialogue containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-168 by adding a fake-provider regression that rejects parser-miss AI interpretations containing unauthorized mutation-like fields before deterministic validation while preserving state.
@@ -980,6 +983,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-164 by adding a fake-provider regression that rejects malformed AI NPC dialogue vocabulary notes before display while preserving deterministic state.
 - 2026-06-22: Completed T-163 by adding a fake-provider regression that rejects malformed AI turn-feedback vocabulary notes and rolls back deterministic state after a collecting action.
 - 2026-06-22: Completed T-162 by adding a fake-provider regression that rejects AI world-pack drafts with empty required title or room-description text before any generated content is accepted.
-- 2026-06-22: Completed T-161 by requiring AI room narration to echo the requested room ID and rejecting mismatched room responses before display while preserving deterministic state.
 
 Keep at most ten items here.
