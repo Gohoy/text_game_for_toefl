@@ -7,6 +7,7 @@ import pytest
 from toefl_rpg.ai.codex_cli import CodexCliProvider
 from toefl_rpg.ai.codex_cli import CodexCliProviderError
 from toefl_rpg.ai.contract import AIProviderUnavailable
+from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
@@ -123,6 +124,42 @@ def test_codex_cli_provider_supports_player_sentence_interpretation() -> None:
     assert response.action == "collect"
     assert response.target == "fungus sample"
     assert response.confidence == 0.82
+
+
+def test_codex_cli_provider_supports_npc_dialogue() -> None:
+    def fake_runner(command, **kwargs):
+        assert "NPC dialogue" in kwargs["input"]
+        assert '"quest_progress": "Biology Investigation 0/3"' in kwargs["input"]
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            stdout=json.dumps(
+                {
+                    "speaker": "Dr. Lin",
+                    "line": "Start with the fungus sample, then use the microscope.",
+                    "vocabulary_notes": ["fungus: a living growth."],
+                }
+            ),
+            stderr="",
+        )
+
+    provider = CodexCliProvider(runner=fake_runner)
+    request = NPCDialogueRequest(
+        npc_name="Dr. Lin",
+        location_id="research_camp",
+        room_name="Research Camp",
+        quest_progress="Biology Investigation 0/3",
+        visible_items=["field notebook"],
+        visible_npcs=["Dr. Lin"],
+        visible_enemies=[],
+        target_words=["organism", "species", "evolve"],
+    )
+
+    response = provider.generate_npc_dialogue(request)
+
+    assert response.speaker == "Dr. Lin"
+    assert "fungus sample" in response.line
+    assert response.vocabulary_notes == ["fungus: a living growth."]
 
 
 def test_codex_cli_provider_reports_missing_executable() -> None:

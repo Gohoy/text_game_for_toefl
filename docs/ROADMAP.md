@@ -57,6 +57,7 @@ Phase 1 is complete when:
 - AI-backed turn narration and sentence feedback through Codex CLI or the explicit fake test provider
 - structured AI interpretation contract for advisory open-ended sentence parsing
 - AI interpretation fallback for parser misses, with deterministic validation of rooms, items, enemies, and rewards
+- AI-backed NPC dialogue grounded in room, quest, visible entity, and vocabulary context
 - deterministic placeholder English corrections retained only for tests/development
 - JSON autosave and load
 - versioned vocabulary mastery records in saves, with legacy-save defaults
@@ -71,7 +72,7 @@ Phase 1 is complete when:
 
 ## Latest Player-Role Assessment
 
-2026-06-22 assessment: the current Biology quest is playable and now routes turn feedback plus parser-miss interpretation through the AI-provider boundary, but it still needs adaptive NPC dialogue and richer live narration to become a complete TOEFL learning loop.
+2026-06-22 assessment: the current Biology quest is playable and now routes turn feedback, parser-miss interpretation, and NPC dialogue through the AI-provider boundary, but it still needs richer live room narration to become a complete TOEFL learning loop.
 
 Evidence from an in-memory playthrough:
 
@@ -79,11 +80,12 @@ Evidence from an in-memory playthrough:
 - the game rewards contextual sentences such as `The harmless creature uses mimicry to avoid extinction.`
 - sentence feedback now comes from a configured provider in normal runtime, with fake-provider smoke coverage for automation
 - vocabulary learning now includes same-session delayed review through `review`, but the correctness check is still a simple deterministic full-sentence/word-use gate
-- narrative and NPC text are static, so repeated play does not feel conversational or adaptive
+- room look text is still static, so repeated exploration does not feel conversational or adaptive
 - a fake-provider playtest can now interpret `Could you grab the specimen for my research?` as collecting the visible fungus sample, while deterministic validation still rejects invented targets such as `crystal sample`
+- `talk to Dr. Lin` now requests validated AI dialogue without mutating quest state, XP, inventory, saves, or mastery
 - verbose movement sentences such as `I go north to the fungus grove.` resolve through deterministic parsing
 
-Conclusion: continue with T-129 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order, an end-to-end test protects quest completion plus review persistence, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences now resolve to deterministic movement intents, and parser misses can use validated AI interpretation before deterministic engine validation. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: continue with T-131 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order, an end-to-end test protects quest completion plus review persistence, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences now resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, and NPC dialogue is AI-generated but display-only. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -342,7 +344,7 @@ None.
 
 ### T-129 — Add AI-backed NPC dialogue
 
-- **State:** ready
+- **State:** done
 - **Priority:** P1
 - **Goal:** Make `talk to Dr. Lin` use a structured AI dialogue response while deterministic code still owns quest state and rewards.
 - **Acceptance criteria:**
@@ -355,7 +357,7 @@ None.
 
 ### T-131 — Add AI-backed room look narration
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P1
 - **Goal:** Make `look` request structured AI room narration while deterministic room state remains authoritative.
 - **Acceptance criteria:**
@@ -425,6 +427,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-129 by adding structured AI NPC dialogue requests and responses, routing `talk to Dr. Lin` through the AI provider, validating dialogue before display, and preserving deterministic quest, XP, inventory, mastery, and save state.
 - 2026-06-22: Completed T-128 by asking the AI provider for a structured interpretation only after deterministic parsing misses, converting accepted proposals back through existing deterministic handlers, and covering accepted open-ended collection plus rejected invented targets.
 - 2026-06-22: Completed T-127 by adding advisory `PlayerSentenceInterpretationRequest` and `PlayerSentenceInterpretation` models, restricting AI-proposed actions to deterministic engine actions, forbidding extra state-mutation fields, and wiring fake/Codex providers through validated schemas.
 - 2026-06-22: Completed T-126 by parsing verbose directional sentences such as `I go north to the fungus grove.` into deterministic move intents while preserving engine-side exit validation for impossible movement.
@@ -434,6 +437,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-122 by making mastery rewards fingerprint-based, suppressing duplicate sentence/word/context rewards, preserving no-reward repeats, and allowing the same word to earn again in a new deterministic context.
 - 2026-06-22: Completed T-121 by adding deterministic learning events for word encounters, correct usage, and incorrect attempts, wiring room encounters and practice actions into mastery records, and covering context IDs with focused tests.
 - 2026-06-22: Completed T-120 by adding explicit `VocabularyMastery` state, serializing a versioned `mastery` save block, and loading legacy saves without mastery data through safe default records.
-- 2026-06-22: Completed T-115 by validating world-pack start-room, exit, item, NPC, enemy, and quest-task references before runtime conversion, with focused missing-reference tests and updated Biology pack namespaces.
 
 Keep at most ten items here.

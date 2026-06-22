@@ -5,7 +5,7 @@ A CLI text RPG for learning TOEFL vocabulary through themed worlds, free-form En
 The project is designed around a strict boundary:
 
 - A local AI agent is a required core part of the intended game experience.
-- AI generates live narrative, richer sentence feedback, vocabulary explanations, and structured content drafts.
+- AI generates live narrative, NPC dialogue, richer sentence feedback, vocabulary explanations, and structured content drafts.
 - Code controls game rules, state, validation, combat, progress, and saves.
 
 See [docs/OVERVIEW_STRUCTURE_PLAN.md](docs/OVERVIEW_STRUCTURE_PLAN.md) for the full structure plan.
@@ -61,6 +61,10 @@ Use `explain <word>` for an AI-generated explanation of a target word that is
 visible in the current room or already practiced. The explanation is displayed
 as coaching text only; deterministic state, XP, mastery, quests, and saves do
 not change because of the explanation itself.
+
+Use `talk to Dr. Lin` for AI-generated NPC dialogue grounded in the current
+room, quest progress, visible entities, and target words. Dialogue is coaching
+text only; deterministic quest state and rewards remain controlled by code.
 
 The deterministic engine still owns movement, inventory, combat, XP, quest
 completion, vocabulary rewards, and saves. AI feedback is validated before display;

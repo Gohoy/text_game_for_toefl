@@ -2,9 +2,11 @@ from copy import deepcopy
 from datetime import datetime, timezone
 
 import pytest
+from pydantic import ValidationError
 
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import FakeAIProvider
+from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.rules import GameEngine
@@ -191,6 +193,65 @@ def test_ai_interpretation_is_not_used_when_parser_matches() -> None:
 
     assert result.success
     assert provider.interpretation_requests == []
+
+
+def test_talk_to_visible_npc_uses_ai_dialogue_without_mutating_state() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    before_state = deepcopy(engine.state)
+
+    result = engine.handle("talk to Dr. Lin")
+
+    assert result.success
+    assert "Dr. Lin says:" in result.message
+    assert "Dialogue vocabulary:" in result.message
+    assert engine.state == before_state
+    request = provider.dialogue_requests[0]
+    assert request.npc_name == "Dr. Lin"
+    assert request.location_id == "research_camp"
+    assert request.quest_progress.startswith("Biology Investigation 0/3")
+    assert request.visible_items == ["field notebook"]
+    assert set(request.target_words) == {"organism", "species", "evolve"}
+
+
+def test_talk_rejects_absent_npc_before_dialogue_ai_call() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    before_state = deepcopy(engine.state)
+
+    result = engine.handle("talk to invisible guide")
+
+    assert not result.success
+    assert "invisible guide is not here" in result.message
+    assert engine.state == before_state
+    assert provider.dialogue_requests == []
+
+
+def test_invalid_ai_dialogue_preserves_state() -> None:
+    class InvalidDialogueProvider(FakeAIProvider):
+        def generate_npc_dialogue(self, request):
+            self.dialogue_requests.append(request)
+            return {"speaker": request.npc_name}
+
+    provider = InvalidDialogueProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI NPC dialogue failed"):
+        engine.handle("talk to Dr. Lin")
+
+    assert engine.state == before_state
+    assert provider.dialogue_requests[0].npc_name == "Dr. Lin"
+
+
+def test_ai_dialogue_cannot_return_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        NPCDialogue(
+            speaker="Dr. Lin",
+            line="Quest complete.",
+            vocabulary_notes=[],
+            xp=100,
+        )
 
 
 def test_invalid_ai_explanation_preserves_state() -> None:

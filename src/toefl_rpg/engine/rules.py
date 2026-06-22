@@ -6,6 +6,8 @@ from typing import Callable, Optional
 
 from toefl_rpg.ai.contract import AIProvider
 from toefl_rpg.ai.contract import AIProviderUnavailable
+from toefl_rpg.ai.contract import NPCDialogue
+from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanation
@@ -342,13 +344,34 @@ class GameEngine:
         npc = self._find_visible_word(target, room.npcs)
         if not npc:
             return TurnResult(False, f"{target or 'That person'} is not here.", feedback)
+
+        provider = require_ai_provider(self.ai_provider)
+        request = NPCDialogueRequest(
+            npc_name=npc,
+            location_id=self.state.current_room_id,
+            room_name=room.name,
+            quest_progress=quest_summary(self.state.completed_tasks),
+            visible_items=list(room.items),
+            visible_npcs=list(room.npcs),
+            visible_enemies=[
+                self.state.world.enemy(enemy_id).name
+                for enemy_id in self.state.live_enemy_ids_in_current_room()
+            ],
+            target_words=list(room.target_words),
+        )
+        try:
+            dialogue = NPCDialogue.model_validate(provider.generate_npc_dialogue(request))
+            if dialogue.speaker.lower() != npc.lower():
+                raise ValueError("AI NPC dialogue returned a different speaker.")
+        except Exception as exc:
+            raise AIProviderUnavailable(f"AI NPC dialogue failed: {exc}") from exc
+
+        vocabulary_text = ""
+        if dialogue.vocabulary_notes:
+            vocabulary_text = "\nDialogue vocabulary: " + "; ".join(dialogue.vocabulary_notes)
         return TurnResult(
             True,
-            (
-                f"{npc} says: Start by collecting a fungus sample in the grove. "
-                "Then analyze it under the microscope and clear the invasive vine "
-                "on the mimicry trail."
-            ),
+            f"{dialogue.speaker} says: {dialogue.line}{vocabulary_text}",
             feedback,
         )
 

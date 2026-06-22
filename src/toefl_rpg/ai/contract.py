@@ -88,6 +88,27 @@ class PlayerSentenceInterpretation(BaseModel):
     reason: str = ""
 
 
+class NPCDialogueRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    npc_name: str = Field(min_length=1)
+    location_id: str = Field(min_length=1)
+    room_name: str = Field(min_length=1)
+    quest_progress: str = Field(min_length=1)
+    visible_items: list[str] = Field(default_factory=list)
+    visible_npcs: list[str] = Field(default_factory=list)
+    visible_enemies: list[str] = Field(default_factory=list)
+    target_words: list[str] = Field(default_factory=list)
+
+
+class NPCDialogue(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    speaker: str = Field(min_length=1)
+    line: str = Field(min_length=1)
+    vocabulary_notes: list[str] = Field(default_factory=list)
+
+
 class AIProvider(Protocol):
     def generate_turn_feedback(self, request: TurnFeedbackRequest) -> TurnFeedback:
         raise NotImplementedError
@@ -95,6 +116,9 @@ class AIProvider(Protocol):
     def interpret_player_sentence(
         self, request: PlayerSentenceInterpretationRequest
     ) -> PlayerSentenceInterpretation:
+        raise NotImplementedError
+
+    def generate_npc_dialogue(self, request: NPCDialogueRequest) -> NPCDialogue:
         raise NotImplementedError
 
     def explain_vocabulary(
@@ -118,6 +142,7 @@ class FakeAIProvider:
     def __init__(self) -> None:
         self.turn_feedback_requests: list[TurnFeedbackRequest] = []
         self.interpretation_requests: list[PlayerSentenceInterpretationRequest] = []
+        self.dialogue_requests: list[NPCDialogueRequest] = []
         self.vocabulary_requests: list[VocabularyExplanationRequest] = []
         self.content_requests: list[ContentDraftRequest] = []
 
@@ -140,6 +165,20 @@ class FakeAIProvider:
             target="",
             confidence=0,
             reason="Fake provider does not infer gameplay actions.",
+        )
+
+    def generate_npc_dialogue(self, request: NPCDialogueRequest) -> NPCDialogue:
+        self.dialogue_requests.append(request)
+        return NPCDialogue(
+            speaker=request.npc_name,
+            line=(
+                "Start by collecting a fungus sample, then analyze it under "
+                "the microscope and clear the invasive vine."
+            ),
+            vocabulary_notes=[
+                "fungus: a growth that can affect an ecosystem.",
+                "microscope: a tool for seeing tiny details.",
+            ],
         )
 
     def explain_vocabulary(

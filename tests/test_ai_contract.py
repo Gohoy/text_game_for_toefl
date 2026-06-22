@@ -4,6 +4,8 @@ from pydantic import ValidationError
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import ContentDraftRequest
 from toefl_rpg.ai.contract import FakeAIProvider
+from toefl_rpg.ai.contract import NPCDialogue
+from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import TurnFeedback
@@ -115,4 +117,35 @@ def test_interpretation_response_rejects_extra_state_mutation_fields() -> None:
             target="north",
             confidence=0.9,
             xp=100,
+        )
+
+
+def test_fake_ai_provider_supports_npc_dialogue() -> None:
+    provider = FakeAIProvider()
+    request = NPCDialogueRequest(
+        npc_name="Dr. Lin",
+        location_id="research_camp",
+        room_name="Research Camp",
+        quest_progress="Biology Investigation 0/3",
+        visible_items=["field notebook"],
+        visible_npcs=["Dr. Lin"],
+        visible_enemies=[],
+        target_words=["organism", "species", "evolve"],
+    )
+
+    response = provider.generate_npc_dialogue(request)
+
+    assert response.speaker == "Dr. Lin"
+    assert response.line
+    assert response.vocabulary_notes
+    assert provider.dialogue_requests == [request]
+
+
+def test_npc_dialogue_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        NPCDialogue(
+            speaker="Dr. Lin",
+            line="Collect the fungus sample.",
+            vocabulary_notes=["fungus: a growth."],
+            completed_tasks=["collect_fungus_sample"],
         )
