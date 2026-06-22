@@ -123,6 +123,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_copied_example_reuse",
+    "category": "rejected",
+    "sentence": "A fungus can decompose wood in a forest, exactly as you suggested.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence copies a suggested example instead of showing fresh understanding.",
+      "suggested_sentence": "A fungus can release nutrients while breaking down fallen branches."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",

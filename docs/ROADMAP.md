@@ -111,6 +111,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers target-word context mismatch that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers vague grammatical target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers metaphorical target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers copied-example reuse that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1385,7 +1386,7 @@ None.
 
 ### T-207 — Add review answer corpus case for copied example reuse
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner repeats a suggested example without showing fresh understanding.
 - **Acceptance criteria:**
@@ -1397,7 +1398,7 @@ None.
 
 ### T-208 — Add learner sentence corpus case for ambiguous enemy references
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner attack requests with vague enemy references route when deterministic combat requires a concrete visible target.
 - **Acceptance criteria:**
@@ -1407,6 +1408,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-207.
+
+### T-209 — Add learner sentence corpus case for broad tool-use requests
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "use the tool" route when deterministic item use requires a concrete inventory or visible target.
+- **Acceptance criteria:**
+  - corpus includes at least one broad tool-use sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-208.
 
 ## Blocked Tasks
 
@@ -1456,6 +1470,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-207 by adding a review-answer corpus regression for copied suggested-example reuse that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-206 by adding a broad-location learner sentence regression for `Please take me to the lab.`, routed through AI interpretation with no state mutation.
 - 2026-06-23: Completed T-205 by adding a review-answer corpus regression for metaphorical fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-204 by adding a learner-sentence corpus regression for self-correction phrasing that routes through AI interpretation and deterministic collect validation.
@@ -1465,6 +1480,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-200 by adding a learner-sentence corpus regression for hedged intention movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-199 by adding a review-answer corpus regression for a fluent but off-context fungus sentence that reaches AI evaluation and keeps review active without XP.
 - 2026-06-23: Completed T-198 by adding a learner-sentence corpus regression for an indirect polite question that routes through AI interpretation and deterministic collect validation.
-- 2026-06-23: Completed T-197 by adding a review-answer corpus regression for memorized definition-style misuse that reaches AI evaluation but keeps review active without XP.
 
 Keep at most ten items here.
