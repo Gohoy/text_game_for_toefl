@@ -62,6 +62,8 @@ class ReviewAnswerEvaluation(BaseModel):
 
 
 class ContentDraftRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     theme: str = Field(min_length=1)
     required_words: list[str] = Field(min_length=1)
     purpose: str = Field(min_length=1)

@@ -108,6 +108,24 @@ def test_fake_ai_provider_supports_structured_content_drafts() -> None:
     }
 
 
+def test_content_draft_request_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        ContentDraftRequest(
+            theme="biology",
+            required_words=["fungus", "symbiosis"],
+            purpose="world_pack",
+            xp=100,
+            inventory=["field notebook"],
+            save_path="/tmp/player-save.json",
+        )
+
+    message = str(exc_info.value)
+    assert "xp" in message
+    assert "inventory" in message
+    assert "save_path" in message
+    assert "Extra inputs are not permitted" in message
+
+
 def test_structured_content_draft_rejects_extra_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         StructuredContentDraft(

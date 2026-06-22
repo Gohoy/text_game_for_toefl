@@ -73,6 +73,7 @@ Phase 1 is complete. Exit evidence:
 - empty AI world-pack draft title and room text are rejected by deterministic schema validation
 - AI content drafts with unauthorized top-level fields are rejected before generated content is accepted
 - AI world-pack draft payloads with unauthorized nested mutation-like fields are rejected by deterministic schema validation
+- AI content-draft requests reject unauthorized extra state-like fields before reaching providers
 - deterministic placeholder English corrections retained only for tests/development
 - JSON autosave and load
 - versioned vocabulary mastery records in saves, with legacy-save defaults
@@ -970,7 +971,7 @@ None.
 
 ### T-176 — Add content draft request strictness regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep AI content-draft requests bounded to the documented prompt inputs before they reach providers.
 - **Acceptance criteria:**
@@ -982,7 +983,7 @@ None.
 
 ### T-177 — Add content draft rejection message regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Keep invalid AI-authored world-pack draft failures clear enough for future in-game authoring tools.
 - **Acceptance criteria:**
@@ -991,6 +992,30 @@ None.
   - tests use fake providers and do not require live Codex CLI
 - **Verification:** AI content draft tests and full suite.
 - **Dependencies:** T-176.
+
+### T-178 — Add turn-feedback request strictness regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep turn-feedback prompts bounded to deterministic action context before they reach providers.
+- **Acceptance criteria:**
+  - turn-feedback request models reject unauthorized extra fields such as XP, inventory, or save paths
+  - existing fake-provider turn-feedback behavior remains unchanged
+  - tests do not require live Codex CLI
+- **Verification:** AI contract tests and full suite.
+- **Dependencies:** T-177.
+
+### T-179 — Add vocabulary-explanation request strictness regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep vocabulary-explanation prompts bounded to learner sentence and theme context before they reach providers.
+- **Acceptance criteria:**
+  - vocabulary-explanation request models reject unauthorized extra fields such as mastered flags, XP, or inventory
+  - existing fake-provider vocabulary explanation behavior remains unchanged
+  - tests do not require live Codex CLI
+- **Verification:** AI contract tests and full suite.
+- **Dependencies:** T-178.
 
 ## Blocked Tasks
 
@@ -1040,6 +1065,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-176 by making AI content-draft requests reject unauthorized state-like extra fields before provider use while preserving fake-provider draft behavior.
 - 2026-06-23: Completed T-175 by adding subprocess-fake Codex CLI provider coverage for strict content-draft response schemas and unchanged structured draft parsing.
 - 2026-06-23: Completed T-174 by adding AI content-draft and world-schema regressions that reject nested mutation-like payload fields before generated world content is accepted.
 - 2026-06-23: Completed T-173 by validating AI content-draft envelopes before payload acceptance and rejecting unauthorized mutation-like top-level fields.
@@ -1049,6 +1075,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-169 by adding a fake-provider regression that rejects AI NPC dialogue containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-168 by adding a fake-provider regression that rejects parser-miss AI interpretations containing unauthorized mutation-like fields before deterministic validation while preserving state.
 - 2026-06-22: Completed T-167 by adding a fake-provider regression that rejects AI vocabulary explanations containing unauthorized mutation-like fields before display while preserving deterministic state.
-- 2026-06-22: Completed T-166 by adding strict review-evaluation judgment validation and a fake-provider regression that preserves the active review word on malformed boolean output.
 
 Keep at most ten items here.
