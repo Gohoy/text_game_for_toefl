@@ -286,6 +286,8 @@ class GameEngine:
             narration = RoomNarration.model_validate(
                 provider.generate_room_narration(request)
             )
+            if narration.location_id != request.location_id:
+                raise ValueError("AI room narration returned a different room.")
         except Exception as exc:
             raise AIProviderUnavailable(f"AI room narration failed: {exc}") from exc
 

@@ -177,6 +177,7 @@ def test_codex_cli_provider_supports_room_narration() -> None:
             0,
             stdout=json.dumps(
                 {
+                    "location_id": "fungus_grove",
                     "narration": "Pale fungus threads wind around the roots.",
                     "focus_hint": "The fungus sample is ready to collect.",
                     "vocabulary_notes": ["symbiosis: living together."],
@@ -200,6 +201,7 @@ def test_codex_cli_provider_supports_room_narration() -> None:
 
     response = provider.generate_room_narration(request)
 
+    assert response.location_id == "fungus_grove"
     assert "fungus" in response.narration
     assert response.focus_hint == "The fungus sample is ready to collect."
     assert response.vocabulary_notes == ["symbiosis: living together."]

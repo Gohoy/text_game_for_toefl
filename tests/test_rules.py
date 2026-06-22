@@ -588,6 +588,7 @@ def test_ai_room_narration_rejects_empty_required_fields_without_mutating_state(
         def generate_room_narration(self, request):
             self.room_narration_requests.append(request)
             return RoomNarration(
+                location_id=request.location_id,
                 narration="",
                 focus_hint="",
                 vocabulary_notes=[],
@@ -605,9 +606,33 @@ def test_ai_room_narration_rejects_empty_required_fields_without_mutating_state(
     assert provider.room_narration_requests[0].location_id == "fungus_grove"
 
 
+def test_ai_room_narration_rejects_mismatched_room_without_mutating_state() -> None:
+    class MismatchedRoomNarrationProvider(FakeAIProvider):
+        def generate_room_narration(self, request):
+            self.room_narration_requests.append(request)
+            return RoomNarration(
+                location_id="research_camp",
+                narration="This narration describes a different room.",
+                focus_hint="Return to camp.",
+                vocabulary_notes=["organism: a living thing."],
+            )
+
+    provider = MismatchedRoomNarrationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="different room"):
+        engine.handle("look")
+
+    assert engine.state == before_state
+    assert provider.room_narration_requests[0].location_id == "fungus_grove"
+
+
 def test_ai_room_narration_cannot_return_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         RoomNarration(
+            location_id="fungus_grove",
             narration="You discover a shortcut.",
             focus_hint="Go east.",
             vocabulary_notes=[],

@@ -134,6 +134,7 @@ class RoomNarrationRequest(BaseModel):
 class RoomNarration(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    location_id: str = Field(min_length=1)
     narration: str = Field(min_length=1)
     focus_hint: str = Field(min_length=1)
     vocabulary_notes: list[str] = Field(default_factory=list)
@@ -224,6 +225,7 @@ class FakeAIProvider:
     def generate_room_narration(self, request: RoomNarrationRequest) -> RoomNarration:
         self.room_narration_requests.append(request)
         return RoomNarration(
+            location_id=request.location_id,
             narration=f"AI room narration for {request.room_name}.",
             focus_hint="Notice the visible entities before choosing your next action.",
             vocabulary_notes=[f"Target words: {', '.join(request.target_words)}."],

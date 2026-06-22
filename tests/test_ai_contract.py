@@ -233,6 +233,7 @@ def test_fake_ai_provider_supports_room_narration() -> None:
 
     response = provider.generate_room_narration(request)
 
+    assert response.location_id == "fungus_grove"
     assert response.narration
     assert response.focus_hint
     assert response.vocabulary_notes
@@ -242,6 +243,7 @@ def test_fake_ai_provider_supports_room_narration() -> None:
 def test_room_narration_rejects_extra_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         RoomNarration(
+            location_id="fungus_grove",
             narration="The grove changes shape.",
             focus_hint="Collect the sample.",
             vocabulary_notes=["fungus: a growth."],

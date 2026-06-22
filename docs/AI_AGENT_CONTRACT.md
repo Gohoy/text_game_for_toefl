@@ -33,7 +33,7 @@ Player sentence interpretation is advisory. The response is limited to a known d
 
 NPC dialogue is also display-only. The request includes the NPC, room, quest progress, visible entities, and target words. The response may include a speaker line and vocabulary notes, but it cannot return deterministic state changes.
 
-Room narration is display-only. The request includes the deterministic room description, exits, visible entities, quest progress, and target words. The response may enrich the prose and add vocabulary notes, but it cannot alter exits, items, NPCs, enemies, quest state, or rewards.
+Room narration is display-only. The request includes the deterministic room ID, room description, exits, visible entities, quest progress, and target words. The response must echo the requested room ID, may enrich the prose, and may add vocabulary notes, but it cannot alter exits, items, NPCs, enemies, quest state, or rewards.
 
 Review answer evaluation is advisory but required in normal runtime. The request includes the target word, learner sentence, world theme, and current review stage. The response may say whether the sentence uses the target word meaningfully and may provide a correction, but it cannot advance review state, grant XP, suppress duplicates, mutate saves, or complete quests. Deterministic code still applies the review event and rewards only after the response validates and the sentence passes deterministic minimum checks.
 
