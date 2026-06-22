@@ -6,6 +6,7 @@ from typing import Callable, Optional
 
 from toefl_rpg.ai.contract import AIProvider
 from toefl_rpg.ai.contract import AIProviderUnavailable
+from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanation
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
@@ -67,6 +68,13 @@ class GameEngine:
         intent = parse_intent(text)
         feedback = ""
         before_state = deepcopy(self.state)
+        if intent.action == "unknown" and not self.use_deterministic_feedback:
+            interpreted_intent, rejection = self._interpret_unknown_intent(text, before_state)
+            if rejection is not None:
+                return self._with_turn_feedback(text, intent, rejection, before_state)
+            if interpreted_intent is not None:
+                intent = interpreted_intent
+
         if intent.action == "quit":
             result = TurnResult(True, "Progress saved. Goodbye.", feedback, True)
             return self._with_turn_feedback(text, intent, result, before_state)
@@ -126,6 +134,45 @@ class GameEngine:
             feedback,
         )
         return self._with_turn_feedback(text, intent, result, before_state)
+
+    def _interpret_unknown_intent(
+        self,
+        text: str,
+        before_state: GameState,
+    ) -> tuple[Optional[ParsedIntent], Optional[TurnResult]]:
+        provider = require_ai_provider(self.ai_provider)
+        room = before_state.current_room
+        request = PlayerSentenceInterpretationRequest(
+            player_sentence=text,
+            location_id=before_state.current_room_id,
+            room_name=room.name,
+            exits=dict(room.exits),
+            visible_items=list(room.items),
+            visible_npcs=list(room.npcs),
+            visible_enemies=[
+                before_state.world.enemy(enemy_id).name
+                for enemy_id in before_state.live_enemy_ids_in_current_room()
+            ],
+            target_words=list(room.target_words),
+        )
+        try:
+            interpretation = provider.interpret_player_sentence(request)
+        except Exception as exc:
+            raise AIProviderUnavailable(
+                f"AI sentence interpretation failed: {exc}"
+            ) from exc
+
+        if interpretation.action == "unknown":
+            return None, None
+        if interpretation.confidence < 0.5:
+            return None, TurnResult(
+                False,
+                (
+                    "I could not confidently turn that sentence into a game action. "
+                    f"Try a clearer sentence for {interpretation.action}."
+                ),
+            )
+        return ParsedIntent(interpretation.action, interpretation.target), None
 
     def _with_turn_feedback(
         self,

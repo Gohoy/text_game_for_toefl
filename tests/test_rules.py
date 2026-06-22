@@ -5,6 +5,7 @@ import pytest
 
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import FakeAIProvider
+from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.rules import GameEngine
 
@@ -128,6 +129,68 @@ def test_explain_rejects_unknown_word_before_ai_call() -> None:
     assert "not a Biology Realm vocabulary word" in result.message
     assert engine.state == before_state
     assert provider.vocabulary_requests == []
+
+
+def test_ai_interpretation_fallback_collects_visible_item() -> None:
+    class CollectingProvider(FakeAIProvider):
+        def interpret_player_sentence(self, request):
+            self.interpretation_requests.append(request)
+            return PlayerSentenceInterpretation(
+                action="collect",
+                target="fungus sample",
+                confidence=0.82,
+                reason="The player is asking to pick up the visible specimen.",
+            )
+
+    provider = CollectingProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+
+    result = engine.handle("Could you grab the specimen for my research?")
+
+    assert result.success
+    assert "fungus sample" in engine.state.player.inventory
+    assert "fungus sample" not in engine.state.current_room.items
+    request = provider.interpretation_requests[0]
+    assert request.location_id == "fungus_grove"
+    assert request.visible_items == ["fungus sample"]
+    assert request.visible_npcs == []
+    assert set(request.target_words) == {"fungus", "symbiosis", "vital"}
+    assert provider.turn_feedback_requests[-1].deterministic_action == "collect"
+
+
+def test_ai_interpretation_cannot_invent_unavailable_target() -> None:
+    class InventingProvider(FakeAIProvider):
+        def interpret_player_sentence(self, request):
+            self.interpretation_requests.append(request)
+            return PlayerSentenceInterpretation(
+                action="collect",
+                target="crystal sample",
+                confidence=0.9,
+                reason="The player asks for a sample that is not in the room.",
+            )
+
+    provider = InventingProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    result = engine.handle("Could you grab the crystal sample?")
+
+    assert not result.success
+    assert "cannot collect crystal sample here" in result.message
+    assert engine.state == before_state
+
+
+def test_ai_interpretation_is_not_used_when_parser_matches() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+
+    result = engine.handle("I want to collect the fungus sample")
+
+    assert result.success
+    assert provider.interpretation_requests == []
 
 
 def test_invalid_ai_explanation_preserves_state() -> None:

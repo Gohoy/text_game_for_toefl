@@ -17,8 +17,11 @@ PYTHONPATH=src python3 -m toefl_rpg
 ```
 
 Normal play uses the local Codex CLI as the required AI provider for turn narration
-and sentence feedback. The executable defaults to `codex`; override it with
-`TOEFL_RPG_CODEX_EXECUTABLE` when needed.
+and sentence feedback. When the deterministic parser cannot understand a
+sentence, the AI provider may propose a structured action; the deterministic
+engine still validates visible rooms, items, enemies, quest state, XP, and
+inventory before anything changes. The executable defaults to `codex`; override
+it with `TOEFL_RPG_CODEX_EXECUTABLE` when needed.
 
 For deterministic smoke tests without a live Codex call, opt into the fake test
 provider explicitly:
@@ -37,6 +40,7 @@ Current supported actions include:
 - `I go north to the fungus grove.`
 - `I want to inspect the microscope`
 - `I want to collect the fungus sample`
+- open-ended equivalents such as `Could you grab the specimen for my research?`
 - `I want to use the microscope`
 - `I attack the invasive vine`
 - `The fungus is vital for the forest.`
