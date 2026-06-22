@@ -1,60 +1,16 @@
-# Codex 20-Minute Continuation Prompt
+Continue `text_game_for_toefl` autonomously for exactly one small, coherent increment.
 
-Continue building the TOEFL CLI text RPG in this repository:
+Follow the repository as the source of truth:
 
-```text
-/Users/gaohongyu1/project/text_game_for_toefl
-```
+1. Read `AGENTS.md`, `docs/ROADMAP.md`, `docs/QUALITY_GATES.md`, and `docs/AUTOMATION_RUNBOOK.md`.
+2. Run `git status --short --branch` and preserve all user changes.
+3. Continue the sole `in_progress` task, otherwise select the first highest-priority `ready` unblocked task.
+4. If it is too large for one run, split it in `docs/ROADMAP.md` and implement only the first independently useful slice.
+5. Inspect the existing implementation and tests before editing. Prefer a characterization or regression test first.
+6. Make the smallest vertical change that satisfies the task acceptance criteria. Do not do unrelated refactors or start a second task.
+7. Run focused tests, then every applicable command in `docs/QUALITY_GATES.md`.
+8. Update `docs/ROADMAP.md` on every successful or blocked run, and update other documents only according to the ownership matrix in `AGENTS.md`.
+9. Commit coherent verified work with the roadmap task ID, then push when possible. Never use destructive Git commands or force-push.
+10. Do not ask broad clarification questions during this scheduled run. If blocked, record the exact blocker and unblock condition, promote the next safe task when appropriate, and stop.
 
-## Required Startup
-
-1. Read `CLAUDE.md`.
-2. Read `AGENTS.md` if it exists.
-3. Read `docs/OVERVIEW_STRUCTURE_PLAN.md`.
-4. Read `docs/ROADMAP.md`.
-5. Check `git status --short --branch`.
-
-Preserve user changes. Do not use destructive git commands.
-
-## Product Direction
-
-Build a complete playable terminal RPG for learning TOEFL vocabulary. The player should normally type English sentences, not only choose menu options.
-
-Keep the core rule boundary strict:
-
-- Deterministic code controls HP, damage, XP, inventory, map movement, item existence, quest completion, vocabulary mastery, save/load, and schema validation.
-- AI or future generated content may suggest narrative, dialogue, explanations, examples, and world-pack drafts, but generated content must pass structured validation before use.
-
-Preferred stack:
-
-- Python
-- Rich
-- Pydantic
-- Pytest
-- JSON world packs and saves
-
-## Run Strategy
-
-Pick the smallest coherent milestone that moves the game toward a complete playable state. Prefer finishing one vertical slice over starting several partial systems.
-
-Good next milestones include:
-
-- improve the Biology Realm end-to-end play path
-- add deterministic review or mastery mechanics
-- add schema validation for world content
-- add content loading from validated JSON
-- improve parser coverage for natural English sentences
-- add tests around rules, saves, content validation, and language feedback
-
-Avoid large rewrites. Keep the game runnable after every run.
-
-## Verification
-
-Run focused tests for the changed area. If the change affects gameplay, also run a short manual smoke check with `PYTHONPATH=src python3 -m toefl_rpg` from a temporary directory so local save files do not affect the result.
-
-Before finishing:
-
-1. Update `docs/ROADMAP.md` with a short progress note.
-2. Run `python3 -m pytest` when practical.
-3. If the repository is coherent and verification passes, commit with a clear message and push to `origin/main`.
-4. Leave the working tree clean unless there is a clear blocker.
+Finish with: task ID, outcome, changed files, verification commands/results, commit, push status, and next ready task. Never claim success without evidence.

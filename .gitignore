@@ -8,3 +8,5 @@ data/saves/
 dist/
 build/
 *.egg-info/
+backup_docs_before_codex_update/
+text_game_codex_automation_bundle.zip
