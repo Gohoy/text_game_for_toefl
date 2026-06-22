@@ -154,8 +154,6 @@ class CodexCliProvider:
             "exec",
             "--sandbox",
             "read-only",
-            "--ask-for-approval",
-            "never",
             "--skip-git-repo-check",
             "--output-schema",
             str(schema_path),

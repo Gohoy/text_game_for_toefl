@@ -59,6 +59,7 @@ def test_codex_cli_provider_builds_bounded_exec_command(tmp_path) -> None:
     assert "--output-last-message" in command
     assert "--sandbox" in command
     assert "read-only" in command
+    assert "--ask-for-approval" not in command
     assert kwargs["timeout"] == 7
     assert kwargs["cwd"] == str(tmp_path)
     assert kwargs["input"].startswith("You are the required AI agent")

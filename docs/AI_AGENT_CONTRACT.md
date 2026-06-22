@@ -54,7 +54,7 @@ The first concrete provider lives in `src/toefl_rpg/ai/codex_cli.py`.
 It invokes:
 
 ```text
-codex exec --sandbox read-only --ask-for-approval never --skip-git-repo-check --output-schema <schema> --output-last-message <output> -
+codex exec --sandbox read-only --skip-git-repo-check --output-schema <schema> --output-last-message <output> -
 ```
 
 The provider writes the relevant Pydantic JSON schema to a temporary file, sends the request as stdin, reads the final structured response, and validates it before returning a typed model.
