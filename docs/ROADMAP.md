@@ -94,6 +94,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers desire-based movement phrasing with explicit deterministic state expectations
 - learner sentence corpus covers permission-question movement phrasing with explicit deterministic state expectations
 - learner sentence corpus covers negative request phrasing so negated movement does not execute the positive action
+- learner sentence corpus covers indirect polite questions routed through validated AI interpretation
 - parser movement matching tolerates common separator punctuation in full-sentence movement input
 - renderer tests keep deterministic result text visually separate from AI coaching for successful and rejected turns
 - vocabulary explanation renderer coverage keeps explanation, example, and memory hint in the result panel without an empty feedback panel
@@ -1262,7 +1263,7 @@ None.
 
 ### T-198 — Add learner sentence corpus case for indirect polite questions
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Expand full-sentence input coverage for indirect polite requests such as "Would you mind..." while preserving deterministic state authority.
 - **Acceptance criteria:**
@@ -1275,7 +1276,7 @@ None.
 
 ### T-199 — Add review answer corpus case for context mismatch
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when the target word is used in a sentence that is fluent but unrelated to the biology context being reviewed.
 - **Acceptance criteria:**
@@ -1284,6 +1285,31 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-198.
+
+### T-200 — Add learner sentence corpus case for hedged intention phrasing
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Expand full-sentence input coverage for learner hedges such as "I think I should..." while preserving deterministic state authority.
+- **Acceptance criteria:**
+  - corpus includes at least one hedged intention sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-199.
+
+### T-201 — Add learner sentence corpus case for pronoun-like item references
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner input with references such as "it" should route when deterministic state still owns item identity and validation.
+- **Acceptance criteria:**
+  - corpus includes at least one pronoun-like item reference sentence
+  - expected AI interpretation route and deterministic validation outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-200.
 
 ## Blocked Tasks
 
@@ -1333,6 +1359,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-198 by adding a learner-sentence corpus regression for an indirect polite question that routes through AI interpretation and deterministic collect validation.
 - 2026-06-23: Completed T-197 by adding a review-answer corpus regression for memorized definition-style misuse that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-196 by adding a review-answer corpus regression for synonym-heavy incorrect target-word use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-195 by adding a parser regression and movement matching support for punctuation-heavy learner input such as `I want to go north, please!!!`.
@@ -1342,6 +1369,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-191 by adding learner-sentence corpus coverage for permission-question movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-190 by adding renderer coverage that keeps multiple AI vocabulary notes as distinct `Vocabulary:` lines without duplicating deterministic result text.
 - 2026-06-23: Completed T-189 by tightening renderer coverage so vocabulary explanation output stays in the result panel and no empty English Feedback panel appears.
-- 2026-06-23: Completed T-188 by adding learner-sentence corpus coverage for desire-based movement phrasing with an explicit deterministic room transition.
 
 Keep at most ten items here.

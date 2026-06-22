@@ -90,6 +90,24 @@
     "expected_message_contains": "You collect fungus sample."
   },
   {
+    "id": "would_you_mind_specimen_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "Would you mind securing the specimen for my research?",
+    "ai_interpretation": {
+      "action": "collect",
+      "target": "fungus sample",
+      "confidence": 0.84,
+      "reason": "The indirect polite request refers to the visible fungus sample."
+    },
+    "expected_success": true,
+    "expected_inventory_contains": "fungus sample",
+    "expected_message_contains": "You collect fungus sample."
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",

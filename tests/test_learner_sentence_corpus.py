@@ -140,6 +140,22 @@ def test_learner_sentence_corpus_covers_negative_request_no_mutation() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_polite_questions() -> None:
+    indirect_polite_cases = [
+        case
+        for case in load_corpus()
+        if case["sentence"].lower().startswith("would you mind")
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case.get("expected_inventory_contains") == "fungus sample"
+        for case in indirect_polite_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 
