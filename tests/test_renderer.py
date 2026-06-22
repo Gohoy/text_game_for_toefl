@@ -65,6 +65,44 @@ def test_renderer_keeps_parser_miss_retry_guidance_in_result_panel() -> None:
     assert output.count("Try a clearer sentence for") == 1
 
 
+def test_renderer_keeps_review_rejection_lines_in_result_panel() -> None:
+    console = Console(record=True, width=100, color_system=None)
+    renderer = Renderer(console)
+    result = TurnResult(
+        success=False,
+        message=(
+            "AI advice: The sentence names the word but does not show its meaning.\n"
+            "Try: A fungus can decompose wood in a forest.\n"
+            "Result: Review needs another try. No XP awarded; 'fungus' remains active for review."
+        ),
+        english_feedback=(
+            "Narration: AI narration for unknown.\n"
+            "Feedback: AI feedback: your sentence is understandable.\n"
+            "Try: The word fungus appears in my sentence.\n"
+            "Vocabulary: Practiced: no target word."
+        ),
+    )
+
+    renderer.show_result(result)
+
+    output = console.export_text()
+    assert "Result" in output
+    assert "English Feedback" in output
+    assert output.index("AI advice: The sentence names the word") < output.index(
+        "English Feedback"
+    )
+    assert output.index("Try: A fungus can decompose wood") < output.index(
+        "English Feedback"
+    )
+    assert output.index("Result: Review needs another try.") < output.index(
+        "English Feedback"
+    )
+    assert output.index("Narration: AI narration for unknown.") > output.index(
+        "English Feedback"
+    )
+    assert output.count("Result: Review needs another try.") == 1
+
+
 def test_renderer_keeps_vocabulary_explanation_lines_in_result_panel() -> None:
     console = Console(record=True, width=100, color_system=None)
     renderer = Renderer(console)
