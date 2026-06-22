@@ -707,6 +707,31 @@ def test_malformed_ai_room_narration_vocabulary_notes_preserve_state() -> None:
     assert provider.room_narration_requests[0].location_id == "fungus_grove"
 
 
+def test_ai_room_narration_extra_fields_preserve_state() -> None:
+    class ExtraFieldRoomNarrationProvider(FakeAIProvider):
+        def generate_room_narration(self, request):
+            self.room_narration_requests.append(request)
+            return {
+                "location_id": request.location_id,
+                "narration": "Fungus threads stretch across the shaded roots.",
+                "focus_hint": "Compare the healthy and weakened trees.",
+                "vocabulary_notes": ["symbiosis: two organisms living together."],
+                "exits": {"east": "hidden_room"},
+                "xp": 100,
+            }
+
+    provider = ExtraFieldRoomNarrationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI room narration failed"):
+        engine.handle("look")
+
+    assert engine.state == before_state
+    assert provider.room_narration_requests[0].location_id == "fungus_grove"
+
+
 def test_ai_room_narration_cannot_return_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         RoomNarration(

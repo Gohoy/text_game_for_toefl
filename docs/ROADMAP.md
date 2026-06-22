@@ -68,6 +68,7 @@ Phase 1 is complete. Exit evidence:
 - AI-backed room look narration grounded in deterministic room state
 - malformed AI room narration responses are rejected with clear provider errors and state preservation
 - mismatched AI room narration room IDs are rejected before display while preserving deterministic state
+- AI room narration with unauthorized extra fields is rejected before display while preserving deterministic state
 - AI world-pack draft validation through the deterministic `WorldPack` schema
 - empty AI world-pack draft title and room text are rejected by deterministic schema validation
 - deterministic placeholder English corrections retained only for tests/development
@@ -113,6 +114,7 @@ Evidence from an in-memory playthrough:
 - `look` now requests validated AI room narration without mutating exits, items, NPCs, enemies, quest state, XP, inventory, saves, or mastery
 - malformed room narration responses, including empty required fields, now raise clear provider errors and preserve deterministic state
 - room narration responses must echo the requested room ID, and mismatches now raise clear provider errors before display
+- room narration extra-field regressions now prove unauthorized mutation-like fields are rejected before display
 - AI-authored world-pack drafts must validate as `WorldPack` before they can be reviewed as usable content
 - AI-authored world-pack drafts with empty required title or room description text now raise clear validation errors before acceptance
 - verbose movement sentences such as `I go north to the fungus grove.` resolve through deterministic parsing
@@ -887,7 +889,7 @@ None.
 
 ### T-170 — Add room narration extra-field regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI room narration returns unauthorized state-like fields.
 - **Acceptance criteria:**
@@ -899,7 +901,7 @@ None.
 
 ### T-171 — Add turn feedback extra-field regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI turn feedback returns unauthorized state-like fields after a deterministic action.
 - **Acceptance criteria:**
@@ -969,6 +971,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-170 by adding a fake-provider regression that rejects AI room narration containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-169 by adding a fake-provider regression that rejects AI NPC dialogue containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-168 by adding a fake-provider regression that rejects parser-miss AI interpretations containing unauthorized mutation-like fields before deterministic validation while preserving state.
 - 2026-06-22: Completed T-167 by adding a fake-provider regression that rejects AI vocabulary explanations containing unauthorized mutation-like fields before display while preserving deterministic state.
@@ -978,6 +981,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-163 by adding a fake-provider regression that rejects malformed AI turn-feedback vocabulary notes and rolls back deterministic state after a collecting action.
 - 2026-06-22: Completed T-162 by adding a fake-provider regression that rejects AI world-pack drafts with empty required title or room-description text before any generated content is accepted.
 - 2026-06-22: Completed T-161 by requiring AI room narration to echo the requested room ID and rejecting mismatched room responses before display while preserving deterministic state.
-- 2026-06-22: Completed T-160 by adding a fake-provider regression that rejects empty AI sentence-interpretation action and reason fields while preserving deterministic state.
 
 Keep at most ten items here.
