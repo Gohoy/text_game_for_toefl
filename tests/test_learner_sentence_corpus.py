@@ -121,6 +121,25 @@ def test_learner_sentence_corpus_covers_permission_questions() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_negative_request_no_mutation() -> None:
+    negative_cases = [
+        case
+        for case in load_corpus()
+        if any(
+            marker in case["sentence"].lower()
+            for marker in ("do not", "don't", "dont", "never")
+        )
+    ]
+
+    assert any(
+        case["category"] == "unknown_interpretation"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is False
+        and case["expected_state_unchanged"] is True
+        for case in negative_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 

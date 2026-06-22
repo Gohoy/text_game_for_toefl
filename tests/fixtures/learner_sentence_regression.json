@@ -56,6 +56,22 @@
     "expected_message_contains": "You go north."
   },
   {
+    "id": "negative_move_request_no_action",
+    "category": "unknown_interpretation",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "I do not want to go north.",
+    "ai_interpretation": {
+      "action": "unknown",
+      "target": "",
+      "confidence": 0,
+      "reason": "The learner explicitly negates the movement request."
+    },
+    "expected_success": false,
+    "expected_message_contains": "I could not turn that sentence into a game action yet.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "collect_specimen_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

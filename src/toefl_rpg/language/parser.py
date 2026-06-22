@@ -37,8 +37,12 @@ def parse_intent(text: str) -> ParsedIntent:
     if normalized in {"look", "look around"}:
         return ParsedIntent("look")
 
+    padded = f" {normalized} "
+    negative_markers = (" do not ", " don't ", " dont ", " never ")
+    if any(marker in padded for marker in negative_markers):
+        return ParsedIntent("unknown", normalized)
+
     for direction in ("north", "south", "east", "west"):
-        padded = f" {normalized} "
         if normalized == direction or normalized.endswith(f" go {direction}"):
             return ParsedIntent("move", direction)
         if normalized.startswith(f"go {direction}") or f" to the {direction}" in normalized:
