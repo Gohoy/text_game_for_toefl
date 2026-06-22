@@ -273,6 +273,24 @@ def test_ai_interpretation_cannot_invent_unavailable_target() -> None:
     assert engine.state == before_state
 
 
+def test_invalid_ai_interpretation_preserves_state() -> None:
+    class InvalidInterpretationProvider(FakeAIProvider):
+        def interpret_player_sentence(self, request):
+            self.interpretation_requests.append(request)
+            return {"action": "collect"}
+
+    provider = InvalidInterpretationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI sentence interpretation failed"):
+        engine.handle("Could you grab the specimen for my research?")
+
+    assert engine.state == before_state
+    assert provider.interpretation_requests[0].location_id == "fungus_grove"
+
+
 def test_ai_interpretation_is_not_used_when_parser_matches() -> None:
     provider = FakeAIProvider()
     engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
@@ -411,23 +429,22 @@ def test_invalid_ai_explanation_preserves_state() -> None:
     assert provider.vocabulary_requests[0].word == "fungus"
 
 
-def test_failed_ai_feedback_does_not_mutate_game_state() -> None:
-    class FailingAIProvider:
+def test_invalid_ai_turn_feedback_preserves_state() -> None:
+    class InvalidTurnFeedbackProvider(FakeAIProvider):
         def generate_turn_feedback(self, request):
-            raise RuntimeError("invalid provider output")
+            self.turn_feedback_requests.append(request)
+            return {"narration": "Missing required feedback fields."}
 
-    engine = GameEngine.new_game(build_biology_realm(), ai_provider=FailingAIProvider())
+    provider = InvalidTurnFeedbackProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
     engine.state.current_room_id = "fungus_grove"
+    before_state = deepcopy(engine.state)
 
-    with pytest.raises(RuntimeError, match="invalid provider output"):
+    with pytest.raises(AIProviderUnavailable, match="AI turn feedback failed"):
         engine.handle("I want to collect the fungus sample")
 
-    assert engine.state.current_room_id == "fungus_grove"
-    assert engine.state.player.inventory == []
-    assert "fungus sample" in engine.state.current_room.items
-    assert engine.state.player.xp == 0
-    assert engine.state.completed_tasks == set()
-    assert engine.state.mastered_words == set()
+    assert engine.state == before_state
+    assert provider.turn_feedback_requests[0].deterministic_action == "collect"
 
 
 def test_inspecting_core_word_grants_xp_once_per_turn() -> None:

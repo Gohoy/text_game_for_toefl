@@ -8,11 +8,13 @@ from toefl_rpg.ai.contract import AIProvider
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import NPCDialogue
 from toefl_rpg.ai.contract import NPCDialogueRequest
+from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import RoomNarrationRequest
+from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanation
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
@@ -162,7 +164,9 @@ class GameEngine:
             target_words=list(room.target_words),
         )
         try:
-            interpretation = provider.interpret_player_sentence(request)
+            interpretation = PlayerSentenceInterpretation.model_validate(
+                provider.interpret_player_sentence(request)
+            )
         except Exception as exc:
             raise AIProviderUnavailable(
                 f"AI sentence interpretation failed: {exc}"
@@ -205,10 +209,12 @@ class GameEngine:
             practiced_words=self._changed_mastery_words(before_state),
         )
         try:
-            feedback = provider.generate_turn_feedback(request)
-        except Exception:
+            feedback = TurnFeedback.model_validate(
+                provider.generate_turn_feedback(request)
+            )
+        except Exception as exc:
             self.state = before_state
-            raise
+            raise AIProviderUnavailable(f"AI turn feedback failed: {exc}") from exc
 
         return TurnResult(
             result.success,
