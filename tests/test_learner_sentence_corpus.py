@@ -221,6 +221,22 @@ def test_learner_sentence_corpus_covers_self_correction_phrasing() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_broad_location_requests() -> None:
+    broad_location_cases = [
+        case
+        for case in load_corpus()
+        if " to the lab" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "unknown_interpretation"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is False
+        and case["expected_state_unchanged"] is True
+        for case in broad_location_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 

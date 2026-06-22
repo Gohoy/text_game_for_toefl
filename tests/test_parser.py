@@ -110,6 +110,13 @@ def test_parse_punctuation_heavy_movement_sentence() -> None:
     assert intent.target == "north"
 
 
+def test_parse_broad_destination_request_as_unknown() -> None:
+    intent = parse_intent("Please take me to the lab.")
+
+    assert intent.action == "unknown"
+    assert intent.target == "please take me to the lab"
+
+
 def test_parse_inspect_sentence() -> None:
     intent = parse_intent("I want to inspect the microscope")
 

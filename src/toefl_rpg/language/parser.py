@@ -42,6 +42,14 @@ def parse_intent(text: str) -> ParsedIntent:
     if any(marker in padded for marker in negative_markers):
         return ParsedIntent("unknown", normalized)
 
+    broad_destination_markers = (
+        " take me to ",
+        " bring me to ",
+        " lead me to ",
+    )
+    if any(marker in padded for marker in broad_destination_markers):
+        return ParsedIntent("unknown", normalized)
+
     movement_text = " ".join(
         normalized.translate(str.maketrans({",": " ", ";": " ", ":": " "})).split()
     )

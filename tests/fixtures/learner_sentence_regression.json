@@ -101,6 +101,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "broad_location_lab_request_ai_declines",
+    "category": "unknown_interpretation",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Please take me to the lab.",
+    "ai_interpretation": {
+      "action": "unknown",
+      "target": "",
+      "confidence": 0,
+      "reason": "The request names a broad destination instead of a concrete available exit."
+    },
+    "expected_success": false,
+    "expected_message_contains": "I could not turn that sentence into a game action yet.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "collect_specimen_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
