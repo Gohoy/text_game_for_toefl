@@ -37,6 +37,14 @@ def minimal_world_pack_data() -> dict:
                 "target_words": ["organism"],
             }
         ],
+        "quest_steps": [
+            {
+                "id": "collect_sample",
+                "title": "Collect a sample",
+                "objective": "Collect the sample.",
+                "xp": 10,
+            }
+        ],
     }
 
 
@@ -76,6 +84,14 @@ def test_world_pack_rejects_duplicate_enemy_ids() -> None:
     data["enemies"].append({**data["enemies"][0], "name": "Duplicate Enemy"})
 
     with pytest.raises(ValidationError, match="duplicate enemy id: test_enemy"):
+        WorldPack.model_validate(data)
+
+
+def test_world_pack_rejects_duplicate_quest_step_ids() -> None:
+    data = minimal_world_pack_data()
+    data["quest_steps"].append({**data["quest_steps"][0], "title": "Duplicate Quest Step"})
+
+    with pytest.raises(ValidationError, match="duplicate quest step id: collect_sample"):
         WorldPack.model_validate(data)
 
 

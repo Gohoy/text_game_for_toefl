@@ -72,7 +72,7 @@ Evidence from an in-memory playthrough:
 - narrative and NPC text are static, so repeated play does not feel conversational or adaptive
 - one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
 
-Conclusion: continue with T-111 next. The next development work should move current Biology content toward a validated world-pack schema before adding more content. AI feedback is now wired into the turn loop, while deterministic code remains the authority for state changes and rewards.
+Conclusion: continue with T-114 next. The next development work should switch Biology startup to the validated JSON pack without changing player-visible behavior. AI feedback is now wired into the turn loop, while deterministic code remains the authority for state changes and rewards.
 
 ## Required AI Direction
 
@@ -174,7 +174,7 @@ None.
 
 ### T-113 — Encode the current Biology world as JSON
 
-- **State:** ready
+- **State:** done
 - **Priority:** P0
 - **Goal:** Create one handcrafted Biology world pack matching current behavior.
 - **Acceptance criteria:**
@@ -186,7 +186,7 @@ None.
 
 ### T-114 — Switch Biology startup to the JSON loader
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P0
 - **Goal:** Use the validated world pack at runtime without changing player-visible behavior.
 - **Acceptance criteria:**
@@ -325,6 +325,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-113 by encoding the current Biology world as `src/toefl_rpg/data/worlds/biology_realm_01.json`, including rooms, exits, items, enemies, target words, core words, and quest steps matched against the current runtime world.
 - 2026-06-22: Completed T-112 by adding `load_world_pack(path)`, actionable loader errors for missing files, invalid JSON, and schema failures, plus focused loader tests.
 - 2026-06-22: Completed T-111 by adding minimal `WorldPack` Pydantic models, duplicate room/enemy ID validation, runtime-state field rejection, conversion to the existing runtime `World`, and focused schema tests.
 - 2026-06-22: Completed T-107 by routing normal turn feedback through the required AI provider, keeping deterministic feedback behind explicit test/development paths, rolling back state on AI feedback failure, and documenting fake-provider CLI smoke.

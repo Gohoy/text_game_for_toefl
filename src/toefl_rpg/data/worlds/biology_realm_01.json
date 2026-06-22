@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "world_id": "biology_realm_01",
+  "title": "Biology Realm",
+  "source_category": "生物",
+  "difficulty": "A2-B1",
+  "start_room_id": "research_camp",
+  "core_words": [
+    "organism",
+    "fungus",
+    "microscope",
+    "bacteria",
+    "strain",
+    "symbiosis",
+    "vital",
+    "species",
+    "evolve",
+    "vaccine",
+    "immune",
+    "respiration",
+    "metabolism",
+    "mimicry",
+    "creature",
+    "extinction"
+  ],
+  "rooms": [
+    {
+      "id": "research_camp",
+      "name": "Research Camp",
+      "description": "A quiet camp beside the forest. Dr. Lin studies how organisms adapt when a strange fungus spreads through the valley.",
+      "exits": {
+        "east": "microscope_tent",
+        "north": "fungus_grove"
+      },
+      "items": ["field notebook"],
+      "npcs": ["Dr. Lin"],
+      "enemies": [],
+      "target_words": ["organism", "species", "evolve"]
+    },
+    {
+      "id": "microscope_tent",
+      "name": "Microscope Tent",
+      "description": "Glass slides and a microscope sit on a clean table. A note asks you to compare bacteria with the unknown strain.",
+      "exits": {
+        "west": "research_camp",
+        "east": "vaccine_bench"
+      },
+      "items": ["microscope", "glass slide"],
+      "npcs": [],
+      "enemies": [],
+      "target_words": ["microscope", "bacteria", "strain"]
+    },
+    {
+      "id": "vaccine_bench",
+      "name": "Vaccine Bench",
+      "description": "Sealed vials rest beside a warning chart. The notes compare immune responses, respiration rates, and the metabolism of infected cells.",
+      "exits": {
+        "west": "microscope_tent"
+      },
+      "items": ["vaccine vial"],
+      "npcs": [],
+      "enemies": [],
+      "target_words": ["vaccine", "immune", "respiration", "metabolism"]
+    },
+    {
+      "id": "fungus_grove",
+      "name": "Fungus Grove",
+      "description": "Pale mushrooms cover old roots. Some trees look weak, but others seem to live in symbiosis with the fungus.",
+      "exits": {
+        "south": "research_camp",
+        "north": "mimicry_trail"
+      },
+      "items": ["fungus sample"],
+      "npcs": [],
+      "enemies": [],
+      "target_words": ["symbiosis", "fungus", "vital"]
+    },
+    {
+      "id": "mimicry_trail",
+      "name": "Mimicry Trail",
+      "description": "Harmless insects copy the colors of dangerous creatures. Dr. Lin's markers ask whether mimicry can prevent extinction.",
+      "exits": {
+        "south": "fungus_grove"
+      },
+      "items": ["creature sketch"],
+      "npcs": [],
+      "enemies": ["invasive_vine"],
+      "target_words": ["mimicry", "creature", "extinction"]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "invasive_vine",
+      "name": "Invasive Vine",
+      "description": "A fast-growing vine wraps around the trail markers and crowds out smaller species.",
+      "hp": 13,
+      "attack": 3,
+      "defense": 1,
+      "xp": 12,
+      "target_words": ["mimicry", "creature", "extinction"]
+    }
+  ],
+  "quest_steps": [
+    {
+      "id": "collect_fungus_sample",
+      "title": "Collect a fungus sample",
+      "objective": "Go north to the Fungus Grove and collect the fungus sample.",
+      "xp": 10
+    },
+    {
+      "id": "analyze_fungus_sample",
+      "title": "Analyze the sample",
+      "objective": "Bring the fungus sample to the Microscope Tent and use the microscope.",
+      "xp": 20
+    },
+    {
+      "id": "clear_invasive_vine",
+      "title": "Clear the invasive vine",
+      "objective": "Go to the Mimicry Trail and defeat the invasive vine.",
+      "xp": 15
+    }
+  ]
+}

@@ -27,7 +27,7 @@ A minimal world pack contains:
 }
 ```
 
-The current minimal Pydantic pack contract is implemented by `WorldPack`, `WorldPackRoom`, and `WorldPackEnemy` in `src/toefl_rpg/content/schema.py`. This document explains the stable contract and validation rules.
+The current minimal Pydantic pack contract is implemented by `WorldPack`, `WorldPackRoom`, `WorldPackEnemy`, and `WorldPackQuestStep` in `src/toefl_rpg/content/schema.py`. This document explains the stable contract and validation rules.
 
 ## Stable ID Rules
 
@@ -164,7 +164,7 @@ Example:
 rooms[river_bank].exits.east references missing room "old_lab"
 ```
 
-The first implemented pack model validates required fields, forbids runtime-state fields, and rejects duplicate room and enemy IDs. Cross-reference validation is intentionally a follow-up task.
+The first implemented pack model validates required fields, forbids runtime-state fields, and rejects duplicate room, enemy, and quest-step IDs. Cross-reference validation is intentionally a follow-up task.
 
 World packs are loaded through `load_world_pack(path)` in `src/toefl_rpg/content/loader.py`. Loader failures are reported as `WorldPackLoadError` with messages for missing files, invalid JSON locations, and schema validation details.
 

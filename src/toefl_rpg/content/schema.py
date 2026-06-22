@@ -68,6 +68,15 @@ class WorldPackEnemy(BaseModel):
     target_words: list[str] = Field(default_factory=list)
 
 
+class WorldPackQuestStep(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(min_length=1)
+    title: str = Field(min_length=1)
+    objective: str = Field(min_length=1)
+    xp: int = Field(ge=0)
+
+
 class WorldPack(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -80,11 +89,13 @@ class WorldPack(BaseModel):
     core_words: list[str] = Field(min_length=1)
     rooms: list[WorldPackRoom] = Field(min_length=1)
     enemies: list[WorldPackEnemy] = Field(default_factory=list)
+    quest_steps: list[WorldPackQuestStep] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_unique_ids(self) -> "WorldPack":
         _reject_duplicate_ids("room", [room.id for room in self.rooms])
         _reject_duplicate_ids("enemy", [enemy.id for enemy in self.enemies])
+        _reject_duplicate_ids("quest step", [step.id for step in self.quest_steps])
         return self
 
     def to_world(self) -> World:
