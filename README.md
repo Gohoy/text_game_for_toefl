@@ -59,7 +59,8 @@ After using target words in context, `review` presents due vocabulary and asks
 for a new full-sentence answer. In normal play, the AI provider judges whether
 the answer uses the target word meaningfully; deterministic code then applies
 the review result, advances persisted review stage, and schedules the next
-review.
+review. Review messages keep AI advice separate from deterministic result lines
+such as XP, review stage, and retry state.
 
 Use `explain <word>` for an AI-generated explanation of a target word that is
 visible in the current room or already practiced. The explanation is displayed

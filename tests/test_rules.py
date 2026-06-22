@@ -104,7 +104,10 @@ def test_review_answer_uses_ai_quality_judgment_before_reward() -> None:
 
     fungus = engine.state.vocabulary_mastery["fungus"]
     assert result.success
-    assert "AI accepted the review sentence" in result.message
+    assert "AI advice: Fake AI review evaluation" in result.message
+    assert "Try: A fungus can be vital for forest metabolism." in result.message
+    assert "Result: Review complete for 'fungus'." in result.message
+    assert "Review stage 1. XP +10." in result.message
     assert engine.state.active_review_word is None
     assert fungus.review_stage == 1
     assert fungus.mastery_points == 2
@@ -141,8 +144,10 @@ def test_review_answer_ai_rejection_keeps_word_active_without_reward() -> None:
 
     fungus = engine.state.vocabulary_mastery["fungus"]
     assert not result.success
-    assert "Review needs another try" in result.message
-    assert "The sentence names the word" in result.message
+    assert "AI advice: The sentence names the word" in result.message
+    assert "Try: A fungus can decompose wood in a forest." in result.message
+    assert "Result: Review needs another try." in result.message
+    assert "No XP awarded; 'fungus' remains active for review." in result.message
     assert engine.state.active_review_word == "fungus"
     assert fungus.review_stage == 0
     assert fungus.mastery_points == 1

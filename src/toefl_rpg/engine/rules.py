@@ -668,6 +668,7 @@ class GameEngine:
                 feedback,
             )
 
+        review_advice = ""
         if not self.use_deterministic_feedback:
             provider = require_ai_provider(self.ai_provider)
             request = ReviewAnswerEvaluationRequest(
@@ -685,6 +686,7 @@ class GameEngine:
                     f"AI review evaluation failed: {exc}"
                 ) from exc
 
+            review_advice = self._format_review_advice(evaluation)
             if not evaluation.uses_target_meaningfully:
                 record_learning_event(
                     self.state,
@@ -697,8 +699,9 @@ class GameEngine:
                 return TurnResult(
                     False,
                     (
-                        f"Review needs another try: {evaluation.explanation} "
-                        f"Try: {evaluation.suggested_sentence}"
+                        f"{review_advice}\n"
+                        "Result: Review needs another try. "
+                        f"No XP awarded; '{word}' remains active for review."
                     ),
                     feedback,
                 )
@@ -722,13 +725,20 @@ class GameEngine:
         self.state.mastered_words.add(word)
         self.state.player.xp += 10
         self.state.active_review_word = None
+        result_summary = (
+            f"Result: Review complete for '{word}'. "
+            f"Review stage {record.review_stage}. XP +10."
+        )
         return TurnResult(
             True,
-            (
-                f"Review complete: AI accepted the review sentence for '{word}'. "
-                f"Review stage {record.review_stage}. XP +10."
-            ),
+            f"{review_advice}\n{result_summary}" if review_advice else result_summary,
             feedback,
+        )
+
+    def _format_review_advice(self, evaluation: ReviewAnswerEvaluation) -> str:
+        return (
+            f"AI advice: {evaluation.explanation}\n"
+            f"Try: {evaluation.suggested_sentence}"
         )
 
     def _inventory_summary(self) -> str:
