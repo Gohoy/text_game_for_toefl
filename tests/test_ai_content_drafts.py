@@ -82,6 +82,43 @@ def test_draft_world_pack_rejects_malformed_provider_payload() -> None:
     assert provider.content_requests == [request]
 
 
+@pytest.mark.parametrize(
+    ("empty_field", "expected_path"),
+    [
+        ("title", "title"),
+        ("rooms.0.description", "description"),
+    ],
+)
+def test_draft_world_pack_rejects_empty_required_text_fields(
+    empty_field: str,
+    expected_path: str,
+) -> None:
+    class EmptyTextDraftProvider(FakeAIProvider):
+        def draft_content(self, request):
+            self.content_requests.append(request)
+            payload = minimal_world_pack_data()
+            if empty_field == "title":
+                payload["title"] = ""
+            elif empty_field == "rooms.0.description":
+                payload["rooms"][0]["description"] = ""
+            return StructuredContentDraft(draft_type="world_pack", payload=payload)
+
+    provider = EmptyTextDraftProvider()
+    request = ContentDraftRequest(
+        theme="biology",
+        required_words=["organism"],
+        purpose="world_pack",
+    )
+
+    with pytest.raises(ContentDraftValidationError) as excinfo:
+        draft_world_pack(provider, request)
+
+    message = str(excinfo.value)
+    assert "Invalid AI world_pack draft" in message
+    assert expected_path in message
+    assert provider.content_requests == [request]
+
+
 def test_draft_world_pack_requires_world_pack_purpose() -> None:
     provider = FakeAIProvider()
     request = ContentDraftRequest(
