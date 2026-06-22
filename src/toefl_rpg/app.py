@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from toefl_rpg.ai.codex_cli import CodexCliProvider
 from toefl_rpg.ai.codex_cli import CodexCliProviderError
@@ -11,6 +12,9 @@ from toefl_rpg.cli.renderer import Renderer, create_console
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.rules import GameEngine
 from toefl_rpg.engine.storage import DEFAULT_SAVE_PATH, load_game, save_game
+
+
+SAVE_PATH_ENV_VAR = "TOEFL_RPG_SAVE_PATH"
 
 
 def build_ai_provider_from_env() -> AIProvider:
@@ -26,10 +30,18 @@ def build_ai_provider_from_env() -> AIProvider:
     return CodexCliProvider(executable=executable, timeout_seconds=timeout)
 
 
+def save_path_from_env() -> Path:
+    configured_path = os.environ.get(SAVE_PATH_ENV_VAR, "").strip()
+    if configured_path:
+        return Path(configured_path)
+    return DEFAULT_SAVE_PATH
+
+
 def main() -> None:
     console = create_console()
     world = build_biology_realm()
-    state = load_game(world, DEFAULT_SAVE_PATH)
+    save_path = save_path_from_env()
+    state = load_game(world, save_path)
     try:
         ai_provider = build_ai_provider_from_env()
     except ValueError as exc:
@@ -53,7 +65,7 @@ def main() -> None:
         except (AIProviderUnavailable, CodexCliProviderError) as exc:
             console.print(f"AI provider error: {exc}")
             break
-        save_game(engine.state, DEFAULT_SAVE_PATH)
+        save_game(engine.state, save_path)
         renderer.show_result(result)
         if result.should_quit:
             break

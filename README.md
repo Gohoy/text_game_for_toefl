@@ -26,11 +26,12 @@ controls review stage, XP, duplicate suppression, and saves. The executable
 defaults to `codex`; override it with `TOEFL_RPG_CODEX_EXECUTABLE` when needed.
 
 For deterministic smoke tests without a live Codex call, opt into the fake test
-provider explicitly:
+provider explicitly. Use `TOEFL_RPG_SAVE_PATH` to keep smoke runs away from the
+normal player save slot:
 
 ```bash
 printf "look\nstatus\nquit\n" \
-  | TOEFL_RPG_AI_PROVIDER=fake PYTHONPATH=src python3 -m toefl_rpg
+  | TOEFL_RPG_AI_PROVIDER=fake TOEFL_RPG_SAVE_PATH=/tmp/toefl-rpg-smoke.json PYTHONPATH=src python3 -m toefl_rpg
 ```
 
 Current supported actions include:
@@ -83,6 +84,10 @@ Progress is autosaved after each handled turn:
 ```text
 data/saves/slot1.json
 ```
+
+Set `TOEFL_RPG_SAVE_PATH` to use a different save file for smoke tests or
+isolated playthroughs. If it is unset, normal play continues to use the default
+slot above.
 
 The full TOEFL vocabulary source should stay outside the repo and be read from:
 
