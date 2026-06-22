@@ -188,6 +188,23 @@ def test_learner_sentence_corpus_covers_pronoun_like_item_references() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_compound_action_requests() -> None:
+    compound_cases = [
+        case
+        for case in load_corpus()
+        if " and " in f" {case['sentence'].lower()} "
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "deterministic_parser"
+        and case["expected_success"] is True
+        and "expected_room_id" in case
+        and "expected_inventory_not_contains" in case
+        for case in compound_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 
@@ -280,6 +297,8 @@ def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
         assert engine.state.current_room_id == case["expected_room_id"]
     if "expected_inventory_contains" in case:
         assert case["expected_inventory_contains"] in engine.state.player.inventory
+    if "expected_inventory_not_contains" in case:
+        assert case["expected_inventory_not_contains"] not in engine.state.player.inventory
     if case.get("expected_state_unchanged") or case["category"] == "rejected":
         assert engine.state == before_state
 

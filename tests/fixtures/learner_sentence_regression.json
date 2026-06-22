@@ -70,6 +70,21 @@
     "expected_message_contains": "You go north."
   },
   {
+    "id": "compound_move_collect_deterministic_first_action",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [],
+    "sentence": "I want to go north and collect the fungus sample.",
+    "expected_parser": {
+      "action": "move",
+      "target": "north"
+    },
+    "expected_success": true,
+    "expected_room_id": "fungus_grove",
+    "expected_inventory_not_contains": "fungus sample",
+    "expected_message_contains": "You go north."
+  },
+  {
     "id": "negative_move_request_no_action",
     "category": "unknown_interpretation",
     "route": "ai_interpretation_fallback",

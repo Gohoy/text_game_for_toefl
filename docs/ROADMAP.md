@@ -110,6 +110,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers memorized definition-style misuse that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers target-word context mismatch that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
+- learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1316,7 +1317,7 @@ None.
 
 ### T-202 — Add learner sentence corpus case for compound action requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how sentences with multiple requested actions should route when deterministic code must execute only one validated action at a time.
 - **Acceptance criteria:**
@@ -1329,7 +1330,7 @@ None.
 
 ### T-203 — Add review answer corpus case for vague but grammatical target use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner uses the target word in a grammatical but vague sentence that does not prove meaning.
 - **Acceptance criteria:**
@@ -1338,6 +1339,31 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-202.
+
+### T-204 — Add learner sentence corpus case for self-correction phrasing
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner sentences with self-correction such as "I mean..." should route without letting AI mutate state directly.
+- **Acceptance criteria:**
+  - corpus includes at least one self-correction sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-203.
+
+### T-205 — Add review answer corpus case for metaphorical target use
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when the active word appears metaphorically rather than as the intended Biology meaning.
+- **Acceptance criteria:**
+  - review corpus includes a fluent metaphorical sentence containing the active review word
+  - fake AI evaluation rejects it without XP and keeps the active review word
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-204.
 
 ## Blocked Tasks
 
@@ -1387,6 +1413,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-202 by adding a learner-sentence corpus regression for a compound movement-plus-collection request that executes only the deterministic movement and leaves the item uncollected.
 - 2026-06-23: Completed T-201 by adding a learner-sentence corpus regression for pronoun-like item references such as `Could you get it for Dr. Lin?`, routed through AI interpretation and deterministic collect validation.
 - 2026-06-23: Completed T-200 by adding a learner-sentence corpus regression for hedged intention movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-199 by adding a review-answer corpus regression for a fluent but off-context fungus sentence that reaches AI evaluation and keeps review active without XP.
@@ -1396,6 +1423,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-195 by adding a parser regression and movement matching support for punctuation-heavy learner input such as `I want to go north, please!!!`.
 - 2026-06-23: Completed T-194 by adding a negative-request learner corpus regression and parser guard so negated movement does not execute the positive action.
 - 2026-06-23: Completed T-193 by adding plain-console renderer fallback coverage for separate deterministic result and English feedback labels.
-- 2026-06-23: Completed T-192 by adding an AI interpretation provider-exception regression that explicitly preserves location, inventory, XP, quest progress, and mastery.
 
 Keep at most ten items here.
