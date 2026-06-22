@@ -155,6 +155,24 @@
     "expected_message_contains": "You collect fungus sample."
   },
   {
+    "id": "self_correction_collect_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "I was going to describe the grove; I mean, could you secure the specimen for Dr. Lin?",
+    "ai_interpretation": {
+      "action": "collect",
+      "target": "fungus sample",
+      "confidence": 0.82,
+      "reason": "The learner self-corrects toward securing the visible fungus sample."
+    },
+    "expected_success": true,
+    "expected_inventory_contains": "fungus sample",
+    "expected_message_contains": "You collect fungus sample."
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",

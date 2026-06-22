@@ -205,6 +205,22 @@ def test_learner_sentence_corpus_covers_compound_action_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_self_correction_phrasing() -> None:
+    self_correction_cases = [
+        case
+        for case in load_corpus()
+        if "i mean" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case.get("expected_inventory_contains") == "fungus sample"
+        for case in self_correction_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 
