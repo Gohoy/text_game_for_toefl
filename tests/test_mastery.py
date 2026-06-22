@@ -1,10 +1,13 @@
+from datetime import datetime, timezone
+
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.mastery import LearningEvent
 from toefl_rpg.engine.mastery import record_learning_event
 from toefl_rpg.engine.mastery import record_rewardable_usage
 from toefl_rpg.engine.mastery import response_fingerprint
+from toefl_rpg.engine.mastery import select_due_vocabulary
 from toefl_rpg.engine.rules import GameEngine
-from toefl_rpg.engine.state import GameState
+from toefl_rpg.engine.state import GameState, VocabularyMastery
 
 
 def new_test_engine() -> GameEngine:
@@ -179,3 +182,95 @@ def test_incorrect_contextual_attempt_updates_mastery_without_reward() -> None:
     assert microscope.recent_response_fingerprints == [
         response_fingerprint(sentence, "microscope", "room:research_camp")
     ]
+
+
+def test_due_vocabulary_selector_orders_due_words_stably() -> None:
+    state = GameState(
+        world=build_biology_realm(),
+        current_room_id="research_camp",
+        vocabulary_mastery={
+            "vital": VocabularyMastery(
+                word="vital",
+                encounter_count=1,
+                review_stage=2,
+                next_review_at="2026-06-22T08:00:00+00:00",
+            ),
+            "fungus": VocabularyMastery(
+                word="fungus",
+                correct_use_count=1,
+                review_stage=1,
+                next_review_at="2026-06-22T07:00:00Z",
+            ),
+            "bacteria": VocabularyMastery(
+                word="bacteria",
+                correct_use_count=1,
+                review_stage=0,
+                next_review_at="2026-06-22T08:00:00+00:00",
+            ),
+            "microscope": VocabularyMastery(
+                word="microscope",
+                correct_use_count=1,
+                next_review_at="2026-06-23T08:00:00+00:00",
+            ),
+        },
+    )
+
+    due_words = select_due_vocabulary(
+        state,
+        datetime(2026, 6, 22, 8, 30, tzinfo=timezone.utc),
+    )
+
+    assert due_words == ["fungus", "bacteria", "vital"]
+
+
+def test_due_vocabulary_selector_supports_limit_and_naive_clock() -> None:
+    state = GameState(
+        world=build_biology_realm(),
+        current_room_id="research_camp",
+        vocabulary_mastery={
+            "fungus": VocabularyMastery(
+                word="fungus",
+                correct_use_count=1,
+                next_review_at="2026-06-22T07:00:00+00:00",
+            ),
+            "vital": VocabularyMastery(
+                word="vital",
+                correct_use_count=1,
+                next_review_at="2026-06-22T08:00:00+00:00",
+            ),
+        },
+    )
+
+    due_words = select_due_vocabulary(state, datetime(2026, 6, 22, 9, 0), limit=1)
+
+    assert due_words == ["fungus"]
+
+
+def test_due_vocabulary_selector_ignores_unseen_words() -> None:
+    state = GameState(
+        world=build_biology_realm(),
+        current_room_id="research_camp",
+        vocabulary_mastery={
+            "fungus": VocabularyMastery(
+                word="fungus",
+                next_review_at="2026-06-21T08:00:00+00:00",
+            ),
+            "vital": VocabularyMastery(
+                word="vital",
+                encounter_count=1,
+                next_review_at=None,
+            ),
+            "strain": VocabularyMastery(
+                word="strain",
+                correct_use_count=1,
+                next_review_at="not-a-date",
+            ),
+        },
+    )
+
+    due_words = select_due_vocabulary(
+        state,
+        datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc),
+    )
+
+    assert due_words == []

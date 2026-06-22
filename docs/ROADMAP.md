@@ -59,6 +59,7 @@ Phase 1 is complete when:
 - versioned vocabulary mastery records in saves, with legacy-save defaults
 - deterministic mastery events for encounters, correct use, and incorrect attempts
 - duplicate response fingerprints suppress repeat mastery and XP rewards
+- deterministic review-due vocabulary selector with injected clock
 - external vocabulary importer
 - focused tests for several existing systems
 
@@ -76,7 +77,7 @@ Evidence from an in-memory playthrough:
 - one ambiguous learner sentence, `I want collect a sample with the microscope`, was interpreted as collecting the microscope, showing that open-ended input needs AI interpretation plus deterministic validation
 - a fresh in-memory playtest also found verbose movement sentences such as `I go north to the fungus grove.` are not yet parsed as movement, confirming the next learning-loop work should keep improving structured interpretation
 
-Conclusion: continue with T-123 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, and duplicate response fingerprints now suppress repeat rewards while allowing new contexts to earn again. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: continue with T-124 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, and a clock-injected selector can identify due review words in stable order. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -249,7 +250,7 @@ None.
 
 ### T-123 — Select vocabulary due for review
 
-- **State:** ready
+- **State:** done
 - **Priority:** P1
 - **Goal:** Add a deterministic review-due selector based on the learning design.
 - **Acceptance criteria:**
@@ -261,7 +262,7 @@ None.
 
 ### T-124 — Add one playable review flow
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P1
 - **Goal:** Let the player review due Biology words through the terminal.
 - **Acceptance criteria:**
@@ -329,6 +330,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-123 by adding a deterministic review-due selector with an injected clock, stable due ordering, optional limiting, and regression coverage for unseen and malformed review records.
 - 2026-06-22: Completed T-122 by making mastery rewards fingerprint-based, suppressing duplicate sentence/word/context rewards, preserving no-reward repeats, and allowing the same word to earn again in a new deterministic context.
 - 2026-06-22: Completed T-121 by adding deterministic learning events for word encounters, correct usage, and incorrect attempts, wiring room encounters and practice actions into mastery records, and covering context IDs with focused tests.
 - 2026-06-22: Completed T-120 by adding explicit `VocabularyMastery` state, serializing a versioned `mastery` save block, and loading legacy saves without mastery data through safe default records.
@@ -338,6 +340,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-112 by adding `load_world_pack(path)`, actionable loader errors for missing files, invalid JSON, and schema failures, plus focused loader tests.
 - 2026-06-22: Completed T-111 by adding minimal `WorldPack` Pydantic models, duplicate room/enemy ID validation, runtime-state field rejection, conversion to the existing runtime `World`, and focused schema tests.
 - 2026-06-22: Completed T-107 by routing normal turn feedback through the required AI provider, keeping deterministic feedback behind explicit test/development paths, rolling back state on AI feedback failure, and documenting fake-provider CLI smoke.
-- 2026-06-22: Completed T-106 by adding a bounded Codex CLI provider that requests schema-validated JSON, handles missing executable and timeout failures, and is covered by fake-runner tests.
 
 Keep at most ten items here.
