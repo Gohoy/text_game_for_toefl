@@ -11,6 +11,7 @@ from toefl_rpg.ai.contract import PlayerSentenceInterpretation
 from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import TurnFeedback
+from toefl_rpg.ai.contract import VocabularyExplanation
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.mastery import response_fingerprint
 from toefl_rpg.engine.mastery import review_context_id
@@ -271,6 +272,34 @@ def test_explain_visible_vocabulary_uses_ai_without_mutating_state() -> None:
         provider.vocabulary_requests[0].learner_sentence
         == "Please explain the word fungus"
     )
+
+
+def test_vocabulary_explanation_keeps_learning_sections_distinct() -> None:
+    class StructuredExplanationProvider(FakeAIProvider):
+        def explain_vocabulary(self, request):
+            self.vocabulary_requests.append(request)
+            return VocabularyExplanation(
+                word=request.word,
+                plain_meaning="A fungus is a living growth such as mold or mushrooms.",
+                example_sentence="A fungus can recycle nutrients in a forest.",
+                memory_hint="Connect fungus with forest mushrooms.",
+            )
+
+    provider = StructuredExplanationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    result = engine.handle("explain fungus")
+
+    assert result.success
+    assert result.message.splitlines() == [
+        "fungus: A fungus is a living growth such as mold or mushrooms.",
+        "Example: A fungus can recycle nutrients in a forest.",
+        "Memory hint: Connect fungus with forest mushrooms.",
+    ]
+    assert engine.state == before_state
+    assert provider.vocabulary_requests[0].word == "fungus"
 
 
 def test_explain_practiced_vocabulary_can_work_outside_current_room() -> None:
