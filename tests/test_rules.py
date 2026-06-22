@@ -814,6 +814,29 @@ def test_malformed_ai_dialogue_vocabulary_notes_preserve_state() -> None:
     assert provider.dialogue_requests[0].npc_name == "Dr. Lin"
 
 
+def test_ai_dialogue_extra_fields_preserve_state() -> None:
+    class ExtraFieldDialogueProvider(FakeAIProvider):
+        def generate_npc_dialogue(self, request):
+            self.dialogue_requests.append(request)
+            return {
+                "speaker": request.npc_name,
+                "line": "Use respiration clues to track the organism.",
+                "vocabulary_notes": ["respiration: the process of using oxygen."],
+                "completed_tasks": ["collect_fungus_sample"],
+                "xp": 100,
+            }
+
+    provider = ExtraFieldDialogueProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI NPC dialogue failed"):
+        engine.handle("talk to Dr. Lin")
+
+    assert engine.state == before_state
+    assert provider.dialogue_requests[0].npc_name == "Dr. Lin"
+
+
 def test_ai_dialogue_cannot_return_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         NPCDialogue(

@@ -64,6 +64,7 @@ Phase 1 is complete. Exit evidence:
 - mismatched AI NPC dialogue speakers are rejected before display while preserving deterministic state
 - empty AI NPC dialogue speaker and line fields are rejected while preserving deterministic state
 - malformed AI NPC dialogue vocabulary notes are rejected before display while preserving deterministic state
+- AI NPC dialogue with unauthorized extra fields is rejected before display while preserving deterministic state
 - AI-backed room look narration grounded in deterministic room state
 - malformed AI room narration responses are rejected with clear provider errors and state preservation
 - mismatched AI room narration room IDs are rejected before display while preserving deterministic state
@@ -108,6 +109,7 @@ Evidence from an in-memory playthrough:
 - NPC dialogue speaker mismatches now raise clear provider errors before display and preserve deterministic state
 - empty NPC dialogue required fields now have regression coverage proving provider errors preserve deterministic state
 - malformed NPC dialogue vocabulary notes now have regression coverage proving provider errors preserve deterministic state
+- NPC dialogue extra-field regressions now prove unauthorized mutation-like fields are rejected before display
 - `look` now requests validated AI room narration without mutating exits, items, NPCs, enemies, quest state, XP, inventory, saves, or mastery
 - malformed room narration responses, including empty required fields, now raise clear provider errors and preserve deterministic state
 - room narration responses must echo the requested room ID, and mismatches now raise clear provider errors before display
@@ -873,7 +875,7 @@ None.
 
 ### T-169 — Add NPC dialogue extra-field regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI NPC dialogue returns unauthorized state-like fields.
 - **Acceptance criteria:**
@@ -882,6 +884,42 @@ None.
   - test uses fake providers and does not require live Codex CLI
 - **Verification:** engine tests and full suite.
 - **Dependencies:** T-164.
+
+### T-170 — Add room narration extra-field regression
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Protect the failure path when AI room narration returns unauthorized state-like fields.
+- **Acceptance criteria:**
+  - extra mutation-like fields raise a clear provider error before display
+  - deterministic state remains unchanged
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** engine tests and full suite.
+- **Dependencies:** T-165.
+
+### T-171 — Add turn feedback extra-field regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect the failure path when AI turn feedback returns unauthorized state-like fields after a deterministic action.
+- **Acceptance criteria:**
+  - extra mutation-like fields raise a clear provider error before display
+  - deterministic state is rolled back after a state-changing action
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** engine tests and full suite.
+- **Dependencies:** T-163.
+
+### T-172 — Add review evaluation extra-field regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect the failure path when AI review evaluation returns unauthorized state-like fields.
+- **Acceptance criteria:**
+  - extra mutation-like fields raise a clear provider error before display
+  - active review state remains unchanged
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** review engine tests and full suite.
+- **Dependencies:** T-166.
 
 ## Blocked Tasks
 
@@ -931,6 +969,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-169 by adding a fake-provider regression that rejects AI NPC dialogue containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-168 by adding a fake-provider regression that rejects parser-miss AI interpretations containing unauthorized mutation-like fields before deterministic validation while preserving state.
 - 2026-06-22: Completed T-167 by adding a fake-provider regression that rejects AI vocabulary explanations containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-166 by adding strict review-evaluation judgment validation and a fake-provider regression that preserves the active review word on malformed boolean output.
@@ -940,6 +979,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-162 by adding a fake-provider regression that rejects AI world-pack drafts with empty required title or room-description text before any generated content is accepted.
 - 2026-06-22: Completed T-161 by requiring AI room narration to echo the requested room ID and rejecting mismatched room responses before display while preserving deterministic state.
 - 2026-06-22: Completed T-160 by adding a fake-provider regression that rejects empty AI sentence-interpretation action and reason fields while preserving deterministic state.
-- 2026-06-22: Completed T-159 by adding a fake-provider regression that rejects empty AI NPC dialogue speaker and line fields while preserving deterministic state.
 
 Keep at most ten items here.
