@@ -147,7 +147,7 @@ None.
 
 ### T-111 — Define the minimal world-pack schema
 
-- **State:** ready
+- **State:** done
 - **Priority:** P0
 - **Goal:** Add Pydantic models for the fields already required by the current Biology world.
 - **Acceptance criteria:**
@@ -162,7 +162,7 @@ None.
 
 ### T-112 — Add a JSON world-pack loader
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P0
 - **Goal:** Load and validate a world pack from a repository JSON file.
 - **Acceptance criteria:**
@@ -325,6 +325,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-111 by adding minimal `WorldPack` Pydantic models, duplicate room/enemy ID validation, runtime-state field rejection, conversion to the existing runtime `World`, and focused schema tests.
 - 2026-06-22: Completed T-107 by routing normal turn feedback through the required AI provider, keeping deterministic feedback behind explicit test/development paths, rolling back state on AI feedback failure, and documenting fake-provider CLI smoke.
 - 2026-06-22: Completed T-106 by adding a bounded Codex CLI provider that requests schema-validated JSON, handles missing executable and timeout failures, and is covered by fake-runner tests.
 - 2026-06-22: Completed T-105 by adding the required AI-agent contract, validated request/response models, a fake provider for tests, and explicit missing-provider behavior.

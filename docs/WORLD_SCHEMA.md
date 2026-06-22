@@ -27,7 +27,7 @@ A minimal world pack contains:
 }
 ```
 
-The exact Pydantic models are authoritative once implemented. This document explains the stable contract and validation rules.
+The current minimal Pydantic pack contract is implemented by `WorldPack`, `WorldPackRoom`, and `WorldPackEnemy` in `src/toefl_rpg/content/schema.py`. This document explains the stable contract and validation rules.
 
 ## Stable ID Rules
 
@@ -163,6 +163,8 @@ Example:
 ```text
 rooms[river_bank].exits.east references missing room "old_lab"
 ```
+
+The first implemented pack model validates required fields, forbids runtime-state fields, and rejects duplicate room and enemy IDs. Cross-reference validation is intentionally a follow-up task.
 
 ## Schema Evolution
 
