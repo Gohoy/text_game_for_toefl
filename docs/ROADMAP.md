@@ -105,6 +105,7 @@ Phase 1 is complete. Exit evidence:
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
 - duplicate review answers are detected before AI review evaluation, preserving no-reward behavior while avoiding unnecessary provider calls
 - review-answer corpus covers fluent but synonym-heavy incorrect target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers memorized definition-style misuse that reaches AI evaluation and keeps review active without XP
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1249,7 +1250,7 @@ None.
 
 ### T-197 — Add review answer corpus case for memorized definition misuse
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep review evaluation coverage clear when a learner writes a grammatical definition-like sentence that names the word but does not show usable meaning in context.
 - **Acceptance criteria:**
@@ -1261,7 +1262,7 @@ None.
 
 ### T-198 — Add learner sentence corpus case for indirect polite questions
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Expand full-sentence input coverage for indirect polite requests such as "Would you mind..." while preserving deterministic state authority.
 - **Acceptance criteria:**
@@ -1332,6 +1333,8 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-197 by adding a review-answer corpus regression for memorized definition-style misuse that reaches AI evaluation but keeps review active without XP.
+- 2026-06-23: Completed T-196 by adding a review-answer corpus regression for synonym-heavy incorrect target-word use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-195 by adding a parser regression and movement matching support for punctuation-heavy learner input such as `I want to go north, please!!!`.
 - 2026-06-23: Completed T-194 by adding a negative-request learner corpus regression and parser guard so negated movement does not execute the positive action.
 - 2026-06-23: Completed T-193 by adding plain-console renderer fallback coverage for separate deterministic result and English feedback labels.
@@ -1340,7 +1343,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-190 by adding renderer coverage that keeps multiple AI vocabulary notes as distinct `Vocabulary:` lines without duplicating deterministic result text.
 - 2026-06-23: Completed T-189 by tightening renderer coverage so vocabulary explanation output stays in the result panel and no empty English Feedback panel appears.
 - 2026-06-23: Completed T-188 by adding learner-sentence corpus coverage for desire-based movement phrasing with an explicit deterministic room transition.
-- 2026-06-23: Completed T-187 by adding a renderer regression that keeps rejected deterministic action results separate from AI narration and suggestions.
-- 2026-06-23: Completed T-186 by adding learner-sentence corpus coverage for polite deterministic commands and polite AI-interpretation fallback with explicit state expectations.
 
 Keep at most ten items here.

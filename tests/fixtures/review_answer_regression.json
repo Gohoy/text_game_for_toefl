@@ -59,6 +59,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_definition_style_misuse",
+    "category": "rejected",
+    "sentence": "Fungus means a biological term that I memorized for the test.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence is fluent but describes memorizing the word instead of using its meaning in context.",
+      "suggested_sentence": "A fungus can decompose leaves on the forest floor."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",
