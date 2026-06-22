@@ -649,6 +649,40 @@ def test_invalid_ai_turn_feedback_preserves_state() -> None:
     assert provider.turn_feedback_requests[0].deterministic_action == "collect"
 
 
+@pytest.mark.parametrize(
+    "empty_field",
+    ["narration", "sentence_feedback", "suggested_sentence"],
+)
+def test_empty_ai_turn_feedback_required_fields_preserve_state_after_state_change(
+    empty_field: str,
+) -> None:
+    class EmptyTurnFeedbackProvider(FakeAIProvider):
+        def generate_turn_feedback(self, request):
+            self.turn_feedback_requests.append(request)
+            feedback = {
+                "narration": "The grove reacts to your careful fieldwork.",
+                "sentence_feedback": "Your sentence clearly states the intended action.",
+                "suggested_sentence": "I want to collect the fungus sample.",
+                "vocabulary_notes": [],
+            }
+            feedback[empty_field] = ""
+            return feedback
+
+    provider = EmptyTurnFeedbackProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.state.current_room_id = "fungus_grove"
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI turn feedback failed"):
+        engine.handle("I want to collect the fungus sample")
+
+    assert engine.state == before_state
+    assert provider.turn_feedback_requests[0].deterministic_action == "collect"
+    assert provider.turn_feedback_requests[0].deterministic_result.startswith(
+        "You collect fungus sample."
+    )
+
+
 def test_inspecting_core_word_grants_xp_once_per_turn() -> None:
     engine = new_test_engine()
     engine.handle("go east")
