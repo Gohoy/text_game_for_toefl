@@ -28,6 +28,20 @@
     "expected_message_contains": "You go north."
   },
   {
+    "id": "would_like_move_deterministic",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [],
+    "sentence": "I would like to go east to the microscope tent.",
+    "expected_parser": {
+      "action": "move",
+      "target": "east"
+    },
+    "expected_success": true,
+    "expected_room_id": "microscope_tent",
+    "expected_message_contains": "You go east."
+  },
+  {
     "id": "collect_specimen_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

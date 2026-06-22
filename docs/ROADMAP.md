@@ -91,6 +91,7 @@ Phase 1 is complete. Exit evidence:
 - all AI request models have strict-schema audit coverage in the AI contract tests
 - parser and AI sentence interpretation share an executable action/target convention audit
 - learner sentence corpus covers polite deterministic commands and polite AI-interpretation fallback
+- learner sentence corpus covers desire-based movement phrasing with explicit deterministic state expectations
 - renderer tests keep deterministic result text visually separate from AI coaching for successful and rejected turns
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
@@ -1127,7 +1128,7 @@ None.
 
 ### T-188 — Add learner sentence corpus case for desire-based phrasing
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Expand full-sentence input coverage for learner phrases such as "I would like to..." and "I need to..." without changing deterministic authority.
 - **Acceptance criteria:**
@@ -1140,7 +1141,7 @@ None.
 
 ### T-189 — Add renderer regression for vocabulary explanation output boundaries
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Keep vocabulary explanation result text separate from turn-level AI coaching and avoid showing an empty feedback panel.
 - **Acceptance criteria:**
@@ -1211,6 +1212,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-188 by adding learner-sentence corpus coverage for desire-based movement phrasing with an explicit deterministic room transition.
 - 2026-06-23: Completed T-187 by adding a renderer regression that keeps rejected deterministic action results separate from AI narration and suggestions.
 - 2026-06-23: Completed T-186 by adding learner-sentence corpus coverage for polite deterministic commands and polite AI-interpretation fallback with explicit state expectations.
 - 2026-06-23: Completed T-185 by adding an executable parser/AI interpretation intent-contract audit that covers every deterministic action and target convention.
@@ -1220,6 +1222,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-181 by making AI NPC dialogue requests reject unauthorized state-like extra fields before provider use while preserving fake-provider dialogue behavior.
 - 2026-06-23: Completed T-180 by adding a regression that parser-miss AI interpretation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider interpretation behavior.
 - 2026-06-23: Completed T-179 by making AI vocabulary-explanation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider explanation behavior.
-- 2026-06-23: Completed T-178 by making AI turn-feedback requests reject unauthorized state-like extra fields before provider use while preserving fake-provider feedback behavior.
 
 Keep at most ten items here.

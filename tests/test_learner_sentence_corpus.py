@@ -83,6 +83,25 @@ def test_learner_sentence_corpus_covers_polite_command_routes() -> None:
     assert {"deterministic_parser", "ai_interpretation_fallback"} <= polite_cases
 
 
+def test_learner_sentence_corpus_covers_desire_based_commands() -> None:
+    desire_cases = [
+        case
+        for case in load_corpus()
+        if case["sentence"].lower().startswith(("i would like to", "i need to"))
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] in {"deterministic_parser", "ai_interpretation_fallback"}
+        and (
+            "expected_room_id" in case
+            or "expected_inventory_contains" in case
+            or case.get("expected_state_unchanged") is not None
+        )
+        for case in desire_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 
