@@ -110,6 +110,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers memorized definition-style misuse that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers target-word context mismatch that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers vague grammatical target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers metaphorical target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1357,7 +1358,7 @@ None.
 
 ### T-205 — Add review answer corpus case for metaphorical target use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when the active word appears metaphorically rather than as the intended Biology meaning.
 - **Acceptance criteria:**
@@ -1369,7 +1370,7 @@ None.
 
 ### T-206 — Add learner sentence corpus case for overly broad location requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "take me to the lab" route when deterministic movement requires concrete exits.
 - **Acceptance criteria:**
@@ -1391,6 +1392,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-206.
+
+### T-208 — Add learner sentence corpus case for ambiguous enemy references
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner attack requests with vague enemy references route when deterministic combat requires a concrete visible target.
+- **Acceptance criteria:**
+  - corpus includes at least one vague enemy-reference attack sentence
+  - expected parser route or AI fallback route is explicit
+  - expected combat mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-207.
 
 ## Blocked Tasks
 
@@ -1440,6 +1454,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-205 by adding a review-answer corpus regression for metaphorical fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-204 by adding a learner-sentence corpus regression for self-correction phrasing that routes through AI interpretation and deterministic collect validation.
 - 2026-06-23: Completed T-203 by adding a review-answer corpus regression for vague grammatical fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-202 by adding a learner-sentence corpus regression for a compound movement-plus-collection request that executes only the deterministic movement and leaves the item uncollected.
@@ -1449,6 +1464,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-198 by adding a learner-sentence corpus regression for an indirect polite question that routes through AI interpretation and deterministic collect validation.
 - 2026-06-23: Completed T-197 by adding a review-answer corpus regression for memorized definition-style misuse that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-196 by adding a review-answer corpus regression for synonym-heavy incorrect target-word use that reaches AI evaluation but keeps review active without XP.
-- 2026-06-23: Completed T-195 by adding a parser regression and movement matching support for punctuation-heavy learner input such as `I want to go north, please!!!`.
 
 Keep at most ten items here.

@@ -107,6 +107,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_metaphorical_target_use",
+    "category": "rejected",
+    "sentence": "A fungus of doubt spread through the research team.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence is fluent but uses fungus metaphorically instead of showing its Biology meaning.",
+      "suggested_sentence": "A fungus can break down dead plant material in a forest."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",

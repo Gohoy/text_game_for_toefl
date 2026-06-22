@@ -292,6 +292,22 @@ def test_review_answer_corpus_covers_vague_target_use() -> None:
     )
 
 
+def test_review_answer_corpus_covers_metaphorical_target_use() -> None:
+    metaphorical_cases = [
+        case
+        for case in load_review_corpus()
+        if "of doubt" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["expected_ai_evaluation"] is True
+        and case["expected_active_review_word"] == "fungus"
+        and case["expected_xp"] == 16
+        for case in metaphorical_cases
+    )
+
+
 @pytest.mark.parametrize("case", load_corpus(), ids=lambda case: case["id"])
 def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
     provider = CorpusAIProvider(case)
