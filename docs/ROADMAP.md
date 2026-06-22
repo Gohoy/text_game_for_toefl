@@ -94,6 +94,7 @@ Phase 1 is complete. Exit evidence:
 - invalid AI outputs for turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration fail clearly without leaving partial state changes
 - malformed AI turn-feedback vocabulary notes are rejected with state rollback after state-changing actions
 - AI turn feedback with unauthorized extra fields is rejected with state rollback after state-changing actions
+- AI turn-feedback requests reject unauthorized extra state-like fields before reaching providers
 - empty AI vocabulary-explanation meaning, example, and memory-hint fields are rejected while preserving deterministic state
 - AI vocabulary explanations with unauthorized extra fields are rejected while preserving deterministic state
 - empty AI turn-feedback narration, feedback, and suggested-sentence fields are rejected with state rollback after state-changing actions
@@ -996,7 +997,7 @@ None.
 
 ### T-178 — Add turn-feedback request strictness regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep turn-feedback prompts bounded to deterministic action context before they reach providers.
 - **Acceptance criteria:**
@@ -1008,7 +1009,7 @@ None.
 
 ### T-179 — Add vocabulary-explanation request strictness regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Keep vocabulary-explanation prompts bounded to learner sentence and theme context before they reach providers.
 - **Acceptance criteria:**
@@ -1029,6 +1030,18 @@ None.
   - tests do not require live Codex CLI
 - **Verification:** AI contract tests and full suite.
 - **Dependencies:** T-179.
+
+### T-181 — Add NPC dialogue request strictness regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep NPC dialogue prompts bounded to visible deterministic context before they reach providers.
+- **Acceptance criteria:**
+  - NPC dialogue request models reject unauthorized extra fields such as XP, inventory, or quest completion flags
+  - existing fake-provider NPC dialogue behavior remains unchanged
+  - tests do not require live Codex CLI
+- **Verification:** AI contract tests and full suite.
+- **Dependencies:** T-180.
 
 ## Blocked Tasks
 
@@ -1078,6 +1091,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-178 by making AI turn-feedback requests reject unauthorized state-like extra fields before provider use while preserving fake-provider feedback behavior.
 - 2026-06-23: Completed T-177 by adding fake-provider regressions that distinguish AI content-draft envelope failures from world-pack payload failures while preserving nested payload field paths.
 - 2026-06-23: Completed T-176 by making AI content-draft requests reject unauthorized state-like extra fields before provider use while preserving fake-provider draft behavior.
 - 2026-06-23: Completed T-175 by adding subprocess-fake Codex CLI provider coverage for strict content-draft response schemas and unchanged structured draft parsing.
@@ -1087,6 +1101,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-171 by adding a fake-provider regression that rejects AI turn feedback containing unauthorized mutation-like fields and rolls back a state-changing collect action.
 - 2026-06-22: Completed T-170 by adding a fake-provider regression that rejects AI room narration containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-169 by adding a fake-provider regression that rejects AI NPC dialogue containing unauthorized mutation-like fields before display while preserving deterministic state.
-- 2026-06-22: Completed T-168 by adding a fake-provider regression that rejects parser-miss AI interpretations containing unauthorized mutation-like fields before deterministic validation while preserving state.
 
 Keep at most ten items here.

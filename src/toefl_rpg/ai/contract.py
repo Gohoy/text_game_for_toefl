@@ -12,6 +12,8 @@ class AIProviderUnavailable(RuntimeError):
 
 
 class TurnFeedbackRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     player_sentence: str = Field(min_length=1)
     location_id: str = Field(min_length=1)
     deterministic_action: DeterministicAction

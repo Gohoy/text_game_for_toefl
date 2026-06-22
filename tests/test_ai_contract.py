@@ -45,6 +45,25 @@ def test_fake_ai_provider_generates_valid_turn_feedback() -> None:
     assert provider.turn_feedback_requests == [request]
 
 
+def test_turn_feedback_request_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        TurnFeedbackRequest(
+            player_sentence="I want to collect the fungus sample.",
+            location_id="fungus_grove",
+            deterministic_action="collect",
+            deterministic_result="You collect fungus sample.",
+            xp=100,
+            inventory=["fungus sample"],
+            save_path="/tmp/player-save.json",
+        )
+
+    message = str(exc_info.value)
+    assert "xp" in message
+    assert "inventory" in message
+    assert "save_path" in message
+    assert "Extra inputs are not permitted" in message
+
+
 def test_ai_turn_feedback_requires_player_facing_text() -> None:
     with pytest.raises(ValidationError):
         TurnFeedback(
