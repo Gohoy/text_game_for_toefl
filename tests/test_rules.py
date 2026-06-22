@@ -283,6 +283,41 @@ def test_invalid_ai_review_evaluation_preserves_state() -> None:
     assert provider.review_evaluation_requests[0].word == "fungus"
 
 
+@pytest.mark.parametrize("empty_field", ["explanation", "suggested_sentence"])
+def test_empty_ai_review_evaluation_fields_preserve_active_review_state(
+    empty_field: str,
+) -> None:
+    class EmptyReviewProvider(FakeAIProvider):
+        def evaluate_review_answer(self, request):
+            self.review_evaluation_requests.append(request)
+            evaluation = {
+                "uses_target_meaningfully": True,
+                "explanation": "The sentence connects the word to its role in nature.",
+                "suggested_sentence": "A fungus can be vital for forest metabolism.",
+            }
+            evaluation[empty_field] = ""
+            return evaluation
+
+    provider = EmptyReviewProvider()
+    now = datetime(2026, 6, 22, 8, 0, tzinfo=timezone.utc)
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        ai_provider=provider,
+        clock=lambda: now,
+    )
+    engine.handle("go north")
+    engine.handle("The fungus is vital for the old forest.")
+    engine.handle("review")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI review evaluation failed"):
+        engine.handle("A fungus can be vital for forest metabolism.")
+
+    assert engine.state == before_state
+    assert engine.state.active_review_word == "fungus"
+    assert provider.review_evaluation_requests[0].word == "fungus"
+
+
 def test_explain_visible_vocabulary_uses_ai_without_mutating_state() -> None:
     provider = FakeAIProvider()
     engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
