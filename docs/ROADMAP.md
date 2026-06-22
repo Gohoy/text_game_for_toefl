@@ -63,7 +63,7 @@ None.
 
 ### T-110 — Characterize the current Biology world
 
-- **State:** ready
+- **State:** done
 - **Priority:** P0
 - **Goal:** Protect current world behavior before moving content out of code.
 - **Scope:** Add focused tests or fixtures that capture room IDs, exits, item placement, enemy placement, target words, and the three quest steps.
@@ -80,7 +80,7 @@ None.
 
 ### T-111 — Define the minimal world-pack schema
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P0
 - **Goal:** Add Pydantic models for the fields already required by the current Biology world.
 - **Acceptance criteria:**
@@ -258,6 +258,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-110 by adding characterization tests for the current Biology world identity, topology, content placement, enemy contract, target words, and quest steps.
 - 2026-06-22: Adopted the Codex automation documentation bundle, including the runbook, quality gates, world schema notes, learning design notes, and the `.codex/20_minute_prompt.md` scheduled prompt.
 
 Keep at most ten items here.
