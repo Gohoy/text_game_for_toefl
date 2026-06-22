@@ -59,6 +59,7 @@ Phase 1 is complete. Exit evidence:
 - structured AI interpretation contract for advisory open-ended sentence parsing
 - AI interpretation fallback for parser misses, with deterministic validation of rooms, items, enemies, and rewards
 - malformed parser-miss AI interpretation responses are rejected with clear provider errors and state preservation
+- parser-miss AI interpretations with unauthorized extra fields are rejected before deterministic validation
 - AI-backed NPC dialogue grounded in room, quest, visible entity, and vocabulary context
 - mismatched AI NPC dialogue speakers are rejected before display while preserving deterministic state
 - empty AI NPC dialogue speaker and line fields are rejected while preserving deterministic state
@@ -134,6 +135,7 @@ Evidence from an in-memory playthrough:
 - malformed turn-feedback vocabulary notes now have regression coverage proving validation failures roll back state-changing actions
 - low-confidence parser-miss retry guidance now has engine and renderer regressions proving deterministic state is preserved and retry text stays separate from AI coaching
 - empty sentence-interpretation action and reason fields now have regression coverage proving provider errors preserve deterministic state
+- sentence-interpretation extra-field regressions now prove unauthorized mutation-like fields are rejected before deterministic validation
 - parser intents and AI interpretation responses now share the same deterministic action contract from `src/toefl_rpg/engine/actions.py`
 - CLI playtests can now set `TOEFL_RPG_SAVE_PATH` to avoid the default player save slot
 - Codex CLI provider invocation now matches the installed `codex exec` flags by avoiding the unsupported `--ask-for-approval` option
@@ -859,7 +861,7 @@ None.
 
 ### T-168 — Add sentence interpretation extra-field regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI parser-miss interpretation returns unauthorized state-like fields.
 - **Acceptance criteria:**
@@ -871,7 +873,7 @@ None.
 
 ### T-169 — Add NPC dialogue extra-field regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI NPC dialogue returns unauthorized state-like fields.
 - **Acceptance criteria:**
@@ -929,6 +931,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-168 by adding a fake-provider regression that rejects parser-miss AI interpretations containing unauthorized mutation-like fields before deterministic validation while preserving state.
 - 2026-06-22: Completed T-167 by adding a fake-provider regression that rejects AI vocabulary explanations containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-166 by adding strict review-evaluation judgment validation and a fake-provider regression that preserves the active review word on malformed boolean output.
 - 2026-06-22: Completed T-165 by adding a fake-provider regression that rejects malformed AI room narration vocabulary notes before display while preserving deterministic state.
@@ -938,6 +941,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-161 by requiring AI room narration to echo the requested room ID and rejecting mismatched room responses before display while preserving deterministic state.
 - 2026-06-22: Completed T-160 by adding a fake-provider regression that rejects empty AI sentence-interpretation action and reason fields while preserving deterministic state.
 - 2026-06-22: Completed T-159 by adding a fake-provider regression that rejects empty AI NPC dialogue speaker and line fields while preserving deterministic state.
-- 2026-06-22: Completed T-158 by adding a fake-provider regression that rejects empty AI vocabulary-explanation meaning, example, and memory-hint fields while preserving deterministic state.
 
 Keep at most ten items here.

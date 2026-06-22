@@ -543,6 +543,31 @@ def test_empty_ai_interpretation_required_fields_preserve_state(
     assert provider.interpretation_requests[0].location_id == "fungus_grove"
 
 
+def test_ai_interpretation_extra_fields_preserve_state() -> None:
+    class ExtraFieldInterpretationProvider(FakeAIProvider):
+        def interpret_player_sentence(self, request):
+            self.interpretation_requests.append(request)
+            return {
+                "action": "collect",
+                "target": "fungus sample",
+                "confidence": 0.9,
+                "reason": "The learner asks for the visible specimen.",
+                "inventory": ["fungus sample"],
+                "xp": 100,
+            }
+
+    provider = ExtraFieldInterpretationProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.handle("go north")
+    before_state = deepcopy(engine.state)
+
+    with pytest.raises(AIProviderUnavailable, match="AI sentence interpretation failed"):
+        engine.handle("Could you grab the specimen for my research?")
+
+    assert engine.state == before_state
+    assert provider.interpretation_requests[0].location_id == "fungus_grove"
+
+
 def test_ai_interpretation_is_not_used_when_parser_matches() -> None:
     provider = FakeAIProvider()
     engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
