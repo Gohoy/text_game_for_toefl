@@ -15,7 +15,7 @@ python3 -m pytest -q
 
 If the project standardizes commands in `pyproject.toml`, a `Makefile`, or a task runner, update this document and use the canonical commands.
 
-## CLI Smoke Gate
+## Required Fake CLI Smoke Gate
 
 Run this when changing application startup, command parsing, rendering, movement, inventory, quests, combat, saves, or language practice:
 
@@ -34,6 +34,29 @@ The process must:
 - terminate successfully
 
 Keep a deterministic subprocess smoke test in the test suite once practical; the shell smoke command remains useful for integration verification.
+
+This required smoke gate must stay fake-provider only. Automation should not
+require a paid API call, a live Codex session, or the normal player save slot.
+
+## Manual Live Codex Smoke
+
+Run this only when changing Codex CLI provider wiring, structured-output
+schemas, timeouts, or player-facing AI runtime behavior:
+
+```bash
+printf "look\nquit\n" \
+  | TOEFL_RPG_SAVE_PATH=/tmp/toefl-rpg-live-smoke.json PYTHONPATH=src python3 -m toefl_rpg
+```
+
+The process should:
+
+- call the configured local Codex CLI provider
+- use a temporary `TOEFL_RPG_SAVE_PATH`
+- show AI-generated turn feedback or narration
+- show no traceback or schema-format error
+- terminate successfully
+
+Do not make this command a mandatory automation gate.
 
 ## Content and Schema Gate
 

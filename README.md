@@ -37,6 +37,15 @@ printf "look\nstatus\nquit\n" \
   | TOEFL_RPG_AI_PROVIDER=fake TOEFL_RPG_SAVE_PATH=/tmp/toefl-rpg-smoke.json PYTHONPATH=src python3 -m toefl_rpg
 ```
 
+For a manual live Codex smoke, omit the fake provider but still use a temporary
+save path. This calls your local Codex CLI account and is not part of the
+required automation gate:
+
+```bash
+printf "look\nquit\n" \
+  | TOEFL_RPG_SAVE_PATH=/tmp/toefl-rpg-live-smoke.json PYTHONPATH=src python3 -m toefl_rpg
+```
+
 Current supported actions include:
 
 - `help`

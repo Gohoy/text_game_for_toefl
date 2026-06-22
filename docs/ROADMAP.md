@@ -104,8 +104,9 @@ Evidence from an in-memory playthrough:
 - CLI playtests can now set `TOEFL_RPG_SAVE_PATH` to avoid the default player save slot
 - Codex CLI provider invocation now matches the installed `codex exec` flags by avoiding the unsupported `--ask-for-approval` option
 - player-facing AI response schemas now set `additionalProperties: false` for Codex structured-output compatibility, and live Codex turns have a longer default timeout with an environment override
+- documentation now distinguishes the required fake-provider CLI smoke from an optional manual live Codex smoke, both using temporary save paths
 
-Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, review messages separate AI advice from deterministic rewards and retry state, duplicate review-answer messages avoid extra rewards and remain distinct from normal review acceptance or rejection, review-answer corpus coverage now distinguishes deterministic checks from AI evaluation, low-confidence AI interpretation coverage protects state-preserving retry guidance, turn-feedback display coverage protects AI coaching labels and separate deterministic Result output, vocabulary explanation display coverage protects distinct meaning, example, and memory-hint lines, Codex CLI invocation, strict response schemas, and live timeout defaults match the installed local `codex exec` structured-output requirements, an end-to-end test protects quest completion plus review persistence, smoke playtests can use an isolated save path, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, parser and AI action names share one deterministic contract, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, review messages separate AI advice from deterministic rewards and retry state, duplicate review-answer messages avoid extra rewards and remain distinct from normal review acceptance or rejection, review-answer corpus coverage now distinguishes deterministic checks from AI evaluation, low-confidence AI interpretation coverage protects state-preserving retry guidance, turn-feedback display coverage protects AI coaching labels and separate deterministic Result output, vocabulary explanation display coverage protects distinct meaning, example, and memory-hint lines, Codex CLI invocation, strict response schemas, live timeout defaults, and live-smoke documentation match the installed local `codex exec` structured-output requirements, an end-to-end test protects quest completion plus review persistence, smoke playtests can use an isolated save path, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, parser and AI action names share one deterministic contract, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -572,7 +573,7 @@ None.
 
 ### T-146 — Add Codex CLI live smoke documentation
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Document a safe manual smoke path for running one live Codex-backed turn without touching the normal save slot.
 - **Acceptance criteria:**
@@ -584,7 +585,7 @@ None.
 
 ### T-148 — Add review duplicate pre-check optimization
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Avoid calling the review-evaluation AI provider when a review answer fingerprint is already known to be duplicate.
 - **Acceptance criteria:**
@@ -605,6 +606,18 @@ None.
   - fake-provider test does not require live Codex CLI
 - **Verification:** engine tests and full suite.
 - **Dependencies:** T-144.
+
+### T-150 — Add parser-miss retry display regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect the player-facing retry guidance when AI interpretation declines or cannot confidently parse a learner sentence.
+- **Acceptance criteria:**
+  - low-confidence parser-miss output shows retry guidance instead of normal success feedback
+  - deterministic state remains unchanged
+  - test uses fake providers and does not require live Codex CLI
+- **Verification:** engine/renderer tests and full suite.
+- **Dependencies:** T-142.
 
 ## Blocked Tasks
 
@@ -654,6 +667,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-146 by documenting a temporary-save manual live Codex smoke command in README, distinguishing it from the required fake-provider smoke gate, and keeping automation free of paid or live Codex requirements.
 - 2026-06-22: Completed T-144 by adding engine and renderer regressions that keep AI vocabulary explanation meaning, example, and memory-hint lines visibly distinct while preserving deterministic state and avoiding an unrelated English Feedback panel.
 - 2026-06-22: Completed T-143 by adding a review duplicate-message regression that verifies repeated active review answers use a distinct duplicate message, clear the active review, and avoid extra XP, review-stage, and mastery-point gains with a fake provider.
 - 2026-06-22: Completed T-147 by making player-facing AI response schemas strict with `additionalProperties: false`, adding extra-field rejection tests, asserting the Codex CLI schema file uses the strict schema required by OpenAI structured outputs, and raising the default live Codex timeout while keeping `TOEFL_RPG_CODEX_TIMEOUT` configurable.
@@ -663,6 +677,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-140 by adding review-answer corpus fixtures for AI-accepted, deterministic-rejected, AI-rejected, and malformed AI evaluation cases, with tests proving which answers stop before AI and which reach validated review evaluation.
 - 2026-06-22: Completed T-139 by adding `TOEFL_RPG_SAVE_PATH` for CLI load/autosave isolation, documenting smoke usage with a temporary save file, and preserving the default `data/saves/slot1.json` behavior for normal play.
 - 2026-06-22: Completed T-138 by formatting review answer messages with separate `AI advice`, `Try`, and deterministic `Result` lines while preserving review stage, XP, duplicate suppression, active-review state, and existing turn feedback behavior.
-- 2026-06-22: Completed T-137 by moving deterministic action literals into `src/toefl_rpg/engine/actions.py`, making parser intents and AI interpretation validation share that contract, and adding regression tests to detect future action-name drift.
 
 Keep at most ten items here.
