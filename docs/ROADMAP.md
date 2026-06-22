@@ -91,6 +91,7 @@ Phase 1 is complete. Exit evidence:
 - all AI request models have strict-schema audit coverage in the AI contract tests
 - parser and AI sentence interpretation share an executable action/target convention audit
 - learner sentence corpus covers polite deterministic commands and polite AI-interpretation fallback
+- renderer tests keep deterministic result text visually separate from AI coaching for successful and rejected turns
 - empty AI review-evaluation explanation and suggested-sentence fields are rejected while active review state remains unchanged
 - malformed AI review-evaluation judgment flags are rejected while active review state remains unchanged
 - AI review evaluations with unauthorized extra fields are rejected while active review state remains unchanged
@@ -1114,7 +1115,7 @@ None.
 
 ### T-187 — Add renderer regression for AI coaching versus deterministic results
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep AI coaching text visually distinct from deterministic result summaries in player-facing output.
 - **Acceptance criteria:**
@@ -1123,6 +1124,44 @@ None.
   - no live Codex CLI is required
 - **Verification:** renderer tests and full suite.
 - **Dependencies:** T-186.
+
+### T-188 — Add learner sentence corpus case for desire-based phrasing
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Expand full-sentence input coverage for learner phrases such as "I would like to..." and "I need to..." without changing deterministic authority.
+- **Acceptance criteria:**
+  - corpus includes at least one accepted desire-based movement or interaction sentence
+  - expected parser route or AI fallback route is explicit
+  - expected state mutation remains deterministic and explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-187.
+
+### T-189 — Add renderer regression for vocabulary explanation output boundaries
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep vocabulary explanation result text separate from turn-level AI coaching and avoid showing an empty feedback panel.
+- **Acceptance criteria:**
+  - renderer tests cover vocabulary explanation output with no turn feedback panel
+  - explanation, example, and memory hint remain in the deterministic result section
+  - no live Codex CLI is required
+- **Verification:** renderer tests and full suite.
+- **Dependencies:** T-188.
+
+### T-190 — Add AI feedback formatting regression for multiple vocabulary notes
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Ensure multiple AI vocabulary notes stay readable and separate in the English feedback text.
+- **Acceptance criteria:**
+  - rules or renderer tests cover at least two vocabulary notes from AI turn feedback
+  - each note is rendered on a distinct `Vocabulary:` line
+  - deterministic result text remains unchanged
+  - no live Codex CLI is required
+- **Verification:** rules or renderer tests plus full suite.
+- **Dependencies:** T-189.
 
 ## Blocked Tasks
 
@@ -1172,6 +1211,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-187 by adding a renderer regression that keeps rejected deterministic action results separate from AI narration and suggestions.
 - 2026-06-23: Completed T-186 by adding learner-sentence corpus coverage for polite deterministic commands and polite AI-interpretation fallback with explicit state expectations.
 - 2026-06-23: Completed T-185 by adding an executable parser/AI interpretation intent-contract audit that covers every deterministic action and target convention.
 - 2026-06-23: Completed T-184 by adding an executable AI request-model audit that verifies every request schema is strict and that the audited request set is complete.
@@ -1181,6 +1221,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-180 by adding a regression that parser-miss AI interpretation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider interpretation behavior.
 - 2026-06-23: Completed T-179 by making AI vocabulary-explanation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider explanation behavior.
 - 2026-06-23: Completed T-178 by making AI turn-feedback requests reject unauthorized state-like extra fields before provider use while preserving fake-provider feedback behavior.
-- 2026-06-23: Completed T-177 by adding fake-provider regressions that distinguish AI content-draft envelope failures from world-pack payload failures while preserving nested payload field paths.
 
 Keep at most ten items here.

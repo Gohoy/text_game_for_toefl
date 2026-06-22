@@ -65,6 +65,37 @@ def test_renderer_keeps_parser_miss_retry_guidance_in_result_panel() -> None:
     assert output.count("Try a clearer sentence for") == 1
 
 
+def test_renderer_keeps_rejected_action_result_separate_from_ai_feedback() -> None:
+    console = Console(record=True, width=100, color_system=None)
+    renderer = Renderer(console)
+    result = TurnResult(
+        success=False,
+        message="You cannot go north from here.",
+        english_feedback=(
+            "Narration: AI narration for move.\n"
+            "Feedback: AI feedback: your sentence is clear, but the path is blocked.\n"
+            "Try: I go east to the microscope tent.\n"
+            "Vocabulary: Practiced: no target word."
+        ),
+    )
+
+    renderer.show_result(result)
+
+    output = console.export_text()
+    assert "Result" in output
+    assert "English Feedback" in output
+    assert output.index("You cannot go north from here.") < output.index(
+        "English Feedback"
+    )
+    assert output.index("Narration: AI narration for move.") > output.index(
+        "English Feedback"
+    )
+    assert output.index("Try: I go east to the microscope tent.") > output.index(
+        "English Feedback"
+    )
+    assert output.count("You cannot go north from here.") == 1
+
+
 def test_renderer_keeps_review_rejection_lines_in_result_panel() -> None:
     console = Console(record=True, width=100, color_system=None)
     renderer = Renderer(console)
