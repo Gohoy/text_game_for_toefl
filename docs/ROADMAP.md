@@ -21,27 +21,27 @@ Rules:
 
 ## Current Phase
 
-**Phase 1 — Stabilize an AI-centered Biology learning loop**
+**Phase 2 — AI language feedback reliability**
 
-The project already has a playable Biology CLI with movement, items, a three-step quest, deterministic combat, autosave, vocabulary sentence practice, XP, and AI-backed turn feedback through a required provider.
+Phase 1 exit criteria are satisfied as of 2026-06-22. The project has a playable Biology CLI with movement, items, a three-step quest, deterministic combat, autosave, vocabulary sentence practice, XP, and required AI-provider paths for player-facing narration, sentence feedback, vocabulary explanations, NPC dialogue, room narration, parser-miss interpretation, and structured content drafting.
 
-The current goal is to make AI-agent interaction a required core part of the Biology loop while preserving deterministic authority over game state, rewards, saves, and validation.
+The current goal is to improve language-feedback reliability while preserving deterministic authority over game state, rewards, saves, mastery, quest completion, combat, and validation.
 
 ## Phase 1 Exit Criteria
 
-Phase 1 is complete when:
+Phase 1 is complete. Exit evidence:
 
-- current Biology behavior is protected by characterization or integration tests
-- a required AI-agent interface exists for narration, sentence feedback, vocabulary explanations, and structured content drafts
-- missing AI-agent configuration fails clearly in player runtime paths
-- tests can use fake AI providers without network or paid API access
-- Biology world content loads from a validated JSON world pack
-- content references are checked deterministically
-- vocabulary mastery has an explicit persisted model
-- repeated identical actions cannot farm unlimited mastery rewards
-- at least one deterministic delayed-review flow exists
-- a new game can complete the Biology quest and review loop end to end
-- saves remain compatible or have an explicit schema migration
+- current Biology behavior is protected by characterization and end-to-end tests in `tests/test_biology_world_characterization.py`, `tests/test_biology_world_pack.py`, and `tests/test_biology_e2e.py`
+- the required AI-agent interface covers turn feedback, player sentence interpretation, NPC dialogue, room narration, vocabulary explanations, and structured content drafts in `src/toefl_rpg/ai/contract.py`
+- missing AI-agent configuration fails clearly in player runtime paths, with fake-provider test coverage in `tests/test_ai_contract.py`, `tests/test_rules.py`, and `tests/test_biology_e2e.py`
+- tests use `FakeAIProvider` and Codex CLI subprocess fakes without network or paid API access
+- Biology world content loads from the validated JSON world pack, with loader and schema coverage in `tests/test_world_loader.py`, `tests/test_world_schema.py`, and `tests/test_biology_world_pack.py`
+- content references are checked deterministically before runtime conversion
+- vocabulary mastery has an explicit persisted model and legacy-save defaults in `tests/test_storage.py`
+- duplicate response fingerprints prevent unlimited mastery and XP farming in `tests/test_mastery.py`
+- the `review` command provides a deterministic delayed-review flow
+- `tests/test_biology_e2e.py` completes the Biology quest, review loop, save, and reload path with a fake AI provider
+- saves remain compatible through explicit defaults for legacy saves without mastery data
 
 ## Current Capabilities
 
@@ -74,7 +74,7 @@ Phase 1 is complete when:
 
 ## Latest Player-Role Assessment
 
-2026-06-22 assessment: the current Biology quest is playable and now routes turn feedback, parser-miss interpretation, NPC dialogue, and room look narration through the AI-provider boundary. AI-generated world-pack drafts now have a deterministic schema-validation path, so the next useful work is consolidating phase status and preparing the next phase of language-feedback reliability work.
+2026-06-22 assessment: the current Biology quest is playable and routes turn feedback, parser-miss interpretation, NPC dialogue, room look narration, vocabulary explanations, and content drafting through the AI-provider boundary. AI-generated world-pack drafts have a deterministic schema-validation path. Phase 1 is closed; remaining work belongs in Phase 2 language-feedback reliability.
 
 Evidence from an in-memory playthrough:
 
@@ -88,7 +88,7 @@ Evidence from an in-memory playthrough:
 - AI-authored world-pack drafts must validate as `WorldPack` before they can be reviewed as usable content
 - verbose movement sentences such as `I go north to the fungus grove.` resolve through deterministic parsing
 
-Conclusion: continue with T-133 next. Biology startup now uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order, an end-to-end test protects quest completion plus review persistence, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences now resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
+Conclusion: proceed to Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order, an end-to-end test protects quest completion plus review persistence, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate. AI feedback is wired into the turn loop, while deterministic code remains the authority for state changes, content validation, and rewards.
 
 ## Required AI Direction
 
@@ -386,7 +386,7 @@ None.
 
 ### T-133 — Consolidate Phase 1 exit assessment
 
-- **State:** ready
+- **State:** done
 - **Priority:** P1
 - **Goal:** Check Phase 1 exit criteria against the implemented Biology loop and split any remaining unmet work into small Phase 2 tasks.
 - **Acceptance criteria:**
@@ -398,7 +398,7 @@ None.
 
 ### T-134 — Add language-feedback regression corpus
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P1
 - **Goal:** Start Phase 2 by capturing common learner sentence patterns and expected deterministic/AI-boundary behavior.
 - **Acceptance criteria:**
@@ -420,6 +420,18 @@ None.
 - **Verification:** AI contract tests, review engine tests, full suite.
 - **Dependencies:** T-133.
 
+### T-136 — Add AI feedback failure regression cases
+
+- **State:** planned
+- **Priority:** P1
+- **Goal:** Broaden regression coverage for malformed or unusable AI feedback across player-facing language paths.
+- **Acceptance criteria:**
+  - tests cover invalid turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration outputs
+  - each failure preserves deterministic state and reports a clear provider error
+  - fake providers are used; no live Codex CLI call is required
+- **Verification:** AI contract tests, engine tests, full suite.
+- **Dependencies:** T-134.
+
 ## Blocked Tasks
 
 None.
@@ -437,7 +449,7 @@ Use this format when needed:
 - **Next investigation:** One concrete next step.
 ```
 
-## Future Phases
+## Current Phase Focus
 
 ### Phase 2 — AI language feedback reliability
 
@@ -445,6 +457,8 @@ Use this format when needed:
 - separate deterministic action authority from AI coaching text
 - add regression corpora for common learner sentences
 - validate AI feedback shape and failure modes
+
+## Future Phases
 
 ### Phase 3 — Content authoring and import
 
@@ -466,6 +480,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-22: Completed T-133 by checking Phase 1 exit criteria against implemented Biology gameplay, AI-provider contracts, JSON world validation, mastery persistence, review flow, save compatibility, and the fake-provider end-to-end test suite; roadmap status now moves to Phase 2 language-feedback reliability.
 - 2026-06-22: Completed T-132 by adding `validate_world_pack_draft()` and `draft_world_pack()` for AI-authored world-pack drafts, reusing the deterministic `WorldPack` schema to reject unsupported draft types, missing references, duplicate IDs, and runtime-state fields before generated content can be used.
 - 2026-06-22: Completed T-131 by adding structured AI room narration requests and responses, routing `look` through the AI provider, validating narration before display, and preserving deterministic room, quest, XP, inventory, mastery, and save state.
 - 2026-06-22: Completed T-129 by adding structured AI NPC dialogue requests and responses, routing `talk to Dr. Lin` through the AI provider, validating dialogue before display, and preserving deterministic quest, XP, inventory, mastery, and save state.
@@ -475,6 +490,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-125 by adding an AI-backed `explain <word>` command for visible or practiced Biology vocabulary, validating requested words before provider calls, displaying structured explanations without state mutation, and preserving state on invalid AI output.
 - 2026-06-22: Completed T-130 by adding a fake-AI end-to-end Biology playthrough covering movement, vocabulary practice, due review completion, quest completion, combat, save, reload, and post-load status.
 - 2026-06-22: Completed T-123 by adding a deterministic review-due selector with an injected clock, stable due ordering, optional limiting, and regression coverage for unseen and malformed review records.
-- 2026-06-22: Completed T-122 by making mastery rewards fingerprint-based, suppressing duplicate sentence/word/context rewards, preserving no-reward repeats, and allowing the same word to earn again in a new deterministic context.
 
 Keep at most ten items here.
