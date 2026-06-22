@@ -60,6 +60,7 @@ Phase 1 is complete. Exit evidence:
 - AI interpretation fallback for parser misses, with deterministic validation of rooms, items, enemies, and rewards
 - malformed parser-miss AI interpretation responses are rejected with clear provider errors and state preservation
 - parser-miss AI interpretations with unauthorized extra fields are rejected before deterministic validation
+- parser-miss AI interpretation requests reject unauthorized extra state-like fields before reaching providers
 - AI-backed NPC dialogue grounded in room, quest, visible entity, and vocabulary context
 - mismatched AI NPC dialogue speakers are rejected before display while preserving deterministic state
 - empty AI NPC dialogue speaker and line fields are rejected while preserving deterministic state
@@ -1022,7 +1023,7 @@ None.
 
 ### T-180 — Add sentence-interpretation request strictness regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep parser-miss AI interpretation prompts bounded to visible deterministic context before they reach providers.
 - **Acceptance criteria:**
@@ -1034,7 +1035,7 @@ None.
 
 ### T-181 — Add NPC dialogue request strictness regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Keep NPC dialogue prompts bounded to visible deterministic context before they reach providers.
 - **Acceptance criteria:**
@@ -1043,6 +1044,18 @@ None.
   - tests do not require live Codex CLI
 - **Verification:** AI contract tests and full suite.
 - **Dependencies:** T-180.
+
+### T-182 — Add room narration request strictness regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep room narration prompts bounded to deterministic room context before they reach providers.
+- **Acceptance criteria:**
+  - room narration request models reject unauthorized extra fields such as XP, inventory, or quest completion flags
+  - existing fake-provider room narration behavior remains unchanged
+  - tests do not require live Codex CLI
+- **Verification:** AI contract tests and full suite.
+- **Dependencies:** T-181.
 
 ## Blocked Tasks
 
@@ -1092,6 +1105,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-180 by adding a regression that parser-miss AI interpretation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider interpretation behavior.
 - 2026-06-23: Completed T-179 by making AI vocabulary-explanation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider explanation behavior.
 - 2026-06-23: Completed T-178 by making AI turn-feedback requests reject unauthorized state-like extra fields before provider use while preserving fake-provider feedback behavior.
 - 2026-06-23: Completed T-177 by adding fake-provider regressions that distinguish AI content-draft envelope failures from world-pack payload failures while preserving nested payload field paths.
@@ -1101,6 +1115,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-173 by validating AI content-draft envelopes before payload acceptance and rejecting unauthorized mutation-like top-level fields.
 - 2026-06-22: Completed T-172 by adding a fake-provider regression that rejects AI review evaluations containing unauthorized mutation-like fields while preserving the active review word.
 - 2026-06-22: Completed T-171 by adding a fake-provider regression that rejects AI turn feedback containing unauthorized mutation-like fields and rolls back a state-changing collect action.
-- 2026-06-22: Completed T-170 by adding a fake-provider regression that rejects AI room narration containing unauthorized mutation-like fields before display while preserving deterministic state.
 
 Keep at most ten items here.

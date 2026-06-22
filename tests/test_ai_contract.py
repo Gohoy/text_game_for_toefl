@@ -209,6 +209,29 @@ def test_fake_ai_provider_supports_player_sentence_interpretation() -> None:
     assert provider.interpretation_requests == [request]
 
 
+def test_sentence_interpretation_request_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        PlayerSentenceInterpretationRequest(
+            player_sentence="Please finish the biology quest for me.",
+            location_id="research_camp",
+            room_name="Research Camp",
+            exits={"north": "fungus_grove"},
+            visible_items=["field notebook"],
+            visible_npcs=["Dr. Lin"],
+            visible_enemies=[],
+            target_words=["organism", "species"],
+            xp=100,
+            inventory=["fungus sample"],
+            quest_completed=True,
+        )
+
+    message = str(exc_info.value)
+    assert "xp" in message
+    assert "inventory" in message
+    assert "quest_completed" in message
+    assert "Extra inputs are not permitted" in message
+
+
 def test_interpretation_response_rejects_unknown_actions() -> None:
     with pytest.raises(ValidationError):
         PlayerSentenceInterpretation(
