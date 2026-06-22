@@ -72,6 +72,7 @@ Phase 1 is complete. Exit evidence:
 - AI world-pack draft validation through the deterministic `WorldPack` schema
 - empty AI world-pack draft title and room text are rejected by deterministic schema validation
 - AI content drafts with unauthorized top-level fields are rejected before generated content is accepted
+- AI world-pack draft payloads with unauthorized nested mutation-like fields are rejected by deterministic schema validation
 - deterministic placeholder English corrections retained only for tests/development
 - JSON autosave and load
 - versioned vocabulary mastery records in saves, with legacy-save defaults
@@ -121,6 +122,7 @@ Evidence from an in-memory playthrough:
 - AI-authored world-pack drafts must validate as `WorldPack` before they can be reviewed as usable content
 - AI-authored world-pack drafts with empty required title or room description text now raise clear validation errors before acceptance
 - AI-authored content drafts with unauthorized top-level fields now raise clear validation errors before payload acceptance
+- AI-authored world-pack payloads with nested mutation-like fields now raise clear validation errors before generated content is accepted
 - verbose movement sentences such as `I go north to the fungus grove.` resolve through deterministic parsing
 - a learner-sentence regression corpus now captures accepted, rejected, and ambiguous sentence patterns and verifies whether each route is handled by deterministic parsing or validated AI interpretation fallback
 - low-confidence and unknown AI interpretation corpus cases now preserve deterministic state and show retry guidance instead of mutating the world
@@ -943,7 +945,7 @@ None.
 
 ### T-174 — Add content draft payload mutation-field regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect the failure path when AI world-pack drafts include unauthorized mutation-like payload fields.
 - **Acceptance criteria:**
@@ -955,7 +957,7 @@ None.
 
 ### T-175 — Add Codex schema strictness coverage for content drafts
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Ensure Codex CLI structured-output schemas for content drafting stay strict after validation expansions.
 - **Acceptance criteria:**
@@ -963,7 +965,31 @@ None.
   - test uses subprocess fakes and does not require live Codex CLI
   - existing provider command behavior remains unchanged
 - **Verification:** Codex CLI provider tests and full suite.
-- **Dependencies:** T-173.
+- **Dependencies:** T-174.
+
+### T-176 — Add content draft request strictness regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep AI content-draft requests bounded to the documented prompt inputs before they reach providers.
+- **Acceptance criteria:**
+  - content-draft request models reject unauthorized extra fields such as player XP, inventory, or save paths
+  - existing fake-provider content draft behavior remains unchanged
+  - tests do not require live Codex CLI
+- **Verification:** AI contract tests and full suite.
+- **Dependencies:** T-175.
+
+### T-177 — Add content draft rejection message regression
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Keep invalid AI-authored world-pack draft failures clear enough for future in-game authoring tools.
+- **Acceptance criteria:**
+  - validation failures include whether the rejected layer is the content-draft envelope or the world-pack payload
+  - nested payload field paths remain visible in the raised error
+  - tests use fake providers and do not require live Codex CLI
+- **Verification:** AI content draft tests and full suite.
+- **Dependencies:** T-176.
 
 ## Blocked Tasks
 
@@ -1013,6 +1039,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-174 by adding AI content-draft and world-schema regressions that reject nested mutation-like payload fields before generated world content is accepted.
 - 2026-06-23: Completed T-173 by validating AI content-draft envelopes before payload acceptance and rejecting unauthorized mutation-like top-level fields.
 - 2026-06-22: Completed T-172 by adding a fake-provider regression that rejects AI review evaluations containing unauthorized mutation-like fields while preserving the active review word.
 - 2026-06-22: Completed T-171 by adding a fake-provider regression that rejects AI turn feedback containing unauthorized mutation-like fields and rolls back a state-changing collect action.
@@ -1022,6 +1049,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-167 by adding a fake-provider regression that rejects AI vocabulary explanations containing unauthorized mutation-like fields before display while preserving deterministic state.
 - 2026-06-22: Completed T-166 by adding strict review-evaluation judgment validation and a fake-provider regression that preserves the active review word on malformed boolean output.
 - 2026-06-22: Completed T-165 by adding a fake-provider regression that rejects malformed AI room narration vocabulary notes before display while preserving deterministic state.
-- 2026-06-22: Completed T-164 by adding a fake-provider regression that rejects malformed AI NPC dialogue vocabulary notes before display while preserving deterministic state.
 
 Keep at most ten items here.

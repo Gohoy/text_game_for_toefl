@@ -108,6 +108,32 @@ def test_draft_world_pack_rejects_extra_top_level_provider_fields() -> None:
     assert provider.content_requests == [request]
 
 
+def test_draft_world_pack_rejects_payload_mutation_fields() -> None:
+    class PayloadMutationDraftProvider(FakeAIProvider):
+        def draft_content(self, request):
+            self.content_requests.append(request)
+            payload = minimal_world_pack_data()
+            payload["rooms"][0]["inventory"] = ["field notebook"]
+            payload["quest_steps"][0]["reward_item"] = "lab pass"
+            return StructuredContentDraft(draft_type="world_pack", payload=payload)
+
+    provider = PayloadMutationDraftProvider()
+    request = ContentDraftRequest(
+        theme="biology",
+        required_words=["organism"],
+        purpose="world_pack",
+    )
+
+    with pytest.raises(ContentDraftValidationError) as excinfo:
+        draft_world_pack(provider, request)
+
+    message = str(excinfo.value)
+    assert "Invalid AI world_pack draft" in message
+    assert "inventory" in message
+    assert "reward_item" in message
+    assert provider.content_requests == [request]
+
+
 @pytest.mark.parametrize(
     ("empty_field", "expected_path"),
     [

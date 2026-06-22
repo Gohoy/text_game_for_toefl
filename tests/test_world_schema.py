@@ -161,3 +161,19 @@ def test_world_pack_rejects_runtime_state_fields() -> None:
         WorldPack.model_validate(data)
 
     assert "Extra inputs are not permitted" in str(exc_info.value)
+
+
+def test_world_pack_rejects_nested_runtime_mutation_fields() -> None:
+    data = minimal_world_pack_data()
+    data["rooms"][0]["inventory"] = ["field notebook"]
+    data["enemies"][0]["drops"] = ["fungus sample"]
+    data["quest_steps"][0]["reward_item"] = "lab pass"
+
+    with pytest.raises(ValidationError) as exc_info:
+        WorldPack.model_validate(data)
+
+    message = str(exc_info.value)
+    assert "rooms.0.inventory" in message
+    assert "enemies.0.drops" in message
+    assert "quest_steps.0.reward_item" in message
+    assert "Extra inputs are not permitted" in message
