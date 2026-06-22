@@ -32,6 +32,8 @@ class TurnFeedback(BaseModel):
 
 
 class VocabularyExplanationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     word: str = Field(min_length=1)
     theme: str = Field(min_length=1)
     learner_sentence: str = ""

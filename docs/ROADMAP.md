@@ -97,6 +97,7 @@ Phase 1 is complete. Exit evidence:
 - AI turn-feedback requests reject unauthorized extra state-like fields before reaching providers
 - empty AI vocabulary-explanation meaning, example, and memory-hint fields are rejected while preserving deterministic state
 - AI vocabulary explanations with unauthorized extra fields are rejected while preserving deterministic state
+- AI vocabulary-explanation requests reject unauthorized extra state-like fields before reaching providers
 - empty AI turn-feedback narration, feedback, and suggested-sentence fields are rejected with state rollback after state-changing actions
 - mismatched AI vocabulary explanation words are rejected before display while preserving deterministic state
 - external vocabulary importer
@@ -1009,7 +1010,7 @@ None.
 
 ### T-179 — Add vocabulary-explanation request strictness regression
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Keep vocabulary-explanation prompts bounded to learner sentence and theme context before they reach providers.
 - **Acceptance criteria:**
@@ -1021,7 +1022,7 @@ None.
 
 ### T-180 — Add sentence-interpretation request strictness regression
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Keep parser-miss AI interpretation prompts bounded to visible deterministic context before they reach providers.
 - **Acceptance criteria:**
@@ -1091,6 +1092,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-179 by making AI vocabulary-explanation requests reject unauthorized state-like extra fields before provider use while preserving fake-provider explanation behavior.
 - 2026-06-23: Completed T-178 by making AI turn-feedback requests reject unauthorized state-like extra fields before provider use while preserving fake-provider feedback behavior.
 - 2026-06-23: Completed T-177 by adding fake-provider regressions that distinguish AI content-draft envelope failures from world-pack payload failures while preserving nested payload field paths.
 - 2026-06-23: Completed T-176 by making AI content-draft requests reject unauthorized state-like extra fields before provider use while preserving fake-provider draft behavior.
@@ -1100,6 +1102,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-22: Completed T-172 by adding a fake-provider regression that rejects AI review evaluations containing unauthorized mutation-like fields while preserving the active review word.
 - 2026-06-22: Completed T-171 by adding a fake-provider regression that rejects AI turn feedback containing unauthorized mutation-like fields and rolls back a state-changing collect action.
 - 2026-06-22: Completed T-170 by adding a fake-provider regression that rejects AI room narration containing unauthorized mutation-like fields before display while preserving deterministic state.
-- 2026-06-22: Completed T-169 by adding a fake-provider regression that rejects AI NPC dialogue containing unauthorized mutation-like fields before display while preserving deterministic state.
 
 Keep at most ten items here.

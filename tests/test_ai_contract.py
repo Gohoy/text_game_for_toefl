@@ -99,6 +99,24 @@ def test_fake_ai_provider_supports_vocabulary_explanations() -> None:
     assert response.memory_hint
 
 
+def test_vocabulary_explanation_request_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        VocabularyExplanationRequest(
+            word="mimicry",
+            theme="biology",
+            learner_sentence="The creature uses mimicry.",
+            mastered=True,
+            xp=100,
+            inventory=["field notebook"],
+        )
+
+    message = str(exc_info.value)
+    assert "mastered" in message
+    assert "xp" in message
+    assert "inventory" in message
+    assert "Extra inputs are not permitted" in message
+
+
 def test_vocabulary_explanation_rejects_extra_state_mutation_fields() -> None:
     with pytest.raises(ValidationError):
         VocabularyExplanation(
