@@ -40,6 +40,27 @@ def record_learning_event(
     return record
 
 
+def record_rewardable_usage(
+    state: GameState,
+    word: str,
+    context_id: str,
+    sentence: str,
+) -> bool:
+    fingerprint = response_fingerprint(sentence, word, context_id)
+    record = state.vocabulary_mastery.setdefault(word, VocabularyMastery(word=word))
+    if fingerprint in record.recent_response_fingerprints:
+        return False
+
+    record_learning_event(
+        state,
+        LearningEvent.USAGE_CORRECT,
+        word,
+        context_id,
+        fingerprint,
+    )
+    return True
+
+
 def record_room_encounter(state: GameState) -> None:
     context_id = room_context_id(state.current_room_id)
     for word in state.current_room.target_words:

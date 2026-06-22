@@ -1,6 +1,7 @@
 from toefl_rpg.content.sample_world import build_biology_realm
 from toefl_rpg.engine.mastery import LearningEvent
 from toefl_rpg.engine.mastery import record_learning_event
+from toefl_rpg.engine.mastery import record_rewardable_usage
 from toefl_rpg.engine.mastery import response_fingerprint
 from toefl_rpg.engine.rules import GameEngine
 from toefl_rpg.engine.state import GameState
@@ -53,6 +54,43 @@ def test_learning_events_have_distinct_deterministic_effects() -> None:
     ]
 
 
+def test_rewardable_usage_suppresses_duplicate_fingerprint() -> None:
+    state = GameState(
+        world=build_biology_realm(),
+        current_room_id="research_camp",
+    )
+
+    first = record_rewardable_usage(
+        state,
+        "organism",
+        "room:research_camp",
+        "The organism can evolve.",
+    )
+    duplicate = record_rewardable_usage(
+        state,
+        "organism",
+        "room:research_camp",
+        "The organism can evolve.",
+    )
+    new_context = record_rewardable_usage(
+        state,
+        "organism",
+        "quest:biology:explain_organism",
+        "The organism can evolve.",
+    )
+
+    record = state.vocabulary_mastery["organism"]
+    assert first is True
+    assert duplicate is False
+    assert new_context is True
+    assert record.correct_use_count == 2
+    assert record.mastery_points == 2
+    assert record.distinct_context_ids == {
+        "room:research_camp",
+        "quest:biology:explain_organism",
+    }
+
+
 def test_new_game_and_movement_record_room_encounters_without_xp() -> None:
     engine = new_test_engine()
 
@@ -85,6 +123,42 @@ def test_correct_contextual_use_updates_mastery_record() -> None:
     assert fungus.mastery_points == 1
     assert vital.correct_use_count == 1
     assert vital.mastery_points == 1
+
+
+def test_duplicate_contextual_sentence_does_not_award_again() -> None:
+    engine = new_test_engine()
+    engine.handle("go north")
+
+    first_result = engine.handle("The fungus is vital for the old forest.")
+    xp_after_first = engine.state.player.xp
+    duplicate_result = engine.handle("The fungus is vital for the old forest.")
+
+    fungus = engine.state.vocabulary_mastery["fungus"]
+    assert first_result.success
+    assert duplicate_result.success
+    assert xp_after_first == 16
+    assert engine.state.player.xp == xp_after_first
+    assert fungus.correct_use_count == 1
+    assert fungus.mastery_points == 1
+
+
+def test_same_word_can_be_rewarded_in_a_new_context() -> None:
+    engine = new_test_engine()
+    engine.handle("go north")
+
+    sentence_result = engine.handle("The fungus is vital for the old forest.")
+    collect_result = engine.handle("I want to collect the fungus sample")
+
+    fungus = engine.state.vocabulary_mastery["fungus"]
+    assert sentence_result.success
+    assert collect_result.success
+    assert engine.state.player.xp == 31
+    assert fungus.correct_use_count == 2
+    assert fungus.mastery_points == 2
+    assert {
+        "room:fungus_grove",
+        "collect:fungus_sample",
+    } <= fungus.distinct_context_ids
 
 
 def test_incorrect_contextual_attempt_updates_mastery_without_reward() -> None:

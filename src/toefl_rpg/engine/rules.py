@@ -10,6 +10,7 @@ from toefl_rpg.content.schema import World
 from toefl_rpg.engine.combat import PLAYER_ATTACK, PLAYER_DEFENSE, calculate_damage
 from toefl_rpg.engine.mastery import LearningEvent
 from toefl_rpg.engine.mastery import record_learning_event
+from toefl_rpg.engine.mastery import record_rewardable_usage
 from toefl_rpg.engine.mastery import record_room_encounter
 from toefl_rpg.engine.mastery import response_fingerprint
 from toefl_rpg.engine.mastery import room_context_id
@@ -180,7 +181,11 @@ class GameEngine:
             return TurnResult(False, f"You do not see {target} here.", feedback)
 
         if matched_word in self.state.world.core_words:
-            gained_xp = self._practice_words([matched_word], 5)
+            gained_xp = self._practice_words(
+                [matched_word],
+                5,
+                context_id=self._context_id("inspect", matched_word),
+            )
             xp_text = f" XP +{gained_xp}." if gained_xp else " You already practiced this word."
             return TurnResult(
                 True,
@@ -199,7 +204,11 @@ class GameEngine:
         room.items.remove(item)
         self.state.player.inventory.append(item)
         practiced = self._core_words_in_text(item)
-        gained_xp = self._practice_words(practiced, 5)
+        gained_xp = self._practice_words(
+            practiced,
+            5,
+            context_id=self._context_id("collect", item),
+        )
         practice_text = (
             f" Practiced words: {', '.join(practiced)}. XP +{gained_xp}."
             if practiced and gained_xp
@@ -228,7 +237,11 @@ class GameEngine:
                     feedback,
                 )
             words = ["microscope", "bacteria", "strain"]
-            gained_xp = self._practice_words(words, 5)
+            gained_xp = self._practice_words(
+                words,
+                5,
+                context_id="quest:biology_investigation:analyze_fungus_sample",
+            )
             quest_text = self._complete_task(ANALYZE_FUNGUS_SAMPLE)
             return TurnResult(
                 True,
@@ -279,7 +292,11 @@ class GameEngine:
         if current_hp == 0:
             self.state.defeated_enemies.add(enemy_id)
             self.state.player.xp += enemy.xp
-            vocab_xp = self._practice_words(enemy.target_words, 5)
+            vocab_xp = self._practice_words(
+                enemy.target_words,
+                5,
+                context_id=f"combat:{enemy_id}",
+            )
             quest_text = ""
             if enemy_id == "invasive_vine":
                 quest_text = self._complete_task(CLEAR_INVASIVE_VINE)
@@ -329,18 +346,23 @@ class GameEngine:
                 return candidate
         return ""
 
-    def _practice_words(self, words: list[str], xp_each: int) -> int:
+    def _practice_words(
+        self,
+        words: list[str],
+        xp_each: int,
+        context_id: str,
+        sentence: str = "",
+    ) -> int:
         gained_xp = 0
-        context_id = room_context_id(self.state.current_room_id)
+        reward_sentence = sentence or context_id
         for word in words:
-            if word in self.state.mastered_words:
-                continue
-            record_learning_event(
+            if not record_rewardable_usage(
                 self.state,
-                LearningEvent.USAGE_CORRECT,
                 word,
                 context_id,
-            )
+                reward_sentence,
+            ):
+                continue
             self.state.mastered_words.add(word)
             self.state.player.xp += xp_each
             gained_xp += xp_each
@@ -361,7 +383,12 @@ class GameEngine:
             self._record_incorrect_practice(text, practiced)
             return None
 
-        gained_xp = self._practice_words(contextual_words, 8)
+        gained_xp = self._practice_words(
+            contextual_words,
+            8,
+            context_id=room_context_id(self.state.current_room_id),
+            sentence=text,
+        )
         words_text = ", ".join(contextual_words)
         if gained_xp:
             return TurnResult(
@@ -408,3 +435,7 @@ class GameEngine:
                 context_id,
                 response_fingerprint(text, word, context_id),
             )
+
+    def _context_id(self, kind: str, value: str) -> str:
+        stable_value = value.lower().replace(" ", "_")
+        return f"{kind}:{stable_value}"

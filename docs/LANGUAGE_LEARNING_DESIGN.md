@@ -38,7 +38,7 @@ distinct_context_ids
 recent_response_fingerprints
 ```
 
-Implemented status: saves now include a versioned `mastery` block with these fields for each persisted word, and legacy saves without the block load safe default records from the previous practiced-word set. Deterministic learning events now update records for room encounters, correct practice, and incorrect wrong-context attempts; anti-farming and delayed review remain follow-up work.
+Implemented status: saves now include a versioned `mastery` block with these fields for each persisted word, and legacy saves without the block load safe default records from the previous practiced-word set. Deterministic learning events now update records for room encounters, correct practice, and incorrect wrong-context attempts. Duplicate response fingerprints suppress repeat rewards, while a new deterministic context can still earn; delayed review remains follow-up work.
 
 Recommended derived statuses:
 
