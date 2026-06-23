@@ -89,6 +89,18 @@ Each entry should stay short and include:
 | Regression coverage | `tests/test_app.py::test_save_path_from_env_defaults_to_normal_slot`, `tests/test_app.py::test_save_path_from_env_uses_configured_path`, the fake-provider smoke command in `docs/QUALITY_GATES.md`, and the live Codex smoke command in `README.md`. |
 | Proactive check | Any new smoke command or automated playtest should set `TOEFL_RPG_SAVE_PATH` to a temporary path unless it is explicitly testing the normal player save slot. |
 
+### DBG-006 - World-Pack Schema-Reference Validation
+
+| Field | Value |
+| --- | --- |
+| Failure signature | A schema-reference failure occurs when a world pack references a missing room, exit target, item, enemy, quest step, or item description key. |
+| Observed player symptom | The player may hit a broken exit, unreachable quest step, missing inspection fact, invisible item, or runtime content error after AI-drafted or hand-authored content is accepted. |
+| Deterministic owner | `WorldPack` schema validation, content loading, and runtime world conversion. |
+| AI boundary | AI may draft world-pack content, but it cannot make content accepted or authoritative. Code validates every accepted room, exit, item, enemy, quest, and item-description reference. |
+| Verified fix | World-pack validation rejects missing start rooms, exit targets, room items, item-description keys, enemies, and quest-step IDs before runtime conversion or AI-drafted content acceptance. |
+| Regression coverage | `tests/test_world_schema.py` reference-validation cases, `tests/test_world_loader.py::test_load_world_pack_schema_error_includes_path_and_field`, `tests/test_biology_world_pack.py`, and `tests/test_ai_content_drafts.py::test_validate_world_pack_draft_rejects_invalid_references`. |
+| Proactive check | Any generated or hand-authored world pack must pass schema/content validation before play; new reference types should add schema tests before they are used by quests, rendering, or AI narration. |
+
 ## Maintenance Rules
 
 - Add entries only for failures observed in playtests, smoke runs, tests, or user reports.
