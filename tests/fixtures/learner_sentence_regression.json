@@ -222,6 +222,20 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "broad_conversation_request_rejected",
+    "category": "rejected",
+    "route": "deterministic_parser",
+    "setup_commands": [],
+    "sentence": "Please talk to someone.",
+    "expected_parser": {
+      "action": "talk",
+      "target": "someone"
+    },
+    "expected_success": false,
+    "expected_message_contains": "someone is not here.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",

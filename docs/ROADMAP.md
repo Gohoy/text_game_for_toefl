@@ -119,6 +119,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers overly broad location requests routed through AI fallback with no state mutation
 - learner sentence corpus covers ambiguous enemy references rejected by deterministic combat without state mutation
 - learner sentence corpus covers broad tool-use requests rejected by deterministic item validation without state mutation
+- learner sentence corpus covers broad conversation requests rejected by deterministic NPC validation without state mutation
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1439,7 +1440,7 @@ None.
 
 ### T-211 — Add learner sentence corpus case for broad conversation requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "talk to someone" route when deterministic dialogue requires a concrete visible NPC.
 - **Acceptance criteria:**
@@ -1452,7 +1453,7 @@ None.
 
 ### T-212 — Add review answer corpus case for list-like target-word fragments
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner provides a list-like fragment instead of a sentence that demonstrates the active word.
 - **Acceptance criteria:**
@@ -1524,6 +1525,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-211 by adding a learner-sentence corpus regression for broad conversation requests that deterministic NPC validation rejects without state mutation.
 - 2026-06-23: Completed T-210 by adding a review-answer corpus regression for negated fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-209 by adding a learner-sentence corpus regression for broad tool-use requests that deterministic item validation rejects without state mutation.
 - 2026-06-23: Completed T-208 by adding a learner-sentence corpus regression for ambiguous enemy references that deterministic combat rejects without state mutation.
@@ -1533,6 +1535,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-204 by adding a learner-sentence corpus regression for self-correction phrasing that routes through AI interpretation and deterministic collect validation.
 - 2026-06-23: Completed T-203 by adding a review-answer corpus regression for vague grammatical fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-202 by adding a learner-sentence corpus regression for a compound movement-plus-collection request that executes only the deterministic movement and leaves the item uncollected.
-- 2026-06-23: Completed T-201 by adding a learner-sentence corpus regression for pronoun-like item references such as `Could you get it for Dr. Lin?`, routed through AI interpretation and deterministic collect validation.
 
 Keep at most ten items here.
