@@ -566,6 +566,23 @@ def test_learner_sentence_corpus_covers_indirect_help_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_hint_requests() -> None:
+    indirect_hint_cases = [
+        case
+        for case in load_corpus()
+        if "give me a hint" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "help"
+        for case in indirect_hint_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_prerequisite_reminders() -> None:
     prerequisite_cases = [
         case
