@@ -381,6 +381,23 @@ def test_learner_sentence_corpus_covers_broad_status_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_recap_requests() -> None:
+    indirect_recap_cases = [
+        case
+        for case in load_corpus()
+        if "summarize what happened" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "status"
+        for case in indirect_recap_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_status_comparisons() -> None:
     indirect_status_cases = [
         case
