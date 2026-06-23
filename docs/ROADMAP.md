@@ -149,6 +149,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers source-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers spelling-bee-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers practice-schedule-only target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers e-learning-only target use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -275,6 +276,7 @@ Evidence from an in-memory playthrough:
 - study-app-only review answers such as saying `fungus` belongs in a TOEFL study-app now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - language-app-only review answers such as saying `fungus` belongs in a TOEFL language app now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - learning-platform-only review answers such as saying `fungus` belongs on a TOEFL learning platform now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
+- e-learning-only review answers such as saying `fungus` belongs in a TOEFL e-learning tool now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - indirect goal-reminder requests such as `What should I accomplish next?` now route through validated AI interpretation to deterministic status, preserving state while surfacing the next Biology Investigation objective
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - indirect next-word requests such as `Which vocabulary word comes next?` now route through validated AI interpretation to deterministic help, preserving state while avoiding practice credit
@@ -2637,7 +2639,7 @@ None.
 
 ### T-301 — Add review answer corpus case for e-learning-only target use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says the active word belongs in a TOEFL e-learning tool but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2646,6 +2648,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-300.
+
+### T-302 — Add TOEFL RPG playtest debug protocol
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Adapt the copied OpenGame Debug Skill idea into a local protocol for recurring TOEFL CLI playtest failures.
+- **Acceptance criteria:**
+  - protocol stores failure signature, observed player symptom, deterministic owner, AI boundary, verified fix, and regression coverage
+  - includes seed entries for the vial-liquid inspection fix, parser-miss state preservation, review-answer false positives, and AI response schema failures
+  - no OpenGame runtime dependency, Node tooling, browser-game scaffold, asset pipeline, or new API-key requirement is introduced
+- **Verification:** documentation consistency check and full suite if implementation files are touched.
+- **Dependencies:** T-301.
 
 ### T-274 — Add deterministic item inspection descriptions
 
