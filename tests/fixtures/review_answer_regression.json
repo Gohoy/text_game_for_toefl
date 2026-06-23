@@ -278,6 +278,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_visual_form_only_target_use",
+    "category": "rejected",
+    "sentence": "The word fungus looks short and balanced on the page.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence comments on how fungus looks on the page but does not show its Biology meaning.",
+      "suggested_sentence": "A fungus can break down dead leaves and absorb nutrients."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_etymology_only_target_use",
     "category": "rejected",
     "sentence": "The origin of fungus is interesting to study.",
