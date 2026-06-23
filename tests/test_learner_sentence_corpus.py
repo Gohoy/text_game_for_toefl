@@ -1422,6 +1422,22 @@ def test_review_answer_corpus_covers_glossary_only_target_use() -> None:
     )
 
 
+def test_review_answer_corpus_covers_synonym_list_only_target_use() -> None:
+    synonym_list_only_cases = [
+        case
+        for case in load_review_corpus()
+        if "toefl synonym list" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["expected_ai_evaluation"] is True
+        and case["expected_active_review_word"] == "fungus"
+        and case["expected_xp"] == 16
+        for case in synonym_list_only_cases
+    )
+
+
 def test_review_answer_corpus_covers_unsupported_certainty_claims() -> None:
     unsupported_certainty_cases = [
         case
