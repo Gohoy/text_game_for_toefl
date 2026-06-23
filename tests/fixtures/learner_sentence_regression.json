@@ -315,6 +315,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_help_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "What can I do now?",
+    "ai_interpretation": {
+      "action": "help",
+      "target": "",
+      "confidence": 0.77,
+      "reason": "The learner is asking for available commands or next actions."
+    },
+    "expected_success": true,
+    "expected_message_contains": "Try full sentences:",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",
