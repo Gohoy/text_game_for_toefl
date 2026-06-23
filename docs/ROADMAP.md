@@ -271,6 +271,7 @@ Evidence from an in-memory playthrough:
 - hangman-only review answers such as saying `fungus` belongs in a TOEFL hangman game now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - vocabulary-game-only review answers such as saying `fungus` belongs in a TOEFL vocabulary game now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - word-puzzle-only review answers such as saying `fungus` belongs in a TOEFL word puzzle now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
+- vocabulary-app-only review answers such as saying `fungus` belongs in a TOEFL vocabulary app now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - indirect goal-reminder requests such as `What should I accomplish next?` now route through validated AI interpretation to deterministic status, preserving state while surfacing the next Biology Investigation objective
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - indirect next-word requests such as `Which vocabulary word comes next?` now route through validated AI interpretation to deterministic help, preserving state while avoiding practice credit
@@ -2585,7 +2586,7 @@ None.
 
 ### T-297 — Add review answer corpus case for vocabulary-app-only target use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says the active word belongs in a vocabulary app but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2594,6 +2595,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-296.
+
+### T-298 — Add review answer corpus case for study-app-only target use
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner says the active word belongs in a TOEFL study app but does not show its Biology meaning, role, property, or consequence.
+- **Acceptance criteria:**
+  - review corpus includes at least one study-app-only sentence containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-297.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -2656,6 +2669,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-297 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL vocabulary app.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-296 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL word puzzle.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-295 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL vocabulary game.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-294 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL hangman game.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
@@ -2665,6 +2679,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-290 by adding a review-answer corpus regression for `Fungus helps my TOEFL mnemonic.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-289 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL synonym list.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-288 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL glossary.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-23: Completed T-287 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL word bank.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.
