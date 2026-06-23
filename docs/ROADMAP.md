@@ -252,6 +252,7 @@ Evidence from an in-memory playthrough:
 - answer-label review answers such as calling `fungus` the correct review answer now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - exam-context-only review answers such as saying `fungus` may appear in a difficult TOEFL exam question now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - reading-skill-only review answers such as saying `fungus` can improve TOEFL reading skill now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
+- dictionary-skill-only review answers such as saying the learner can find `fungus` in a TOEFL dictionary now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - indirect goal-reminder requests such as `What should I accomplish next?` now route through validated AI interpretation to deterministic status, preserving state while surfacing the next Biology Investigation objective
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - indirect next-word requests such as `Which vocabulary word comes next?` now route through validated AI interpretation to deterministic help, preserving state while avoiding practice credit
@@ -2361,7 +2362,7 @@ None.
 
 ### T-280 — Add review answer corpus case for dictionary-skill-only target use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says the active word helps dictionary lookup or vocabulary study but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2373,7 +2374,7 @@ None.
 
 ### T-281 — Add learner sentence corpus case for indirect review-readiness requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner questions such as "Am I ready for a review?" route when the response should use deterministic status, help, or review availability without mutating mastery state.
 - **Acceptance criteria:**
@@ -2394,6 +2395,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-281.
+
+### T-283 — Add review answer corpus case for study-list-only target use
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner says the active word belongs on a study list but does not show its Biology meaning, role, property, or consequence.
+- **Acceptance criteria:**
+  - review corpus includes at least one study-list-only sentence containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-282.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -2456,6 +2469,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-280 by adding a review-answer corpus regression for `I can find fungus quickly in a TOEFL dictionary.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-279 by adding a review-answer corpus regression for `Fungus can improve my TOEFL reading skill.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-278 by adding a learner-sentence corpus regression for `Which vocabulary word comes next?`, routed through AI interpretation to deterministic help with no practice credit or state mutation.
 - 2026-06-23: Completed T-277 by adding a review-answer corpus regression for `Fungus may appear in future TOEFL biology passages.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
@@ -2465,6 +2479,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-274 by adding deterministic world-pack item descriptions, validation for item-description references, and vaccine vial inspection text that reports visible clear liquid contents.
 - 2026-06-23: Completed T-270 by adding a review-answer corpus regression for `Fungus is different from bacteria as a vocabulary word.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-269 by adding a learner-sentence corpus regression for `How do I get back to camp?`, routed through AI interpretation to deterministic room narration with Fungus Grove exit grounding and no automatic movement.
-- 2026-06-23: Completed T-268 by adding a review-answer corpus regression for `I feel confident about fungus now.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.
