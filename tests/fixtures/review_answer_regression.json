@@ -358,6 +358,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_confidence_only_target_use",
+    "category": "rejected",
+    "sentence": "I feel confident about fungus now.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence says the learner feels confident about fungus but does not show its Biology meaning.",
+      "suggested_sentence": "A fungus can decompose dead wood and absorb nutrients from it."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_unsupported_certainty_claim",
     "category": "rejected",
     "sentence": "I definitely understand fungus completely now.",
