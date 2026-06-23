@@ -101,6 +101,18 @@ Each entry should stay short and include:
 | Regression coverage | `tests/test_world_schema.py` reference-validation cases, `tests/test_world_loader.py::test_load_world_pack_schema_error_includes_path_and_field`, `tests/test_biology_world_pack.py`, and `tests/test_ai_content_drafts.py::test_validate_world_pack_draft_rejects_invalid_references`. |
 | Proactive check | Any generated or hand-authored world pack must pass schema/content validation before play; new reference types should add schema tests before they are used by quests, rendering, or AI narration. |
 
+### DBG-007 - Renderer Output Ambiguity
+
+| Field | Value |
+| --- | --- |
+| Failure signature | Deterministic results, retry messages, rewards, or errors render next to AI narration and coaching in a way that makes the source of authority unclear. |
+| Observed player symptom | The player may confuse AI advice with a code-owned reward, retry state, blocked action, or review result. |
+| Deterministic owner | CLI renderer labels, panel boundaries, and plain-console fallback output. |
+| AI boundary | AI may provide narration, feedback, suggested sentences, and vocabulary notes, but it cannot decide whether an action succeeded, XP was awarded, a review remains active, or an error occurred. |
+| Verified fix | Result output and English feedback render in separate labeled sections. Review rejection advice and retry summaries remain in the deterministic result panel, vocabulary explanations render without an empty feedback panel, and plain-console output keeps explicit labels. |
+| Regression coverage | `tests/test_renderer.py::test_renderer_shows_result_and_english_feedback_as_separate_panels`, `tests/test_renderer.py::test_plain_console_result_and_feedback_keep_separate_labels`, `tests/test_renderer.py::test_renderer_keeps_parser_miss_retry_guidance_in_result_panel`, `tests/test_renderer.py::test_renderer_keeps_rejected_action_result_separate_from_ai_feedback`, `tests/test_renderer.py::test_renderer_keeps_review_rejection_lines_in_result_panel`, and `tests/test_renderer.py::test_renderer_keeps_vocabulary_explanation_in_result_without_feedback_panel`. |
+| Proactive check | Any renderer, review-message, parser-miss, or AI-feedback change should assert deterministic result text appears before and outside the English feedback section. |
+
 ## Maintenance Rules
 
 - Add entries only for failures observed in playtests, smoke runs, tests, or user reports.

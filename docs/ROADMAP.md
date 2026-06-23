@@ -153,6 +153,7 @@ Phase 1 is complete. Exit evidence:
 - TOEFL RPG playtest debug protocol records recurring failure signatures, deterministic owners, AI boundaries, verified fixes, regression coverage, and proactive checks without adding OpenGame runtime dependencies
 - playtest debug protocol records save-path churn risk so smoke runs and manual playtests keep using isolated `TOEFL_RPG_SAVE_PATH` files instead of the normal player save slot
 - playtest debug protocol records schema-reference failure risk so missing room, exit, quest, item, enemy, or item-description IDs remain deterministic content-validation failures
+- playtest debug protocol records renderer-output ambiguity risk so deterministic results, rewards, retries, and errors stay visually separate from AI coaching
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -2702,7 +2703,7 @@ None.
 
 ### T-306 — Add renderer-output ambiguity seed entry to playtest debug protocol
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Record the recurring risk that deterministic results and AI coaching render together ambiguously, making rewards, retries, or errors hard to distinguish.
 - **Acceptance criteria:**
@@ -2773,6 +2774,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-306 by adding a renderer-output ambiguity seed entry to `docs/PLAYTEST_DEBUG_PROTOCOL.md`, documenting renderer ownership, AI display-only boundaries, and renderer regression coverage for result/feedback separation.
 - 2026-06-24: Completed T-305 by adding a schema-reference failure seed entry to `docs/PLAYTEST_DEBUG_PROTOCOL.md`, documenting deterministic world-pack validation ownership and schema/content test coverage.
 - 2026-06-24: Completed T-304 by adding a save-path churn seed entry to `docs/PLAYTEST_DEBUG_PROTOCOL.md`, documenting temporary `TOEFL_RPG_SAVE_PATH` use and related app/smoke coverage.
 - 2026-06-24: Completed T-303 by linking `docs/PLAYTEST_DEBUG_PROTOCOL.md` from the automation runbook and limiting protocol updates to observed, verified player-facing failures.
