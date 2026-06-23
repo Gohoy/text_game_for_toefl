@@ -413,6 +413,22 @@ def test_learner_sentence_corpus_covers_indirect_quest_progress() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_goal_reminders() -> None:
+    indirect_goal_reminder_cases = [
+        case
+        for case in load_corpus()
+        if "accomplish next" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        for case in indirect_goal_reminder_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_enemy_warnings() -> None:
     indirect_enemy_warning_cases = [
         case

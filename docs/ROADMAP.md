@@ -144,6 +144,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers broad status requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect status-comparison requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect quest-progress requests routed through AI interpretation to deterministic status with no state mutation
+- learner sentence corpus covers indirect goal-reminder requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect enemy-warning requests routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation
 - learner sentence corpus covers indirect help requests routed through AI interpretation to deterministic help with no state mutation
 - learner sentence corpus covers indirect vocabulary-reminder requests routed through AI interpretation to deterministic help with no state mutation
@@ -172,6 +173,8 @@ Phase 1 is complete. Exit evidence:
 ## Latest Player-Role Assessment
 
 2026-06-22 assessment: the current Biology quest is playable and routes turn feedback, parser-miss interpretation, NPC dialogue, room look narration, vocabulary explanations, and content drafting through the AI-provider boundary. AI-generated world-pack drafts have a deterministic schema-validation path. Phase 1 is closed; remaining work belongs in Phase 2 language-feedback reliability.
+
+2026-06-23 playtest update: direct Biology actions remain playable in memory with a fake AI provider, but indirect metacognitive requests still need explicit corpus coverage so the AI can map them to deterministic status/help/look actions without mutation.
 
 Evidence from an in-memory playthrough:
 
@@ -215,6 +218,7 @@ Evidence from an in-memory playthrough:
 - duplicate review answers now skip AI review evaluation before returning the distinct duplicate message
 - synonym-heavy review answers such as defining `fungus` as a harmless animal now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - location-only review answers such as placing `fungus` near a research tent now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
+- indirect goal-reminder requests such as `What should I accomplish next?` now route through validated AI interpretation to deterministic status, preserving state while surfacing the next Biology Investigation objective
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
 - empty turn-feedback required fields now have regression coverage proving validation failures roll back state-changing actions
@@ -1916,7 +1920,7 @@ None.
 
 ### T-246 — Add learner sentence corpus case for indirect goal reminder requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "what should I accomplish next" route when the answer can be given through deterministic status or help without mutating state.
 - **Acceptance criteria:**
@@ -1926,6 +1930,44 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-245.
+
+### T-247 — Add learner sentence corpus case for prerequisite reminders
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "what do I need before using the microscope" route when the answer can be given through deterministic help, status, or room narration without mutating state.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect prerequisite-reminder sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-246.
+
+### T-248 — Add learner sentence corpus case for strategy advice requests
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "how should I deal with the vine" route when the answer should advise through deterministic help, status, or room narration instead of performing combat.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect strategy-advice sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-247.
+
+### T-249 — Add review answer corpus case for category-label target use
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner names the broad category of the active word but does not show its Biology meaning, role, property, or consequence.
+- **Acceptance criteria:**
+  - review corpus includes at least one category-label answer containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-248.
 
 ## Blocked Tasks
 
