@@ -702,6 +702,23 @@ def test_learner_sentence_corpus_covers_indirect_explanation_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_polite_definition_requests() -> None:
+    polite_definition_cases = [
+        case
+        for case in load_corpus()
+        if "define organism" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "deterministic_parser"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["expected_parser"]["action"] == "explain"
+        for case in polite_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_look_requests() -> None:
     indirect_look_cases = [
         case
