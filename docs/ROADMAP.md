@@ -146,6 +146,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect review requests routed through AI interpretation to deterministic review handling with no state mutation when no words are due
 - learner sentence corpus covers indirect vocabulary explanation requests routed through AI interpretation to deterministic explanation with no state mutation
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
+- learner sentence corpus covers indirect repeat-room narration requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect save-exit requests routed through AI interpretation to deterministic quit handling with no state mutation
 - learner sentence corpus covers indirect NPC dialogue requests routed through AI interpretation to deterministic talk validation with no state mutation
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
@@ -1834,7 +1835,7 @@ None.
 
 ### T-240 — Add learner sentence corpus case for indirect repeat-room narration requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "remind me where I am" route when the answer can be given through deterministic look handling and AI room narration.
 - **Acceptance criteria:**
@@ -1847,7 +1848,7 @@ None.
 
 ### T-241 — Add review answer corpus case for location-only target-word use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner places the active word in a location but does not show a biological role, property, or consequence.
 - **Acceptance criteria:**
@@ -1856,6 +1857,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-240.
+
+### T-242 — Add learner sentence corpus case for indirect enemy-warning requests
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "what danger is nearby" route when the current room has no live enemy versus when combat validation is required.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect enemy-warning-style sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-241.
 
 ## Blocked Tasks
 
@@ -1905,6 +1919,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-240 by adding a learner-sentence corpus regression for `Please remind me where I am.`, routed through AI interpretation to deterministic room narration without state mutation.
 - 2026-06-23: Completed T-239 by adding a review-answer corpus regression for `I definitely understand fungus completely now.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-238 by adding a learner-sentence corpus regression for `I am done for now.`, routed through AI interpretation to deterministic quit handling with explicit `should_quit` and no state mutation.
 - 2026-06-23: Completed T-237 by adding a review-answer corpus regression for `A fungus exists in the forest today.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
@@ -1914,6 +1929,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-233 by adding a learner-sentence corpus regression for `What am I carrying right now?`, routed through AI interpretation to deterministic inventory display without state mutation.
 - 2026-06-23: Completed T-232 by adding a learner-sentence corpus regression for `Am I ready to continue?`, routed through AI interpretation to deterministic status without state mutation.
 - 2026-06-23: Completed T-231 by adding a review-answer corpus regression for `A fungus makes me feel amazed and nervous.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-23: Completed T-229 by adding a learner-sentence corpus regression for `What is around me?`, routed through AI interpretation to deterministic room narration without state mutation.
 
 Keep at most ten items here.

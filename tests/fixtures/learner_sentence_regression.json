@@ -448,6 +448,24 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_repeat_room_narration_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "Please remind me where I am.",
+    "ai_interpretation": {
+      "action": "look",
+      "target": "",
+      "confidence": 0.83,
+      "reason": "The learner is asking to hear the current room description again."
+    },
+    "expected_success": true,
+    "expected_message_contains": "AI room narration for Fungus Grove.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "indirect_npc_dialogue_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

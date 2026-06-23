@@ -494,6 +494,23 @@ def test_learner_sentence_corpus_covers_indirect_look_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_repeat_room_narration() -> None:
+    repeat_room_cases = [
+        case
+        for case in load_corpus()
+        if "where i am" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and "AI room narration for Fungus Grove." in case["expected_message_contains"]
+        for case in repeat_room_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_npc_dialogue_requests() -> None:
     indirect_dialogue_cases = [
         case
