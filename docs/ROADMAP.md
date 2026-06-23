@@ -147,6 +147,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers memorization-method-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers etymology-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers source-only target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers practice-schedule-only target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -258,6 +259,7 @@ Evidence from an in-memory playthrough:
 - study-list-only review answers such as saying `fungus` is a TOEFL study-list entry now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - flashcard-deck-only review answers such as saying `fungus` belongs in a TOEFL flashcard deck now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - quiz-prep-only review answers such as saying `fungus` helps TOEFL quiz preparation now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
+- practice-schedule-only review answers such as saying `fungus` belongs in a TOEFL practice schedule now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - indirect goal-reminder requests such as `What should I accomplish next?` now route through validated AI interpretation to deterministic status, preserving state while surfacing the next Biology Investigation objective
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - indirect next-word requests such as `Which vocabulary word comes next?` now route through validated AI interpretation to deterministic help, preserving state while avoiding practice credit
@@ -2440,7 +2442,7 @@ None.
 
 ### T-286 — Add review answer corpus case for practice-schedule-only target use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says the active word belongs in a practice schedule but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2452,7 +2454,7 @@ None.
 
 ### T-287 — Add review answer corpus case for word-bank-only target use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says the active word belongs in a TOEFL word bank but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2535,6 +2537,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-286 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL practice schedule.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-285 by adding a review-answer corpus regression for `Fungus helps my TOEFL quiz preparation.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-284 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL flashcard deck.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-283 by adding a review-answer corpus regression for `Fungus is a study-list entry for TOEFL.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
@@ -2544,6 +2547,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-279 by adding a review-answer corpus regression for `Fungus can improve my TOEFL reading skill.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-278 by adding a learner-sentence corpus regression for `Which vocabulary word comes next?`, routed through AI interpretation to deterministic help with no practice credit or state mutation.
 - 2026-06-23: Completed T-277 by adding a review-answer corpus regression for `Fungus may appear in future TOEFL biology passages.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-23: Completed T-275 by adding a learner-sentence corpus regression for `Am I on the right path?`, routed through AI interpretation to deterministic status with quest grounding and no movement.
 
 Keep at most ten items here.
