@@ -299,6 +299,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "broad_status_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Please tell me how I am doing.",
+    "ai_interpretation": {
+      "action": "status",
+      "target": "",
+      "confidence": 0.8,
+      "reason": "The learner is asking for a progress summary."
+    },
+    "expected_success": true,
+    "expected_message_contains": "HP 30/30. XP 0.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",

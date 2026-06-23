@@ -129,6 +129,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers broad inspection requests rejected by deterministic visible-target validation without AI fallback or state mutation
 - learner sentence corpus covers vague combat pronouns rejected by deterministic enemy validation without state mutation
 - learner sentence corpus covers vague inventory requests routed through AI interpretation with no state mutation
+- learner sentence corpus covers broad status requests routed through AI interpretation to deterministic status with no state mutation
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1575,7 +1576,7 @@ None.
 
 ### T-221 — Add learner sentence corpus case for broad status requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "tell me how I am doing" route when deterministic status commands require a supported phrase or AI interpretation.
 - **Acceptance criteria:**
@@ -1588,7 +1589,7 @@ None.
 
 ### T-222 — Add review answer corpus case for learner uncertainty phrasing
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says they are unsure about the active word instead of using it meaningfully.
 - **Acceptance criteria:**
@@ -1659,6 +1660,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-221 by adding a learner-sentence corpus regression for `Please tell me how I am doing.`, routed through AI interpretation to deterministic status without state mutation.
 - 2026-06-23: Completed T-220 by adding a review-answer corpus regression for overgeneralized fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-219 by adding a learner-sentence corpus regression for `Please show me my stuff.`, routed through AI interpretation to inventory without state mutation.
 - 2026-06-23: Completed T-218 by adding a review-answer corpus regression for hypothetical fungus use that reaches AI evaluation but keeps review active without XP.
@@ -1668,6 +1670,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-214 by adding a review-answer corpus regression for question-form fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-213 by adding a learner-sentence corpus regression for `Please collect the thing.`, rejected by deterministic item validation without state mutation.
 - 2026-06-23: Completed T-212 by adding a review-answer corpus regression for list-like fungus fragments rejected by deterministic precheck without AI evaluation.
-- 2026-06-23: Completed T-211 by adding a learner-sentence corpus regression for broad conversation requests that deterministic NPC validation rejects without state mutation.
 
 Keep at most ten items here.
