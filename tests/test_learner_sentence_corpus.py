@@ -910,6 +910,32 @@ def test_learner_sentence_corpus_covers_combat_room_encountered_only_definition_
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_combat_room_encountered_only_definition_rejection() -> None:
+    indirect_combat_room_encountered_definition_cases = [
+        case
+        for case in load_corpus()
+        if "remind me what mimicry means before i fight" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == [
+            "go north",
+            "go north",
+            "go south",
+            "go south",
+        ]
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["ai_interpretation"]["target"] == "mimicry"
+        and case["expected_success"] is False
+        and case["expected_room_id"] == "research_camp"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 0
+        for case in indirect_combat_room_encountered_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_practiced_definition_away_from_source_room() -> None:
     practiced_definition_cases = [
         case

@@ -197,6 +197,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers combat-practiced vocabulary explanation requests away from the source room without changing combat, mastery, or room state during explanation
 - learner sentence corpus covers indirect combat-practiced vocabulary explanation requests routed through validated AI interpretation away from the source room
 - learner sentence corpus covers combat-room encountered-only vocabulary explanation requests rejected away from the source room before AI vocabulary calls
+- learner sentence corpus covers indirect combat-room encountered-only vocabulary explanation requests routed through validated AI interpretation and rejected before AI vocabulary calls
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -2858,7 +2859,7 @@ None.
 
 ### T-318 — Add indirect combat-room encountered-only explanation rejection
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Cover an indirect full-sentence request for a combat-room word after visiting but not defeating the enemy.
 - **Acceptance criteria:**
@@ -2867,6 +2868,18 @@ None.
   - deterministic explanation access rejects before AI vocabulary explanation and keeps combat, mastery, and room state unchanged
 - **Verification:** learner sentence corpus tests.
 - **Dependencies:** T-317.
+
+### T-319 — Add combat-room visible explanation before combat
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Prove combat-room vocabulary is explainable while the player is still in its source room, even before combat practice.
+- **Acceptance criteria:**
+  - learner sentence corpus includes a combat-room word requested while standing in the Mimicry Trail before defeating the enemy
+  - case routes to deterministic `explain` and succeeds through AI-backed vocabulary explanation
+  - explanation does not mutate combat, mastery, quest, XP, or room state
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-318.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -2929,6 +2942,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-318 by adding an indirect learner sentence case for `Can you remind me what mimicry means before I fight?` after visiting the Mimicry Trail and returning to camp without fighting, proving validated AI interpretation still reaches deterministic encountered-only rejection before AI vocabulary calls.
 - 2026-06-24: Completed T-317 by adding a learner sentence corpus case for `Could you define mimicry?` after visiting the Mimicry Trail and returning to camp without fighting, proving encounter-only combat-room vocabulary is rejected before AI vocabulary calls.
 - 2026-06-24: Completed T-316 by adding an indirect learner sentence case for `Can you remind me what mimicry means after that fight?` after defeating the invasive vine and returning to camp, proving validated AI interpretation can route combat-practiced vocabulary to deterministic explanation without state mutation.
 - 2026-06-24: Completed T-315 by adding a learner sentence corpus case for `Could you define mimicry?` after defeating the invasive vine and returning to camp, proving combat-practiced vocabulary authorizes off-room explanation without state mutation during explanation.
@@ -2938,6 +2952,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-311 by adding an indirect learner sentence case for `Can you remind me what fungus means now?` after collecting a fungus sample and returning to camp, proving validated AI interpretation can route to deterministic explanation without state mutation.
 - 2026-06-24: Completed T-310 by adding a learner sentence corpus case for `Could you define fungus?` after practicing `fungus` in the grove and returning to camp, proving practiced-word state authorizes AI-backed explanation away from the source room without unrelated mutation.
 - 2026-06-24: Completed T-309 by adding a learner sentence corpus case for `Could you define astronomy?`, proving unknown vocabulary is rejected before AI vocabulary calls and without state mutation.
-- 2026-06-24: Completed T-308 by adding a learner sentence corpus case for `Could you define vaccine?`, proving unavailable Biology vocabulary is rejected before AI vocabulary calls and without state mutation.
 
 Keep at most ten items here.
