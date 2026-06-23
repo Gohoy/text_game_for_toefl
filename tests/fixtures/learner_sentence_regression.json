@@ -438,6 +438,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_prerequisite_reminder_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "What do I need before using the microscope?",
+    "ai_interpretation": {
+      "action": "help",
+      "target": "",
+      "confidence": 0.8,
+      "reason": "The learner is asking for prerequisite guidance before using a tool."
+    },
+    "expected_success": true,
+    "expected_message_contains": "I want to collect the fungus sample",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "indirect_review_request_ai_fallback_no_due_words",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

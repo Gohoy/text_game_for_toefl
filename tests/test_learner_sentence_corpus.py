@@ -479,6 +479,22 @@ def test_learner_sentence_corpus_covers_indirect_help_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_prerequisite_reminders() -> None:
+    prerequisite_cases = [
+        case
+        for case in load_corpus()
+        if "before using the microscope" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        for case in prerequisite_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_review_requests() -> None:
     indirect_review_cases = [
         case
