@@ -954,6 +954,23 @@ def test_review_answer_corpus_covers_morphology_only_target_use() -> None:
     )
 
 
+def test_review_answer_corpus_covers_frequency_only_target_use() -> None:
+    frequency_only_cases = [
+        case
+        for case in load_review_corpus()
+        if "common word" in case["sentence"].lower()
+        and "toefl biology passages" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["expected_ai_evaluation"] is True
+        and case["expected_active_review_word"] == "fungus"
+        and case["expected_xp"] == 16
+        for case in frequency_only_cases
+    )
+
+
 def test_review_answer_corpus_covers_etymology_only_target_use() -> None:
     etymology_only_cases = [
         case

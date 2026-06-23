@@ -262,6 +262,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_frequency_only_target_use",
+    "category": "rejected",
+    "sentence": "Fungus is a common word in TOEFL biology passages.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence says fungus is common in passages but does not show its Biology meaning.",
+      "suggested_sentence": "A fungus can decompose dead leaves and recycle nutrients in soil."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_etymology_only_target_use",
     "category": "rejected",
     "sentence": "The origin of fungus is interesting to study.",
