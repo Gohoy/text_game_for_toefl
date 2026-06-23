@@ -246,6 +246,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_morphology_only_target_use",
+    "category": "rejected",
+    "sentence": "The word fungus has a singular noun form with a recognizable suffix.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence comments on the form of fungus but does not show its Biology meaning.",
+      "suggested_sentence": "A fungus can absorb nutrients from decaying leaves."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_etymology_only_target_use",
     "category": "rejected",
     "sentence": "The origin of fungus is interesting to study.",
