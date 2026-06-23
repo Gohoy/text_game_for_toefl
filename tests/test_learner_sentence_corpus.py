@@ -826,6 +826,35 @@ def test_learner_sentence_corpus_covers_indirect_item_practiced_definition_away_
     )
 
 
+def test_learner_sentence_corpus_covers_combat_practiced_definition_away_from_source_room() -> None:
+    combat_practiced_definition_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == "combat_practiced_definition_away_from_source_room"
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "deterministic_parser"
+        and case["setup_commands"] == [
+            "go north",
+            "go north",
+            "I attack the invasive vine",
+            "I attack the invasive vine",
+            "I attack the invasive vine",
+            "go south",
+            "go south",
+        ]
+        and case["expected_parser"]["action"] == "explain"
+        and case["expected_parser"]["target"] == "mimicry"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "research_camp"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in combat_practiced_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_practiced_definition_away_from_source_room() -> None:
     practiced_definition_cases = [
         case

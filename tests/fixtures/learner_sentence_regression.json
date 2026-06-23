@@ -769,6 +769,30 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "combat_practiced_definition_away_from_source_room",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go north",
+      "go north",
+      "I attack the invasive vine",
+      "I attack the invasive vine",
+      "I attack the invasive vine",
+      "go south",
+      "go south"
+    ],
+    "sentence": "Could you define mimicry?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "mimicry"
+    },
+    "expected_success": true,
+    "expected_room_id": "research_camp",
+    "expected_message_contains": "mimicry: mimicry explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "practiced_definition_request_away_from_source_room",
     "category": "accepted",
     "route": "deterministic_parser",

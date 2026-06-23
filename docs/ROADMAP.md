@@ -194,6 +194,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers encountered-only vocabulary explanation requests rejected away from the source room before AI vocabulary calls
 - learner sentence corpus covers item-practiced vocabulary explanation requests away from the source room without changing inventory, quest, mastery, or room state during explanation
 - learner sentence corpus covers indirect item-practiced vocabulary explanation requests routed through validated AI interpretation away from the source room
+- learner sentence corpus covers combat-practiced vocabulary explanation requests away from the source room without changing combat, mastery, or room state during explanation
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -2819,7 +2820,7 @@ None.
 
 ### T-315 — Add direct combat-practiced explanation away from source room
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Prove deterministic combat practice authorizes later vocabulary explanation away from the source room.
 - **Acceptance criteria:**
@@ -2828,6 +2829,18 @@ None.
   - deterministic combat, mastery, and room state do not change during explanation
 - **Verification:** learner sentence corpus tests.
 - **Dependencies:** T-314.
+
+### T-316 — Add indirect combat-practiced explanation away from source room
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Cover an indirect full-sentence learner request for a combat-practiced Biology word after leaving the combat room.
+- **Acceptance criteria:**
+  - learner sentence corpus includes an indirect combat-practiced explanation request away from the source room
+  - case routes through validated AI interpretation to deterministic `explain`
+  - AI-backed vocabulary explanation succeeds while combat, mastery, and room state remain unchanged during explanation
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-315.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -2890,6 +2903,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-315 by adding a learner sentence corpus case for `Could you define mimicry?` after defeating the invasive vine and returning to camp, proving combat-practiced vocabulary authorizes off-room explanation without state mutation during explanation.
 - 2026-06-24: Completed T-314 by adding an indirect learner sentence case for `Can you remind me what microscope means now?` after using the microscope and returning to camp, proving validated AI interpretation can route item-practiced vocabulary to deterministic explanation without state mutation.
 - 2026-06-24: Completed T-313 by adding a learner sentence corpus case for `Could you define microscope?` after collecting a fungus sample, using the microscope, and returning to camp, proving item-practiced vocabulary authorizes off-room explanation without state mutation during explanation.
 - 2026-06-24: Completed T-312 by adding a learner sentence corpus case for `Could you define microscope?` after visiting and leaving the Microscope Tent without practice, proving encounter-only access is rejected before AI vocabulary calls.
@@ -2899,6 +2913,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-308 by adding a learner sentence corpus case for `Could you define vaccine?`, proving unavailable Biology vocabulary is rejected before AI vocabulary calls and without state mutation.
 - 2026-06-24: Completed T-307 by adding a learner sentence corpus case for `Could you define organism?`, proving deterministic parsing routes to AI-backed vocabulary explanation without state mutation.
 - 2026-06-24: Completed T-306 by adding a renderer-output ambiguity seed entry to `docs/PLAYTEST_DEBUG_PROTOCOL.md`, documenting renderer ownership, AI display-only boundaries, and renderer regression coverage for result/feedback separation.
-- 2026-06-24: Completed T-305 by adding a schema-reference failure seed entry to `docs/PLAYTEST_DEBUG_PROTOCOL.md`, documenting deterministic world-pack validation ownership and schema/content test coverage.
 
 Keep at most ten items here.
