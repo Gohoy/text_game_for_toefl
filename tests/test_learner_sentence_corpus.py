@@ -868,6 +868,27 @@ def test_learner_sentence_corpus_covers_indirect_item_practiced_definition_away_
     )
 
 
+def test_learner_sentence_corpus_covers_source_room_visible_fungus_definition_before_collection() -> None:
+    source_room_visible_fungus_definition_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == "source_room_visible_fungus_definition_before_collection"
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "deterministic_parser"
+        and case["setup_commands"] == ["go north"]
+        and case["expected_parser"]["action"] == "explain"
+        and case["expected_parser"]["target"] == "fungus"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "fungus_grove"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in source_room_visible_fungus_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_combat_practiced_definition_away_from_source_room() -> None:
     combat_practiced_definition_cases = [
         case

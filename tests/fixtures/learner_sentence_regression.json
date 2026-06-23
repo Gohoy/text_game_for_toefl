@@ -807,6 +807,24 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "source_room_visible_fungus_definition_before_collection",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "Could you define fungus?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "fungus"
+    },
+    "expected_success": true,
+    "expected_room_id": "fungus_grove",
+    "expected_message_contains": "fungus: fungus explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "combat_practiced_definition_away_from_source_room",
     "category": "accepted",
     "route": "deterministic_parser",
