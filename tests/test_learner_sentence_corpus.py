@@ -723,6 +723,25 @@ def test_learner_sentence_corpus_covers_indirect_route_planning() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_backtracking() -> None:
+    backtracking_cases = [
+        case for case in load_corpus() if "get back to camp" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "look"
+        and case["expected_interpretation_exits"] == {
+            "south": "research_camp",
+            "north": "mimicry_trail",
+        }
+        for case in backtracking_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_repeat_room_narration() -> None:
     repeat_room_cases = [
         case

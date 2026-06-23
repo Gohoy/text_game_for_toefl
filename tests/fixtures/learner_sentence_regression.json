@@ -682,6 +682,28 @@
     }
   },
   {
+    "id": "indirect_backtracking_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "How do I get back to camp?",
+    "ai_interpretation": {
+      "action": "look",
+      "target": "",
+      "confidence": 0.82,
+      "reason": "The learner is asking for backtracking advice, so the game should describe current exits without moving automatically."
+    },
+    "expected_success": true,
+    "expected_message_contains": "AI room narration for Fungus Grove.",
+    "expected_state_unchanged": true,
+    "expected_interpretation_exits": {
+      "south": "research_camp",
+      "north": "mimicry_trail"
+    }
+  },
+  {
     "id": "indirect_repeat_room_narration_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
