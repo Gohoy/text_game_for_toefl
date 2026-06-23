@@ -151,6 +151,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers practice-schedule-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers e-learning-only target use that reaches AI evaluation and keeps review active without XP
 - TOEFL RPG playtest debug protocol records recurring failure signatures, deterministic owners, AI boundaries, verified fixes, regression coverage, and proactive checks without adding OpenGame runtime dependencies
+- playtest debug protocol records save-path churn risk so smoke runs and manual playtests keep using isolated `TOEFL_RPG_SAVE_PATH` files instead of the normal player save slot
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -2676,7 +2677,7 @@ None.
 
 ### T-304 — Add save-path churn seed entry to playtest debug protocol
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Record the recurring risk that smoke runs or manual playtests accidentally use the normal player save path instead of an isolated temporary save.
 - **Acceptance criteria:**
@@ -2685,6 +2686,18 @@ None.
   - no OpenGame runtime dependency, Node tooling, browser-game scaffold, asset pipeline, or new API-key requirement is introduced
 - **Verification:** documentation consistency check.
 - **Dependencies:** T-303.
+
+### T-305 — Add schema-reference failure seed entry to playtest debug protocol
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Record the recurring risk that world-pack rooms, exits, quests, or item descriptions reference missing content IDs.
+- **Acceptance criteria:**
+  - playtest debug protocol includes a schema-reference failure entry
+  - entry identifies deterministic schema/content-validation ownership, AI non-authority over accepted world content, verified fix, and schema-test coverage
+  - no OpenGame runtime dependency, Node tooling, browser-game scaffold, asset pipeline, or new API-key requirement is introduced
+- **Verification:** documentation consistency check.
+- **Dependencies:** T-304.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -2747,6 +2760,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-304 by adding a save-path churn seed entry to `docs/PLAYTEST_DEBUG_PROTOCOL.md`, documenting temporary `TOEFL_RPG_SAVE_PATH` use and related app/smoke coverage.
 - 2026-06-24: Completed T-303 by linking `docs/PLAYTEST_DEBUG_PROTOCOL.md` from the automation runbook and limiting protocol updates to observed, verified player-facing failures.
 - 2026-06-24: Completed T-302 by adding `docs/PLAYTEST_DEBUG_PROTOCOL.md` with seed entries for the vial-liquid inspection fix, parser-miss state preservation, review-answer false positives, and Codex structured-output schema failures.
 - 2026-06-24: Completed T-300 by adding a review-answer corpus regression for `Fungus belongs on my TOEFL learning platform.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
@@ -2756,6 +2770,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-296 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL word puzzle.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-295 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL vocabulary game.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-294 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL hangman game.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-24: Completed T-293 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL word search.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.

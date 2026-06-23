@@ -77,6 +77,18 @@ Each entry should stay short and include:
 | Regression coverage | `tests/test_ai_contract.py::test_player_facing_response_schemas_are_strict_for_codex`, `tests/test_ai_contract.py::test_ai_request_schemas_are_strict_and_audited`, and strict-schema tests in `tests/test_codex_cli_provider.py`. |
 | Proactive check | Any new AI request or response model must reject extra fields and should have schema strictness coverage before live Codex use. |
 
+### DBG-005 - Save-Path Churn During Smoke Runs
+
+| Field | Value |
+| --- | --- |
+| Failure signature | A smoke run or manual playtest accidentally reads from or writes to the normal player save slot instead of an isolated temporary save file. |
+| Observed player symptom | The player may see stale progress during a smoke run, or automation may overwrite the normal save slot. |
+| Deterministic owner | Application startup save-path selection and storage read/write helpers. |
+| AI boundary | AI has no authority over save paths, save slots, or persisted game state. |
+| Verified fix | `TOEFL_RPG_SAVE_PATH` lets smoke runs and manual live checks use a temporary save path while normal play defaults to `data/saves/slot1.json`. |
+| Regression coverage | `tests/test_app.py::test_save_path_from_env_defaults_to_normal_slot`, `tests/test_app.py::test_save_path_from_env_uses_configured_path`, the fake-provider smoke command in `docs/QUALITY_GATES.md`, and the live Codex smoke command in `README.md`. |
+| Proactive check | Any new smoke command or automated playtest should set `TOEFL_RPG_SAVE_PATH` to a temporary path unless it is explicitly testing the normal player save slot. |
+
 ## Maintenance Rules
 
 - Add entries only for failures observed in playtests, smoke runs, tests, or user reports.
