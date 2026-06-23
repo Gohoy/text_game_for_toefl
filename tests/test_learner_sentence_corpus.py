@@ -500,6 +500,22 @@ def test_review_answer_corpus_covers_quoted_target_word_mention() -> None:
     )
 
 
+def test_review_answer_corpus_covers_hypothetical_target_word_use() -> None:
+    hypothetical_cases = [
+        case
+        for case in load_review_corpus()
+        if case["sentence"].lower().startswith("if i saw a fungus")
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["expected_ai_evaluation"] is True
+        and case["expected_active_review_word"] == "fungus"
+        and case["expected_xp"] == 16
+        for case in hypothetical_cases
+    )
+
+
 @pytest.mark.parametrize("case", load_corpus(), ids=lambda case: case["id"])
 def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
     provider = CorpusAIProvider(case)

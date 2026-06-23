@@ -198,6 +198,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_hypothetical_target_use",
+    "category": "rejected",
+    "sentence": "If I saw a fungus, I would probably understand biology better.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence mentions a hypothetical fungus but does not show concrete biological meaning in context.",
+      "suggested_sentence": "A fungus can decompose dead leaves and return nutrients to the soil."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",
