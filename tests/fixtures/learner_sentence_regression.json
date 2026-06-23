@@ -792,6 +792,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_next_word_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Which vocabulary word comes next?",
+    "ai_interpretation": {
+      "action": "help",
+      "target": "",
+      "confidence": 0.81,
+      "reason": "The learner is asking which local vocabulary word should come next."
+    },
+    "expected_success": true,
+    "expected_message_contains": "The fungus is vital for the forest.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "indirect_rest_request_ai_fallback_status",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
