@@ -889,6 +889,27 @@ def test_learner_sentence_corpus_covers_source_room_visible_fungus_definition_be
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_source_room_visible_fungus_definition_before_collection() -> None:
+    indirect_source_room_visible_fungus_definition_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == "indirect_source_room_visible_fungus_definition_before_collection_ai_fallback"
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == ["go north"]
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["ai_interpretation"]["target"] == "fungus"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "fungus_grove"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in indirect_source_room_visible_fungus_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_combat_practiced_definition_away_from_source_room() -> None:
     combat_practiced_definition_cases = [
         case
