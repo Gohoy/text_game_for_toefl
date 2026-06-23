@@ -125,6 +125,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers emotional-reaction target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers analogy-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers cause-effect-free target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers unsupported-certainty target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1821,7 +1822,7 @@ None.
 
 ### T-239 — Add review answer corpus case for unsupported certainty claim
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner uses the active word in a confident sentence that still does not demonstrate the Biology meaning.
 - **Acceptance criteria:**
@@ -1833,7 +1834,7 @@ None.
 
 ### T-240 — Add learner sentence corpus case for indirect repeat-room narration requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "remind me where I am" route when the answer can be given through deterministic look handling and AI room narration.
 - **Acceptance criteria:**
@@ -1843,6 +1844,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-239.
+
+### T-241 — Add review answer corpus case for location-only target-word use
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner places the active word in a location but does not show a biological role, property, or consequence.
+- **Acceptance criteria:**
+  - review corpus includes at least one location-only answer containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-240.
 
 ## Blocked Tasks
 
@@ -1892,6 +1905,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-239 by adding a review-answer corpus regression for `I definitely understand fungus completely now.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-238 by adding a learner-sentence corpus regression for `I am done for now.`, routed through AI interpretation to deterministic quit handling with explicit `should_quit` and no state mutation.
 - 2026-06-23: Completed T-237 by adding a review-answer corpus regression for `A fungus exists in the forest today.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-236 by adding a learner-sentence corpus regression for `Which word should I practice here?`, routed through AI interpretation to deterministic help without state mutation.
@@ -1901,6 +1915,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-232 by adding a learner-sentence corpus regression for `Am I ready to continue?`, routed through AI interpretation to deterministic status without state mutation.
 - 2026-06-23: Completed T-231 by adding a review-answer corpus regression for `A fungus makes me feel amazed and nervous.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-229 by adding a learner-sentence corpus regression for `What is around me?`, routed through AI interpretation to deterministic room narration without state mutation.
-- 2026-06-23: Completed T-228 by adding a review-answer corpus regression for personal-preference fungus use that reaches AI evaluation but keeps review active without XP.
 
 Keep at most ten items here.

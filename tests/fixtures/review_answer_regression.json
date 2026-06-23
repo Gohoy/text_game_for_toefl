@@ -134,6 +134,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_unsupported_certainty_claim",
+    "category": "rejected",
+    "sentence": "I definitely understand fungus completely now.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The learner sounds confident but does not use fungus to show its Biology meaning.",
+      "suggested_sentence": "A fungus can absorb nutrients from decaying leaves in a damp forest."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_metaphorical_target_use",
     "category": "rejected",
     "sentence": "A fungus of doubt spread through the research team.",
