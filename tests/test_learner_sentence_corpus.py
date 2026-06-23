@@ -397,6 +397,22 @@ def test_learner_sentence_corpus_covers_indirect_status_comparisons() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_quest_progress() -> None:
+    indirect_quest_progress_cases = [
+        case
+        for case in load_corpus()
+        if "investigation remains" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        for case in indirect_quest_progress_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_help_requests() -> None:
     indirect_help_cases = [
         case
