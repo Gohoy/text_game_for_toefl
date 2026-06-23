@@ -134,6 +134,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_analogy_only_target_use",
+    "category": "rejected",
+    "sentence": "A fungus is like a hidden city in my imagination.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence uses fungus only in an analogy and does not show its Biology meaning.",
+      "suggested_sentence": "A fungus can spread through damp soil while decomposing dead plants."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_copied_example_reuse",
     "category": "rejected",
     "sentence": "A fungus can decompose wood in a forest, exactly as you suggested.",

@@ -123,6 +123,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers shallow example-label target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers personal-preference target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers emotional-reaction target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers analogy-only target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1766,7 +1767,7 @@ None.
 
 ### T-235 — Add review answer corpus case for analogy-only target-word use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner uses the active target word only in an analogy without showing the Biology meaning.
 - **Acceptance criteria:**
@@ -1778,7 +1779,7 @@ None.
 
 ### T-236 — Add learner sentence corpus case for indirect vocabulary-reminder requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "which word should I practice here" route when the answer can be given through deterministic help, look, or explanation-style actions.
 - **Acceptance criteria:**
@@ -1800,6 +1801,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-236.
+
+### T-238 — Add learner sentence corpus case for indirect save-exit intent
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "I am done for now" route when the intended outcome is deterministic quit/save behavior.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect save-exit-style sentence
+  - expected parser route or AI fallback route is explicit
+  - expected quit/save result and mutation expectations are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-237.
 
 ## Blocked Tasks
 
@@ -1849,6 +1863,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-235 by adding a review-answer corpus regression for `A fungus is like a hidden city in my imagination.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-234 by adding a learner-sentence corpus regression for `What part of the investigation remains?`, routed through AI interpretation to deterministic quest progress in the status summary without state mutation.
 - 2026-06-23: Completed T-233 by adding a learner-sentence corpus regression for `What am I carrying right now?`, routed through AI interpretation to deterministic inventory display without state mutation.
 - 2026-06-23: Completed T-232 by adding a learner-sentence corpus regression for `Am I ready to continue?`, routed through AI interpretation to deterministic status without state mutation.
@@ -1858,6 +1873,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-227 by adding a learner-sentence corpus regression for `Could you tell me what organism means?`, routed through AI interpretation to deterministic vocabulary explanation without state mutation.
 - 2026-06-23: Completed T-226 by adding a review-answer corpus regression for shallow example-label fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-225 by adding a learner-sentence corpus regression for `Could you quiz me on words?`, routed through AI interpretation to deterministic review handling without state mutation when no words are due.
-- 2026-06-23: Completed T-224 by adding a review-answer corpus regression for tautological fungus use that reaches AI evaluation but keeps review active without XP.
 
 Keep at most ten items here.

@@ -580,6 +580,22 @@ def test_review_answer_corpus_covers_metaphorical_target_use() -> None:
     )
 
 
+def test_review_answer_corpus_covers_analogy_only_target_word_use() -> None:
+    analogy_cases = [
+        case
+        for case in load_review_corpus()
+        if "like a hidden city" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["expected_ai_evaluation"] is True
+        and case["expected_active_review_word"] == "fungus"
+        and case["expected_xp"] == 16
+        for case in analogy_cases
+    )
+
+
 def test_review_answer_corpus_covers_copied_example_reuse() -> None:
     copied_example_cases = [
         case
