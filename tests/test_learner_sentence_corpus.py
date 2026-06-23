@@ -414,6 +414,24 @@ def test_learner_sentence_corpus_covers_indirect_status_comparisons() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_route_confirmation() -> None:
+    route_confirmation_cases = [
+        case
+        for case in load_corpus()
+        if "right path" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "status"
+        and "Quest: Biology Investigation 0/3" in case["expected_message_contains"]
+        for case in route_confirmation_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_readiness_checks() -> None:
     readiness_check_cases = [
         case

@@ -371,6 +371,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_route_confirmation_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Am I on the right path?",
+    "ai_interpretation": {
+      "action": "status",
+      "target": "",
+      "confidence": 0.8,
+      "reason": "The learner is asking whether their current route matches the active quest objective."
+    },
+    "expected_success": true,
+    "expected_message_contains": "Quest: Biology Investigation 0/3: Go north to the Fungus Grove and collect the fungus sample.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "indirect_readiness_check_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
