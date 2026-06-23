@@ -498,6 +498,24 @@ def test_learner_sentence_corpus_covers_indirect_strategy_advice() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_retreat_advice() -> None:
+    indirect_retreat_cases = [
+        case
+        for case in load_corpus()
+        if "retreat from here" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "look"
+        and case["expected_interpretation_visible_enemies"] == ["Invasive Vine"]
+        for case in indirect_retreat_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_save_exit_intent() -> None:
     indirect_save_exit_cases = [
         case
