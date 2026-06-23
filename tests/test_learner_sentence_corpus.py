@@ -516,6 +516,23 @@ def test_learner_sentence_corpus_covers_indirect_retreat_advice() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_rest_requests() -> None:
+    indirect_rest_cases = [
+        case
+        for case in load_corpus()
+        if "rest here" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "status"
+        for case in indirect_rest_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_save_exit_intent() -> None:
     indirect_save_exit_cases = [
         case

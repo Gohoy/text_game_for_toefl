@@ -658,6 +658,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_rest_request_ai_fallback_status",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Can I rest here?",
+    "ai_interpretation": {
+      "action": "status",
+      "target": "",
+      "confidence": 0.78,
+      "reason": "The learner asks about resting, but no rest or heal command exists, so status can answer current HP without changing state."
+    },
+    "expected_success": true,
+    "expected_message_contains": "HP 30/30.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",
