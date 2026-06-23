@@ -781,6 +781,23 @@ def test_review_answer_corpus_covers_category_label_target_use() -> None:
     )
 
 
+def test_review_answer_corpus_covers_answer_label_target_use() -> None:
+    answer_label_cases = [
+        case
+        for case in load_review_corpus()
+        if "correct answer" in case["sentence"].lower()
+        and "review word" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["expected_ai_evaluation"] is True
+        and case["expected_active_review_word"] == "fungus"
+        and case["expected_xp"] == 16
+        for case in answer_label_cases
+    )
+
+
 def test_review_answer_corpus_covers_source_only_target_use() -> None:
     source_only_cases = [
         case

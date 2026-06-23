@@ -129,6 +129,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers location-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers relation-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers category-label target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers answer-label target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers source-only target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
@@ -222,6 +223,7 @@ Evidence from an in-memory playthrough:
 - duplicate review answers now skip AI review evaluation before returning the distinct duplicate message
 - synonym-heavy review answers such as defining `fungus` as a harmless animal now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - location-only review answers such as placing `fungus` near a research tent now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
+- answer-label review answers such as calling `fungus` the correct review answer now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - indirect goal-reminder requests such as `What should I accomplish next?` now route through validated AI interpretation to deterministic status, preserving state while surfacing the next Biology Investigation objective
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
@@ -1988,7 +1990,7 @@ None.
 
 ### T-251 — Add review answer corpus case for answer-label target use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says the active word is the answer or review target but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2000,7 +2002,7 @@ None.
 
 ### T-252 — Add learner sentence corpus case for indirect readiness checks
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "am I ready to fight" route when the answer should use deterministic status or room narration instead of performing combat.
 - **Acceptance criteria:**
@@ -2059,6 +2061,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-251 by adding a review-answer corpus regression for `Fungus is the correct answer for this review word.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-250 by adding a learner-sentence corpus regression for `Can you summarize what happened so far?`, routed through AI interpretation to deterministic status after collecting the fungus sample without state mutation.
 - 2026-06-23: Completed T-249 by adding a review-answer corpus regression for `A fungus is a biology vocabulary category.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-248 by adding a learner-sentence corpus regression for `How should I deal with the vine?`, routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation.
@@ -2068,6 +2071,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-243 by adding a review-answer corpus regression for `A fungus is associated with biology in my notes.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-242 by adding a learner-sentence corpus regression for `What danger is nearby?`, routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation.
 - 2026-06-23: Completed T-240 by adding a learner-sentence corpus regression for `Please remind me where I am.`, routed through AI interpretation to deterministic room narration without state mutation.
-- 2026-06-23: Completed T-239 by adding a review-answer corpus regression for `I definitely understand fungus completely now.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.
