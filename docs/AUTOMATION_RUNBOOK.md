@@ -115,6 +115,13 @@ For a refactor, add a characterization test first.
 For a bug fix, add a failing regression test first when practical.
 For a new feature, test the public behavior or deterministic rule rather than private implementation details.
 
+When a run hits a recurring player-facing failure, consult
+`docs/PLAYTEST_DEBUG_PROTOCOL.md` before fixing it. Add or update a protocol
+entry only after the failure has been observed and the fix is verified by a
+test, smoke check, or documented manual playtest. Do not use the protocol as a
+reason to add OpenGame runtime dependencies, Node tooling, browser-game
+scaffolds, asset pipelines, or new API-key requirements.
+
 ### 5. Implement a Vertical Slice
 
 A good slice contains all required layers for one observable outcome:
