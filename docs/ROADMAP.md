@@ -176,6 +176,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
 - learner sentence corpus covers indirect backtracking requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
+- learner sentence corpus covers indirect detour requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
 - learner sentence corpus covers indirect repeat-room narration requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect save-exit requests routed through AI interpretation to deterministic quit handling with no state mutation
 - learner sentence corpus covers indirect NPC dialogue requests routed through AI interpretation to deterministic talk validation with no state mutation
@@ -245,6 +246,7 @@ Evidence from an in-memory playthrough:
 - answer-label review answers such as calling `fungus` the correct review answer now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - indirect goal-reminder requests such as `What should I accomplish next?` now route through validated AI interpretation to deterministic status, preserving state while surfacing the next Biology Investigation objective
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
+- indirect detour requests such as `Is there another way around?` now route through validated AI interpretation to deterministic room narration with exits grounding and no automatic movement
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
 - empty turn-feedback required fields now have regression coverage proving validation failures roll back state-changing actions
 - malformed turn-feedback vocabulary notes now have regression coverage proving validation failures roll back state-changing actions
@@ -2253,7 +2255,7 @@ None.
 
 ### T-271 — Add learner sentence corpus case for indirect detour requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "is there another way around" route when the answer should use deterministic room narration or help without moving automatically.
 - **Acceptance criteria:**
@@ -2265,7 +2267,7 @@ None.
 
 ### T-272 — Add review answer corpus case for test-strategy-only target use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says the active word helps with TOEFL test strategy but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**

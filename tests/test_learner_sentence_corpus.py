@@ -742,6 +742,27 @@ def test_learner_sentence_corpus_covers_indirect_backtracking() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_detour_requests() -> None:
+    detour_cases = [
+        case
+        for case in load_corpus()
+        if "another way around" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "look"
+        and case["expected_interpretation_exits"] == {
+            "south": "research_camp",
+            "north": "mimicry_trail",
+        }
+        for case in detour_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_repeat_room_narration() -> None:
     repeat_room_cases = [
         case
