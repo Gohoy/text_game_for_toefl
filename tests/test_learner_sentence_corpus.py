@@ -413,6 +413,23 @@ def test_learner_sentence_corpus_covers_indirect_quest_progress() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_save_exit_intent() -> None:
+    indirect_save_exit_cases = [
+        case
+        for case in load_corpus()
+        if "done for now" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_should_quit"] is True
+        and case["expected_state_unchanged"] is True
+        for case in indirect_save_exit_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_help_requests() -> None:
     indirect_help_cases = [
         case
@@ -843,6 +860,8 @@ def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
 
     assert result.success is case["expected_success"]
     assert case["expected_message_contains"] in result.message
+    if "expected_should_quit" in case:
+        assert result.should_quit is case["expected_should_quit"]
 
     if case["route"] == "deterministic_parser":
         assert parsed.action == case["expected_parser"]["action"]

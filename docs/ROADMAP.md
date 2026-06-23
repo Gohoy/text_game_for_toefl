@@ -145,6 +145,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect review requests routed through AI interpretation to deterministic review handling with no state mutation when no words are due
 - learner sentence corpus covers indirect vocabulary explanation requests routed through AI interpretation to deterministic explanation with no state mutation
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
+- learner sentence corpus covers indirect save-exit requests routed through AI interpretation to deterministic quit handling with no state mutation
 - learner sentence corpus covers indirect NPC dialogue requests routed through AI interpretation to deterministic talk validation with no state mutation
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
@@ -1807,7 +1808,7 @@ None.
 
 ### T-238 — Add learner sentence corpus case for indirect save-exit intent
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "I am done for now" route when the intended outcome is deterministic quit/save behavior.
 - **Acceptance criteria:**
@@ -1820,7 +1821,7 @@ None.
 
 ### T-239 — Add review answer corpus case for unsupported certainty claim
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner uses the active word in a confident sentence that still does not demonstrate the Biology meaning.
 - **Acceptance criteria:**
@@ -1829,6 +1830,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-238.
+
+### T-240 — Add learner sentence corpus case for indirect repeat-room narration requests
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "remind me where I am" route when the answer can be given through deterministic look handling and AI room narration.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect repeat-room-narration-style sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-239.
 
 ## Blocked Tasks
 
@@ -1878,6 +1892,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-238 by adding a learner-sentence corpus regression for `I am done for now.`, routed through AI interpretation to deterministic quit handling with explicit `should_quit` and no state mutation.
 - 2026-06-23: Completed T-237 by adding a review-answer corpus regression for `A fungus exists in the forest today.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-236 by adding a learner-sentence corpus regression for `Which word should I practice here?`, routed through AI interpretation to deterministic help without state mutation.
 - 2026-06-23: Completed T-235 by adding a review-answer corpus regression for `A fungus is like a hidden city in my imagination.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
@@ -1887,6 +1902,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-231 by adding a review-answer corpus regression for `A fungus makes me feel amazed and nervous.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-229 by adding a learner-sentence corpus regression for `What is around me?`, routed through AI interpretation to deterministic room narration without state mutation.
 - 2026-06-23: Completed T-228 by adding a review-answer corpus regression for personal-preference fungus use that reaches AI evaluation but keeps review active without XP.
-- 2026-06-23: Completed T-227 by adding a learner-sentence corpus regression for `Could you tell me what organism means?`, routed through AI interpretation to deterministic vocabulary explanation without state mutation.
 
 Keep at most ten items here.

@@ -367,6 +367,23 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_save_exit_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "I am done for now.",
+    "ai_interpretation": {
+      "action": "quit",
+      "target": "",
+      "confidence": 0.82,
+      "reason": "The learner is saying they want to stop playing and save progress."
+    },
+    "expected_success": true,
+    "expected_message_contains": "Progress saved. Goodbye.",
+    "expected_should_quit": true,
+    "expected_state_unchanged": true
+  },
+  {
     "id": "indirect_help_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
