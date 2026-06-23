@@ -721,6 +721,24 @@
     "expected_vocabulary_request_count": 0
   },
   {
+    "id": "item_room_visible_definition_before_item_use",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go east"
+    ],
+    "sentence": "Could you define microscope?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "microscope"
+    },
+    "expected_success": true,
+    "expected_room_id": "microscope_tent",
+    "expected_message_contains": "microscope: microscope explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "item_practiced_definition_away_from_source_room",
     "category": "accepted",
     "route": "deterministic_parser",

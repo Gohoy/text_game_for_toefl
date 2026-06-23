@@ -772,6 +772,27 @@ def test_learner_sentence_corpus_covers_encountered_only_definition_away_from_so
     )
 
 
+def test_learner_sentence_corpus_covers_item_room_visible_definition_before_item_use() -> None:
+    item_room_visible_definition_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == "item_room_visible_definition_before_item_use"
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "deterministic_parser"
+        and case["setup_commands"] == ["go east"]
+        and case["expected_parser"]["action"] == "explain"
+        and case["expected_parser"]["target"] == "microscope"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "microscope_tent"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in item_room_visible_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_item_practiced_definition_away_from_source_room() -> None:
     item_practiced_definition_cases = [
         case
