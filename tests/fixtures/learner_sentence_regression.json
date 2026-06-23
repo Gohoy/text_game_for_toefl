@@ -367,6 +367,28 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_enemy_warning_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north",
+      "go north"
+    ],
+    "sentence": "What danger is nearby?",
+    "ai_interpretation": {
+      "action": "look",
+      "target": "",
+      "confidence": 0.82,
+      "reason": "The learner is asking for a warning about visible threats in the current room."
+    },
+    "expected_success": true,
+    "expected_message_contains": "AI room narration for Mimicry Trail.",
+    "expected_state_unchanged": true,
+    "expected_interpretation_visible_enemies": [
+      "Invasive Vine"
+    ]
+  },
+  {
     "id": "indirect_save_exit_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

@@ -142,6 +142,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers broad status requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect status-comparison requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect quest-progress requests routed through AI interpretation to deterministic status with no state mutation
+- learner sentence corpus covers indirect enemy-warning requests routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation
 - learner sentence corpus covers indirect help requests routed through AI interpretation to deterministic help with no state mutation
 - learner sentence corpus covers indirect vocabulary-reminder requests routed through AI interpretation to deterministic help with no state mutation
 - learner sentence corpus covers indirect review requests routed through AI interpretation to deterministic review handling with no state mutation when no words are due
@@ -1862,7 +1863,7 @@ None.
 
 ### T-242 — Add learner sentence corpus case for indirect enemy-warning requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "what danger is nearby" route when the current room has no live enemy versus when combat validation is required.
 - **Acceptance criteria:**
@@ -1872,6 +1873,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-241.
+
+### T-243 — Add review answer corpus case for relation-only target-word use
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner names a relation involving the active word but does not show the Biology meaning, role, property, or consequence.
+- **Acceptance criteria:**
+  - review corpus includes at least one relation-only answer containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-242.
 
 ## Blocked Tasks
 
@@ -1921,6 +1934,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-242 by adding a learner-sentence corpus regression for `What danger is nearby?`, routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation.
 - 2026-06-23: Completed T-240 by adding a learner-sentence corpus regression for `Please remind me where I am.`, routed through AI interpretation to deterministic room narration without state mutation.
 - 2026-06-23: Completed T-239 by adding a review-answer corpus regression for `I definitely understand fungus completely now.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-238 by adding a learner-sentence corpus regression for `I am done for now.`, routed through AI interpretation to deterministic quit handling with explicit `should_quit` and no state mutation.
@@ -1930,6 +1944,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-234 by adding a learner-sentence corpus regression for `What part of the investigation remains?`, routed through AI interpretation to deterministic quest progress in the status summary without state mutation.
 - 2026-06-23: Completed T-233 by adding a learner-sentence corpus regression for `What am I carrying right now?`, routed through AI interpretation to deterministic inventory display without state mutation.
 - 2026-06-23: Completed T-232 by adding a learner-sentence corpus regression for `Am I ready to continue?`, routed through AI interpretation to deterministic status without state mutation.
-- 2026-06-23: Completed T-231 by adding a review-answer corpus regression for `A fungus makes me feel amazed and nervous.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.

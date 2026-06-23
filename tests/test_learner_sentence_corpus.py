@@ -413,6 +413,23 @@ def test_learner_sentence_corpus_covers_indirect_quest_progress() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_enemy_warnings() -> None:
+    indirect_enemy_warning_cases = [
+        case
+        for case in load_corpus()
+        if "danger is nearby" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["expected_interpretation_visible_enemies"] == ["Invasive Vine"]
+        for case in indirect_enemy_warning_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_save_exit_intent() -> None:
     indirect_save_exit_cases = [
         case
@@ -920,6 +937,10 @@ def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
         assert parsed.action == "unknown"
         assert len(provider.interpretation_requests) == 1
         assert provider.interpretation_requests[0].player_sentence == case["sentence"]
+        if "expected_interpretation_visible_enemies" in case:
+            assert provider.interpretation_requests[0].visible_enemies == case[
+                "expected_interpretation_visible_enemies"
+            ]
 
     if "expected_room_id" in case:
         assert engine.state.current_room_id == case["expected_room_id"]
