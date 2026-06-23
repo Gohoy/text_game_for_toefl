@@ -744,6 +744,31 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "indirect_item_practiced_definition_away_from_source_room_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north",
+      "collect fungus sample",
+      "go south",
+      "go east",
+      "use microscope",
+      "go west"
+    ],
+    "sentence": "Can you remind me what microscope means now?",
+    "ai_interpretation": {
+      "action": "explain",
+      "target": "microscope",
+      "confidence": 0.82,
+      "reason": "The learner indirectly asks for the meaning of an item-practiced Biology word."
+    },
+    "expected_success": true,
+    "expected_room_id": "research_camp",
+    "expected_message_contains": "microscope: microscope explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "practiced_definition_request_away_from_source_room",
     "category": "accepted",
     "route": "deterministic_parser",
