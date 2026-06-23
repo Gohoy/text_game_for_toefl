@@ -285,6 +285,22 @@ def test_learner_sentence_corpus_covers_broad_conversation_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_broad_collection_requests() -> None:
+    broad_collection_cases = [
+        case
+        for case in load_corpus()
+        if "collect the thing" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["route"] == "deterministic_parser"
+        and case["expected_success"] is False
+        and case["expected_state_unchanged"] is True
+        for case in broad_collection_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 

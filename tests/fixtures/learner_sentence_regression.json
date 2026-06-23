@@ -236,6 +236,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "broad_collect_request_rejected",
+    "category": "rejected",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "Please collect the thing.",
+    "expected_parser": {
+      "action": "collect",
+      "target": "the thing"
+    },
+    "expected_success": false,
+    "expected_message_contains": "You cannot collect the thing here.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",
