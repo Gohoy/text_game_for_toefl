@@ -115,6 +115,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers negated target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers list-like target-word fragments rejected by deterministic precheck without AI evaluation
 - review-answer corpus covers question-form target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers quoted target-word mentions that reach AI evaluation and keep review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1508,7 +1509,7 @@ None.
 
 ### T-216 — Add review answer corpus case for quoted target-word mention
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner only mentions the target word as a quoted term instead of using it in context.
 - **Acceptance criteria:**
@@ -1520,7 +1521,7 @@ None.
 
 ### T-217 — Add learner sentence corpus case for vague combat requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "fight it" route when deterministic combat requires a visible enemy target.
 - **Acceptance criteria:**
@@ -1591,6 +1592,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-216 by adding a review-answer corpus regression for quoted fungus mentions that reach AI evaluation but keep review active without XP.
 - 2026-06-23: Completed T-215 by adding a learner-sentence corpus regression for `Please inspect everything.`, rejected by deterministic visible-target validation without state mutation.
 - 2026-06-23: Completed T-214 by adding a review-answer corpus regression for question-form fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-213 by adding a learner-sentence corpus regression for `Please collect the thing.`, rejected by deterministic item validation without state mutation.
@@ -1600,6 +1602,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-209 by adding a learner-sentence corpus regression for broad tool-use requests that deterministic item validation rejects without state mutation.
 - 2026-06-23: Completed T-208 by adding a learner-sentence corpus regression for ambiguous enemy references that deterministic combat rejects without state mutation.
 - 2026-06-23: Completed T-207 by adding a review-answer corpus regression for copied suggested-example reuse that reaches AI evaluation but keeps review active without XP.
-- 2026-06-23: Completed T-206 by adding a broad-location learner sentence regression for `Please take me to the lab.`, routed through AI interpretation with no state mutation.
 
 Keep at most ten items here.
