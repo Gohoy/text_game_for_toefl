@@ -134,6 +134,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers broad inspection requests rejected by deterministic visible-target validation without AI fallback or state mutation
 - learner sentence corpus covers vague combat pronouns rejected by deterministic enemy validation without state mutation
 - learner sentence corpus covers vague inventory requests routed through AI interpretation with no state mutation
+- learner sentence corpus covers indirect inventory-availability requests routed through AI interpretation to deterministic inventory with no state mutation
 - learner sentence corpus covers broad status requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect status-comparison requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect help requests routed through AI interpretation to deterministic help with no state mutation
@@ -1738,7 +1739,7 @@ None.
 
 ### T-233 — Add learner sentence corpus case for indirect inventory availability requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "what am I carrying" route when deterministic inventory commands require a supported phrase or AI interpretation.
 - **Acceptance criteria:**
@@ -1751,7 +1752,7 @@ None.
 
 ### T-234 — Add learner sentence corpus case for indirect quest-progress requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "what part of the investigation remains" route when progress can be answered through deterministic status/help style actions.
 - **Acceptance criteria:**
@@ -1773,6 +1774,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-234.
+
+### T-236 — Add learner sentence corpus case for indirect vocabulary-reminder requests
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "which word should I practice here" route when the answer can be given through deterministic help, look, or explanation-style actions.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect vocabulary-reminder-style sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-235.
 
 ## Blocked Tasks
 
@@ -1822,6 +1836,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-233 by adding a learner-sentence corpus regression for `What am I carrying right now?`, routed through AI interpretation to deterministic inventory display without state mutation.
 - 2026-06-23: Completed T-232 by adding a learner-sentence corpus regression for `Am I ready to continue?`, routed through AI interpretation to deterministic status without state mutation.
 - 2026-06-23: Completed T-231 by adding a review-answer corpus regression for `A fungus makes me feel amazed and nervous.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-229 by adding a learner-sentence corpus regression for `What is around me?`, routed through AI interpretation to deterministic room narration without state mutation.
@@ -1831,6 +1846,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-225 by adding a learner-sentence corpus regression for `Could you quiz me on words?`, routed through AI interpretation to deterministic review handling without state mutation when no words are due.
 - 2026-06-23: Completed T-224 by adding a review-answer corpus regression for tautological fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-223 by adding a learner-sentence corpus regression for `What can I do now?`, routed through AI interpretation to deterministic help without state mutation.
-- 2026-06-23: Completed T-222 by adding a review-answer corpus regression for uncertainty phrasing about fungus that reaches AI evaluation but keeps review active without XP.
 
 Keep at most ten items here.

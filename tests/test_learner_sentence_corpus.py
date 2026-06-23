@@ -349,6 +349,22 @@ def test_learner_sentence_corpus_covers_vague_inventory_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_inventory_availability() -> None:
+    indirect_inventory_cases = [
+        case
+        for case in load_corpus()
+        if "what am i carrying" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        for case in indirect_inventory_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_broad_status_requests() -> None:
     broad_status_cases = [
         case

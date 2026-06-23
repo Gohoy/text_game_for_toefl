@@ -299,6 +299,26 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_inventory_availability_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north",
+      "collect fungus sample"
+    ],
+    "sentence": "What am I carrying right now?",
+    "ai_interpretation": {
+      "action": "inventory",
+      "target": "",
+      "confidence": 0.8,
+      "reason": "The learner is asking to see the items currently carried."
+    },
+    "expected_success": true,
+    "expected_inventory_contains": "fungus sample",
+    "expected_message_contains": "Inventory: fungus sample",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "broad_status_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
