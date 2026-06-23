@@ -122,6 +122,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers tautological target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers shallow example-label target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers personal-preference target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers emotional-reaction target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1711,7 +1712,7 @@ None.
 
 ### T-231 — Add review answer corpus case for emotional-reaction target-word use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner writes only an emotional reaction to the active word without demonstrating its meaning.
 - **Acceptance criteria:**
@@ -1723,7 +1724,7 @@ None.
 
 ### T-232 — Add learner sentence corpus case for indirect status comparison requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "am I ready to continue" route when deterministic status commands require a supported phrase or AI interpretation.
 - **Acceptance criteria:**
@@ -1782,7 +1783,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
-- 2026-06-23: Completed T-230 by adding a learner-sentence corpus regression for `Could you ask the scientist for advice?`, routed through AI interpretation to deterministic NPC dialogue without state mutation.
+- 2026-06-23: Completed T-231 by adding a review-answer corpus regression for `A fungus makes me feel amazed and nervous.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-229 by adding a learner-sentence corpus regression for `What is around me?`, routed through AI interpretation to deterministic room narration without state mutation.
 - 2026-06-23: Completed T-228 by adding a review-answer corpus regression for personal-preference fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-227 by adding a learner-sentence corpus regression for `Could you tell me what organism means?`, routed through AI interpretation to deterministic vocabulary explanation without state mutation.
