@@ -117,6 +117,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
 - learner sentence corpus covers overly broad location requests routed through AI fallback with no state mutation
 - learner sentence corpus covers ambiguous enemy references rejected by deterministic combat without state mutation
+- learner sentence corpus covers broad tool-use requests rejected by deterministic item validation without state mutation
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1412,7 +1413,7 @@ None.
 
 ### T-209 — Add learner sentence corpus case for broad tool-use requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "use the tool" route when deterministic item use requires a concrete inventory or visible target.
 - **Acceptance criteria:**
@@ -1425,7 +1426,7 @@ None.
 
 ### T-210 — Add review answer corpus case for negated target-word use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner uses the active word in a sentence that negates or avoids demonstrating the target meaning.
 - **Acceptance criteria:**
@@ -1434,6 +1435,32 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-209.
+
+### T-211 — Add learner sentence corpus case for broad conversation requests
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "talk to someone" route when deterministic dialogue requires a concrete visible NPC.
+- **Acceptance criteria:**
+  - corpus includes at least one broad conversation sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-210.
+
+### T-212 — Add review answer corpus case for list-like target-word fragments
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner provides a list-like fragment instead of a sentence that demonstrates the active word.
+- **Acceptance criteria:**
+  - review corpus includes at least one list-like fragment or fragment-style answer
+  - expected deterministic precheck or AI evaluation route is explicit
+  - expected XP/review outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-211.
 
 ## Blocked Tasks
 
@@ -1483,6 +1510,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-209 by adding a learner-sentence corpus regression for broad tool-use requests that deterministic item validation rejects without state mutation.
 - 2026-06-23: Completed T-208 by adding a learner-sentence corpus regression for ambiguous enemy references that deterministic combat rejects without state mutation.
 - 2026-06-23: Completed T-207 by adding a review-answer corpus regression for copied suggested-example reuse that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-206 by adding a broad-location learner sentence regression for `Please take me to the lab.`, routed through AI interpretation with no state mutation.
@@ -1492,6 +1520,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-202 by adding a learner-sentence corpus regression for a compound movement-plus-collection request that executes only the deterministic movement and leaves the item uncollected.
 - 2026-06-23: Completed T-201 by adding a learner-sentence corpus regression for pronoun-like item references such as `Could you get it for Dr. Lin?`, routed through AI interpretation and deterministic collect validation.
 - 2026-06-23: Completed T-200 by adding a learner-sentence corpus regression for hedged intention movement phrasing with an explicit deterministic room transition.
-- 2026-06-23: Completed T-199 by adding a review-answer corpus regression for a fluent but off-context fungus sentence that reaches AI evaluation and keeps review active without XP.
 
 Keep at most ten items here.
