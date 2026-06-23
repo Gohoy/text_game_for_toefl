@@ -166,6 +166,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_question_form_target_use",
+    "category": "rejected",
+    "sentence": "Why can a fungus survive in damp forests?",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The learner asks a question about fungus instead of using the word to show understanding.",
+      "suggested_sentence": "A fungus can survive in damp forests because moisture helps it grow."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",
