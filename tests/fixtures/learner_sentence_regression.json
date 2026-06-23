@@ -405,6 +405,28 @@
     ]
   },
   {
+    "id": "indirect_strategy_advice_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north",
+      "go north"
+    ],
+    "sentence": "How should I deal with the vine?",
+    "ai_interpretation": {
+      "action": "look",
+      "target": "",
+      "confidence": 0.81,
+      "reason": "The learner asks for advice about the visible enemy instead of directly attacking it."
+    },
+    "expected_success": true,
+    "expected_message_contains": "AI room narration for Mimicry Trail.",
+    "expected_state_unchanged": true,
+    "expected_interpretation_visible_enemies": [
+      "Invasive Vine"
+    ]
+  },
+  {
     "id": "indirect_save_exit_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
