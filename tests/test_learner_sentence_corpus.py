@@ -404,6 +404,22 @@ def test_review_answer_corpus_covers_negated_target_word_use() -> None:
     )
 
 
+def test_review_answer_corpus_covers_list_like_fragments() -> None:
+    list_like_cases = [
+        case
+        for case in load_review_corpus()
+        if "fungus," in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["expected_ai_evaluation"] is False
+        and case["expected_active_review_word"] == "fungus"
+        and case["expected_xp"] == 16
+        for case in list_like_cases
+    )
+
+
 @pytest.mark.parametrize("case", load_corpus(), ids=lambda case: case["id"])
 def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
     provider = CorpusAIProvider(case)

@@ -27,6 +27,17 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_list_like_fragment_rejected_before_ai",
+    "category": "rejected",
+    "sentence": "fungus, symbiosis, vital",
+    "expected_success": false,
+    "expected_message_contains": "write a full sentence that uses 'fungus'",
+    "expected_ai_evaluation": false,
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_ai_rejected",
     "category": "rejected",
     "sentence": "The word fungus appears in my sentence.",
