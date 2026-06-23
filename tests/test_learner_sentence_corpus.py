@@ -493,6 +493,22 @@ def test_learner_sentence_corpus_covers_indirect_npc_dialogue_requests() -> None
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_vocabulary_reminders() -> None:
+    vocabulary_reminder_cases = [
+        case
+        for case in load_corpus()
+        if "word should i practice" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        for case in vocabulary_reminder_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 

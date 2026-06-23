@@ -140,6 +140,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect status-comparison requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect quest-progress requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect help requests routed through AI interpretation to deterministic help with no state mutation
+- learner sentence corpus covers indirect vocabulary-reminder requests routed through AI interpretation to deterministic help with no state mutation
 - learner sentence corpus covers indirect review requests routed through AI interpretation to deterministic review handling with no state mutation when no words are due
 - learner sentence corpus covers indirect vocabulary explanation requests routed through AI interpretation to deterministic explanation with no state mutation
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
@@ -204,6 +205,7 @@ Evidence from an in-memory playthrough:
 - duplicate review-answer messages are now protected from looking like normal AI acceptance or rejection and do not grant extra XP or mastery
 - duplicate review answers now skip AI review evaluation before returning the distinct duplicate message
 - synonym-heavy review answers such as defining `fungus` as a harmless animal now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
+- indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
 - empty turn-feedback required fields now have regression coverage proving validation failures roll back state-changing actions
 - malformed turn-feedback vocabulary notes now have regression coverage proving validation failures roll back state-changing actions
@@ -1779,7 +1781,7 @@ None.
 
 ### T-236 — Add learner sentence corpus case for indirect vocabulary-reminder requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "which word should I practice here" route when the answer can be given through deterministic help, look, or explanation-style actions.
 - **Acceptance criteria:**
@@ -1792,7 +1794,7 @@ None.
 
 ### T-237 — Add review answer corpus case for cause-effect-free target-word use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner includes the active word but gives no biological cause, effect, role, or property.
 - **Acceptance criteria:**
@@ -1863,6 +1865,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-236 by adding a learner-sentence corpus regression for `Which word should I practice here?`, routed through AI interpretation to deterministic help without state mutation.
 - 2026-06-23: Completed T-235 by adding a review-answer corpus regression for `A fungus is like a hidden city in my imagination.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-234 by adding a learner-sentence corpus regression for `What part of the investigation remains?`, routed through AI interpretation to deterministic quest progress in the status summary without state mutation.
 - 2026-06-23: Completed T-233 by adding a learner-sentence corpus regression for `What am I carrying right now?`, routed through AI interpretation to deterministic inventory display without state mutation.
@@ -1872,6 +1875,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-228 by adding a review-answer corpus regression for personal-preference fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-227 by adding a learner-sentence corpus regression for `Could you tell me what organism means?`, routed through AI interpretation to deterministic vocabulary explanation without state mutation.
 - 2026-06-23: Completed T-226 by adding a review-answer corpus regression for shallow example-label fungus use that reaches AI evaluation but keeps review active without XP.
-- 2026-06-23: Completed T-225 by adding a learner-sentence corpus regression for `Could you quiz me on words?`, routed through AI interpretation to deterministic review handling without state mutation when no words are due.
 
 Keep at most ten items here.
