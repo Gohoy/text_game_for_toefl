@@ -20,6 +20,9 @@ A minimal world pack contains:
   "start_room_id": "field_station",
   "core_words": ["organism", "symbiosis", "metabolism"],
   "items": ["field notebook"],
+  "item_descriptions": {
+    "field notebook": "A notebook with field observations."
+  },
   "npcs": ["Dr. Lin"],
   "rooms": [],
   "enemies": [],
@@ -69,7 +72,7 @@ tags
 
 Runtime changes such as collected items or defeated enemies belong in player/world state, not by mutating the source JSON.
 
-Current implementation note: room `items` and `npcs` are references to top-level string namespaces. They preserve the current runtime display names for compatibility. A future schema can promote them to object records with separate stable IDs, names, descriptions, and tags.
+Current implementation note: room `items` and `npcs` are references to top-level string namespaces. They preserve the current runtime display names for compatibility. Optional top-level `item_descriptions` entries provide deterministic inspection details for known item IDs. A future schema can promote them to object records with separate stable IDs, names, descriptions, and tags.
 
 ## Item Contract
 
@@ -151,6 +154,7 @@ Validation must reject:
 
 - exits pointing to missing rooms
 - placements pointing to missing items, NPCs, or enemies
+- item descriptions pointing to missing item IDs
 - quest steps pointing to missing quest task IDs
 - duplicate IDs
 - start rooms that do not exist
@@ -169,7 +173,7 @@ Example:
 rooms[river_bank].exits.east references missing room "old_lab"
 ```
 
-The pack model validates required fields, forbids runtime-state fields, rejects duplicate room, item, NPC, enemy, quest task, and quest-step IDs, and rejects missing start-room, exit, placement, and quest-task references.
+The pack model validates required fields, forbids runtime-state fields, rejects duplicate room, item, NPC, enemy, quest task, and quest-step IDs, and rejects missing start-room, exit, placement, item-description, and quest-task references.
 
 World packs are loaded through `load_world_pack(path)` in `src/toefl_rpg/content/loader.py`. Loader failures are reported as `WorldPackLoadError` with messages for missing files, invalid JSON locations, and schema validation details.
 

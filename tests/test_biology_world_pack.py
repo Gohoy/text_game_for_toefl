@@ -24,6 +24,7 @@ def test_biology_world_pack_matches_current_runtime_world() -> None:
     assert packed_world.difficulty == runtime_world.difficulty
     assert packed_world.start_room_id == runtime_world.start_room_id
     assert packed_world.core_words == runtime_world.core_words
+    assert packed_world.item_descriptions == runtime_world.item_descriptions
     assert set(packed_world.rooms) == set(runtime_world.rooms)
     assert set(packed_world.enemies) == set(runtime_world.enemies)
 

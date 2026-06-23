@@ -31,6 +31,9 @@
     "fungus sample",
     "creature sketch"
   ],
+  "item_descriptions": {
+    "vaccine vial": "A small amount of clear liquid moves inside when you shake the sealed vial."
+  },
   "npcs": ["Dr. Lin"],
   "rooms": [
     {

@@ -32,6 +32,7 @@ class World(BaseModel):
     difficulty: str
     start_room_id: str
     core_words: list[str]
+    item_descriptions: dict[str, str] = Field(default_factory=dict)
     rooms: dict[str, Room]
     enemies: dict[str, Enemy] = Field(default_factory=dict)
 
@@ -88,6 +89,7 @@ class WorldPack(BaseModel):
     start_room_id: str = Field(min_length=1)
     core_words: list[str] = Field(min_length=1)
     items: list[str] = Field(default_factory=list)
+    item_descriptions: dict[str, str] = Field(default_factory=dict)
     npcs: list[str] = Field(default_factory=list)
     rooms: list[WorldPackRoom] = Field(min_length=1)
     enemies: list[WorldPackEnemy] = Field(default_factory=list)
@@ -108,6 +110,16 @@ class WorldPack(BaseModel):
         npc_ids = set(self.npcs)
         enemy_ids = {enemy.id for enemy in self.enemies}
         quest_task_ids = set(self.quest_task_ids)
+
+        _reject_missing_targets(
+            "item_descriptions",
+            "item",
+            ((None, item_id) for item_id in self.item_descriptions),
+            item_ids,
+        )
+        for item_id, description in self.item_descriptions.items():
+            if not description.strip():
+                raise ValueError(f"item_descriptions[{item_id}] must not be empty")
 
         if self.start_room_id not in room_ids:
             raise ValueError(
@@ -157,6 +169,7 @@ class WorldPack(BaseModel):
             difficulty=self.difficulty,
             start_room_id=self.start_room_id,
             core_words=list(self.core_words),
+            item_descriptions=dict(self.item_descriptions),
             rooms={
                 room.id: Room(
                     id=room.id,

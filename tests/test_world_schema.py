@@ -64,6 +64,19 @@ def test_valid_minimal_world_pack_converts_to_runtime_world() -> None:
     assert world.enemy("test_enemy").hp == 5
 
 
+def test_world_pack_converts_item_descriptions() -> None:
+    data = minimal_world_pack_data()
+    data["item_descriptions"] = {
+        "field notebook": "The notebook contains careful observations."
+    }
+
+    world = WorldPack.model_validate(data).to_world()
+
+    assert world.item_descriptions == {
+        "field notebook": "The notebook contains careful observations."
+    }
+
+
 def test_world_pack_requires_room_id() -> None:
     data = minimal_world_pack_data()
     del data["rooms"][0]["id"]
@@ -119,6 +132,28 @@ def test_world_pack_rejects_missing_item_reference() -> None:
     with pytest.raises(
         ValidationError,
         match='rooms\\[start_room\\]\\.items references missing item "missing specimen"',
+    ):
+        WorldPack.model_validate(data)
+
+
+def test_world_pack_rejects_missing_item_description_reference() -> None:
+    data = minimal_world_pack_data()
+    data["item_descriptions"] = {"missing specimen": "A stray content record."}
+
+    with pytest.raises(
+        ValidationError,
+        match='item_descriptions references missing item "missing specimen"',
+    ):
+        WorldPack.model_validate(data)
+
+
+def test_world_pack_rejects_empty_item_description() -> None:
+    data = minimal_world_pack_data()
+    data["item_descriptions"] = {"field notebook": " "}
+
+    with pytest.raises(
+        ValidationError,
+        match="item_descriptions\\[field notebook\\] must not be empty",
     ):
         WorldPack.model_validate(data)
 

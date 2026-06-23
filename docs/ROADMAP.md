@@ -52,6 +52,7 @@ Phase 1 is complete. Exit evidence:
 - shared deterministic action contract used by parser intents and AI interpretation validation
 - verbose directional sentences such as `I go north to the fungus grove.`
 - movement, inspection, inventory, collect, and use
+- deterministic item inspection details for described world-pack items, including the vaccine vial's visible liquid
 - deterministic combat
 - a three-step Biology Investigation quest
 - contextual target-word practice
@@ -261,6 +262,7 @@ Evidence from an in-memory playthrough:
 - player-facing AI response schemas now set `additionalProperties: false` for Codex structured-output compatibility, and live Codex turns have a longer default timeout with an environment override
 - Codex CLI structured-output schema strictness is covered for AI content-draft calls through a subprocess fake
 - documentation now distinguishes the required fake-provider CLI smoke from an optional manual live Codex smoke, both using temporary save paths
+- vaccine vial inspection now deterministically reports that clear liquid moves inside, so AI narration has an authoritative fact for player questions about whether the vial contains liquid
 
 Conclusion: proceed with Phase 2. Biology startup uses the validated JSON pack without changing player-visible behavior, cross-reference validation rejects bad content before runtime conversion, saves carry a versioned vocabulary mastery record, deterministic learning events update mastery records, duplicate response fingerprints suppress repeat rewards, a playable review command advances due words in stable order using validated AI evaluation for answer quality, review messages separate AI advice from deterministic rewards and retry state, rejected review answers keep AI advice and deterministic retry text visibly distinct, empty review-evaluation required fields preserve the active review word, duplicate review-answer messages avoid extra rewards, bypass unnecessary AI evaluation, and remain distinct from normal review acceptance or rejection, review-answer corpus coverage now distinguishes deterministic checks from AI evaluation, broad destination requests now avoid accidental collect parsing and preserve state when AI interpretation declines them, low-confidence, malformed, and empty-field AI interpretation coverage protects state-preserving retry guidance and provider errors, turn-feedback display, empty-field, and vocabulary-note coverage protects AI coaching labels, separate deterministic Result output, and rollback after state-changing actions, vocabulary explanation display, mismatch, and empty-field coverage protects distinct meaning, example, memory-hint lines, wrong-word rejection, and deterministic state preservation, NPC dialogue mismatch, empty-field, and vocabulary-note coverage rejects wrong or malformed dialogue before display, room narration malformed, empty-field, and wrong-room coverage rejects invalid look prose before display, Codex CLI invocation, strict response schemas, live timeout defaults, and live-smoke documentation match the installed local `codex exec` structured-output requirements, an end-to-end test protects quest completion plus review persistence, smoke playtests can use an isolated save path, visible or practiced vocabulary can be explained through the required AI provider without mutating deterministic state, verbose and permission-question directional sentences resolve to deterministic movement intents, parser misses can use validated AI interpretation before deterministic engine validation, parser and AI action names share one deterministic action contract, NPC dialogue is AI-generated but display-only, room look narration is AI-generated from deterministic room context, and AI content drafts have a schema-validation gate that rejects malformed, cross-reference-invalid, empty required text, and unauthorized top-level fields. AI feedback is wired into the turn loop, malformed AI output is rejected with clear provider errors, and deterministic code remains the authority for state changes, content validation, and rewards.
 
@@ -2289,6 +2291,19 @@ None.
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-272.
 
+### T-274 — Add deterministic item inspection descriptions
+
+- **State:** done
+- **Priority:** P2
+- **Goal:** Let world packs provide deterministic inspection facts for known item IDs so AI narration can rely on code-owned item details.
+- **Acceptance criteria:**
+  - world schema accepts non-empty item descriptions keyed by existing item IDs
+  - schema validation rejects descriptions for missing item IDs and blank descriptions
+  - inspecting a described visible item uses the deterministic description
+  - Biology world data includes a vaccine vial description about visible liquid contents
+- **Verification:** world schema tests, Biology world characterization tests, rules tests, and full suite.
+- **Dependencies:** none.
+
 ## Blocked Tasks
 
 None.
@@ -2337,6 +2352,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-274 by adding deterministic world-pack item descriptions, validation for item-description references, and vaccine vial inspection text that reports visible clear liquid contents.
 - 2026-06-23: Completed T-270 by adding a review-answer corpus regression for `Fungus is different from bacteria as a vocabulary word.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-269 by adding a learner-sentence corpus regression for `How do I get back to camp?`, routed through AI interpretation to deterministic room narration with Fungus Grove exit grounding and no automatic movement.
 - 2026-06-23: Completed T-268 by adding a review-answer corpus regression for `I feel confident about fungus now.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
@@ -2346,6 +2362,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-264 by adding a learner-sentence corpus regression for `Which task is most urgent?`, routed through AI interpretation to deterministic status with no state mutation.
 - 2026-06-23: Completed T-263 by adding a review-answer corpus regression for `The word fungus looks short and balanced on the page.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-262 by adding a review-answer corpus regression for `Fungus is a common word in TOEFL biology passages.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-23: Completed T-261 by adding a learner-sentence corpus regression for `How can I reach the microscope tent?`, routed through AI interpretation to deterministic room narration with exit grounding and no automatic movement.
 
 Keep at most ten items here.

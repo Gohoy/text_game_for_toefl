@@ -61,6 +61,10 @@ def test_biology_room_topology_and_content_placement() -> None:
     assert world.room("fungus_grove").items == ["fungus sample"]
     assert world.room("mimicry_trail").items == ["creature sketch"]
     assert world.room("mimicry_trail").enemies == ["invasive_vine"]
+    assert (
+        world.item_descriptions["vaccine vial"]
+        == "A small amount of clear liquid moves inside when you shake the sealed vial."
+    )
 
 
 def test_biology_room_target_words() -> None:

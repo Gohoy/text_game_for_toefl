@@ -1119,6 +1119,46 @@ def test_inspecting_core_word_grants_xp_once_per_turn() -> None:
     assert "microscope" in engine.state.mastered_words
 
 
+def test_inspecting_vaccine_vial_reports_liquid_contents() -> None:
+    engine = new_test_engine()
+    engine.handle("go east")
+    engine.handle("go east")
+
+    result = engine.handle("I inspect the vial.")
+
+    assert result.success
+    assert "vaccine vial" in result.message
+    assert "clear liquid moves inside" in result.message
+
+
+def test_ai_interpreted_vial_shake_reports_liquid_contents() -> None:
+    class VialShakeProvider(FakeAIProvider):
+        def interpret_player_sentence(self, request):
+            self.interpretation_requests.append(request)
+            return PlayerSentenceInterpretation(
+                action="inspect",
+                target="vaccine vial",
+                confidence=0.9,
+                reason="The learner wants to inspect the vial by shaking it.",
+            )
+
+    provider = VialShakeProvider()
+    engine = GameEngine.new_game(build_biology_realm(), ai_provider=provider)
+    engine.state.current_room_id = "vaccine_bench"
+
+    result = engine.handle(
+        "Fine, since there is no beaker on the spot. I just shake the vial "
+        "to check if it contains any liquid."
+    )
+
+    assert result.success
+    assert "clear liquid moves inside" in result.message
+    assert provider.interpretation_requests[0].player_sentence.startswith("Fine, since")
+    assert "clear liquid moves inside" in provider.turn_feedback_requests[
+        0
+    ].deterministic_result
+
+
 def test_collect_visible_item_adds_it_to_inventory() -> None:
     engine = new_test_engine()
     engine.handle("go north")

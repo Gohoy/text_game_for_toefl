@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import datetime, timezone
+import re
 from typing import Callable, Optional
 
 from toefl_rpg.ai.contract import AIProvider
@@ -326,6 +327,10 @@ class GameEngine:
                 f"You study {matched_word}. It is now marked as practiced.{xp_text}",
                 feedback,
             )
+        if matched_word in room.items:
+            description = self.state.world.item_descriptions.get(matched_word)
+            if description:
+                return TurnResult(True, f"You inspect {matched_word}. {description}", feedback)
         return TurnResult(True, f"You inspect {matched_word}.", feedback)
 
     def _collect(self, intent: ParsedIntent, feedback: str) -> TurnResult:
@@ -495,11 +500,22 @@ class GameEngine:
         return ""
 
     def _find_visible_word(self, target: str, candidates: list[str]) -> str:
-        target = target.lower()
+        target = self._normalize_match_text(target)
+        if not target:
+            return ""
         for candidate in candidates:
-            if candidate.lower() in target or target in candidate.lower():
+            normalized_candidate = self._normalize_match_text(candidate)
+            if normalized_candidate in target or target in normalized_candidate:
                 return candidate
         return ""
+
+    def _normalize_match_text(self, text: str) -> str:
+        normalized = re.sub(r"[^a-z0-9\s]", " ", text.lower())
+        normalized = " ".join(normalized.split())
+        for article in ("the ", "a ", "an "):
+            if normalized.startswith(article):
+                return normalized.removeprefix(article)
+        return normalized
 
     def _practice_words(
         self,
