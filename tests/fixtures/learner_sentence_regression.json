@@ -669,7 +669,9 @@
     },
     "expected_success": true,
     "expected_message_contains": "organism: organism explained",
-    "expected_state_unchanged": true
+    "expected_room_id": "research_camp",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
   },
   {
     "id": "polite_define_unavailable_word_deterministic_rejected",

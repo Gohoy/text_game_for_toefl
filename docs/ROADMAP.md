@@ -204,6 +204,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect item-room visible vocabulary explanation requests routed through validated AI interpretation before item use
 - learner sentence corpus covers source-room visible fungus vocabulary explanation requests before collection without changing inventory, quest, mastery, XP, or room state
 - learner sentence corpus covers indirect source-room visible fungus vocabulary explanation requests routed through validated AI interpretation before collection
+- learner sentence corpus covers start-room visible organism vocabulary explanation requests before movement or practice
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -2949,7 +2950,7 @@ None.
 
 ### T-325 — Add start-room visible organism explanation
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Prove start-room vocabulary remains explainable from the initial room without prior movement or practice.
 - **Acceptance criteria:**
@@ -2958,6 +2959,42 @@ None.
   - explanation does not mutate inventory, quest, mastery, XP, HP, or room state
 - **Verification:** learner sentence corpus tests.
 - **Dependencies:** T-324.
+
+### T-326 — Add indirect start-room organism explanation
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Prove indirect start-room vocabulary explanation requests can route through validated AI interpretation without prior movement or practice.
+- **Acceptance criteria:**
+  - learner sentence corpus includes an indirect organism explanation request from Research Camp
+  - case routes through AI interpretation to deterministic `explain`
+  - explanation does not mutate inventory, quest, mastery, XP, HP, or room state
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-325.
+
+### T-327 — Add species visible explanation from Research Camp
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Prove another start-room Biology word remains explainable from visible room vocabulary before practice.
+- **Acceptance criteria:**
+  - learner sentence corpus includes a direct `species` explanation request from Research Camp
+  - case routes to deterministic `explain` and succeeds through AI-backed vocabulary explanation
+  - explanation does not mutate inventory, quest, mastery, XP, HP, or room state
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-326.
+
+### T-328 — Add indirect species visible explanation
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Prove indirect start-room `species` explanation requests route through AI interpretation without mutating state.
+- **Acceptance criteria:**
+  - learner sentence corpus includes an indirect `species` explanation request from Research Camp
+  - case routes through AI interpretation to deterministic `explain`
+  - explanation does not mutate inventory, quest, mastery, XP, HP, or room state
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-327.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -3020,6 +3057,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-325 by making the direct start-room `Could you define organism?` corpus case explicitly assert Research Camp, deterministic `explain` routing, one AI vocabulary-explanation request, and no inventory, quest, mastery, XP, HP, or room mutation.
 - 2026-06-24: Completed T-324 by adding an indirect learner sentence case for `What does fungus mean while I am in this grove?` before collection or sentence practice, proving validated AI interpretation can route visible source-room vocabulary to deterministic explanation without inventory, quest, mastery, XP, or room mutation.
 - 2026-06-24: Completed T-323 by adding a learner sentence corpus case for `Could you define fungus?` while standing in Fungus Grove before collection or sentence practice, proving current-room vocabulary visibility authorizes AI-backed explanation without inventory, quest, mastery, XP, or room mutation.
 - 2026-06-24: Completed T-322 by adding an indirect learner sentence case for `What does microscope mean while I am in this tent?` before item use, proving validated AI interpretation can route visible item-room vocabulary to deterministic explanation without inventory, quest, mastery, XP, or room mutation.
