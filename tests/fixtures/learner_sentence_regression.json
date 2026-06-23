@@ -702,6 +702,25 @@
     "expected_vocabulary_request_count": 0
   },
   {
+    "id": "encountered_only_definition_away_from_source_room_rejected",
+    "category": "rejected",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go east",
+      "go west"
+    ],
+    "sentence": "Could you define microscope?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "microscope"
+    },
+    "expected_success": false,
+    "expected_room_id": "research_camp",
+    "expected_message_contains": "'microscope' is in Biology Realm, but it is not visible here or practiced yet.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 0
+  },
+  {
     "id": "practiced_definition_request_away_from_source_room",
     "category": "accepted",
     "route": "deterministic_parser",

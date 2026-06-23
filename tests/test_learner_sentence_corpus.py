@@ -753,6 +753,25 @@ def test_learner_sentence_corpus_covers_unknown_definition_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_encountered_only_definition_away_from_source_room() -> None:
+    encountered_only_definition_cases = [
+        case
+        for case in load_corpus()
+        if "define microscope" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["route"] == "deterministic_parser"
+        and case["setup_commands"] == ["go east", "go west"]
+        and case["expected_success"] is False
+        and case["expected_room_id"] == "research_camp"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 0
+        for case in encountered_only_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_practiced_definition_away_from_source_room() -> None:
     practiced_definition_cases = [
         case
