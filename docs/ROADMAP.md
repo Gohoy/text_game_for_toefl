@@ -127,6 +127,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers broad collection requests rejected by deterministic item validation without AI fallback or state mutation
 - learner sentence corpus covers broad inspection requests rejected by deterministic visible-target validation without AI fallback or state mutation
 - learner sentence corpus covers vague combat pronouns rejected by deterministic enemy validation without state mutation
+- learner sentence corpus covers vague inventory requests routed through AI interpretation with no state mutation
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1548,7 +1549,7 @@ None.
 
 ### T-219 — Add learner sentence corpus case for vague inventory requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "show me my stuff" route when deterministic inventory commands require a supported inventory phrase or AI interpretation.
 - **Acceptance criteria:**
@@ -1561,7 +1562,7 @@ None.
 
 ### T-220 — Add review answer corpus case for overgeneralized target-word use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner overgeneralizes the active word into an incorrect broad category.
 - **Acceptance criteria:**
@@ -1583,6 +1584,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-220.
+
+### T-222 — Add review answer corpus case for learner uncertainty phrasing
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner says they are unsure about the active word instead of using it meaningfully.
+- **Acceptance criteria:**
+  - review corpus includes at least one uncertainty answer containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-221.
 
 ## Blocked Tasks
 
@@ -1632,6 +1645,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-219 by adding a learner-sentence corpus regression for `Please show me my stuff.`, routed through AI interpretation to inventory without state mutation.
 - 2026-06-23: Completed T-218 by adding a review-answer corpus regression for hypothetical fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-217 by adding a learner-sentence corpus regression for `Please fight it.`, rejected by deterministic enemy validation without state mutation.
 - 2026-06-23: Completed T-216 by adding a review-answer corpus regression for quoted fungus mentions that reach AI evaluation but keep review active without XP.
@@ -1641,6 +1655,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-212 by adding a review-answer corpus regression for list-like fungus fragments rejected by deterministic precheck without AI evaluation.
 - 2026-06-23: Completed T-211 by adding a learner-sentence corpus regression for broad conversation requests that deterministic NPC validation rejects without state mutation.
 - 2026-06-23: Completed T-210 by adding a review-answer corpus regression for negated fungus use that reaches AI evaluation but keeps review active without XP.
-- 2026-06-23: Completed T-209 by adding a learner-sentence corpus regression for broad tool-use requests that deterministic item validation rejects without state mutation.
 
 Keep at most ten items here.

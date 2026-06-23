@@ -333,6 +333,22 @@ def test_learner_sentence_corpus_covers_broad_inspection_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_vague_inventory_requests() -> None:
+    vague_inventory_cases = [
+        case
+        for case in load_corpus()
+        if "my stuff" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        for case in vague_inventory_cases
+    )
+
+
 def test_review_answer_corpus_has_required_case_types() -> None:
     categories = {case["category"] for case in load_review_corpus()}
 

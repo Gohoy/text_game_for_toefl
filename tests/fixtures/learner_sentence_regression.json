@@ -283,6 +283,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "vague_inventory_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Please show me my stuff.",
+    "ai_interpretation": {
+      "action": "inventory",
+      "target": "",
+      "confidence": 0.78,
+      "reason": "The learner is asking to see their carried items."
+    },
+    "expected_success": true,
+    "expected_message_contains": "Your inventory is empty.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",
