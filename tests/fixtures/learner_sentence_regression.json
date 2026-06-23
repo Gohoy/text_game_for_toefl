@@ -371,6 +371,28 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_readiness_check_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north",
+      "go north"
+    ],
+    "sentence": "Am I ready to fight?",
+    "ai_interpretation": {
+      "action": "status",
+      "target": "",
+      "confidence": 0.8,
+      "reason": "The learner asks whether they are ready for combat rather than directly attacking."
+    },
+    "expected_success": true,
+    "expected_message_contains": "HP 30/30. XP 0.",
+    "expected_state_unchanged": true,
+    "expected_interpretation_visible_enemies": [
+      "Invasive Vine"
+    ]
+  },
+  {
     "id": "indirect_quest_progress_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
