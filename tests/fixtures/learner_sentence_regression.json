@@ -315,6 +315,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_status_comparison_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Am I ready to continue?",
+    "ai_interpretation": {
+      "action": "status",
+      "target": "",
+      "confidence": 0.79,
+      "reason": "The learner is asking whether their current progress is enough to keep going."
+    },
+    "expected_success": true,
+    "expected_message_contains": "HP 30/30. XP 0.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "indirect_help_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
