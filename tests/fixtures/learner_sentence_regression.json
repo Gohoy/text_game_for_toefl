@@ -819,6 +819,27 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "combat_room_encountered_only_definition_away_from_source_room_rejected",
+    "category": "rejected",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go north",
+      "go north",
+      "go south",
+      "go south"
+    ],
+    "sentence": "Could you define mimicry?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "mimicry"
+    },
+    "expected_success": false,
+    "expected_room_id": "research_camp",
+    "expected_message_contains": "'mimicry' is in Biology Realm, but it is not visible here or practiced yet.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 0
+  },
+  {
     "id": "practiced_definition_request_away_from_source_room",
     "category": "accepted",
     "route": "deterministic_parser",
