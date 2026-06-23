@@ -230,6 +230,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_uncertainty_target_use",
+    "category": "rejected",
+    "sentence": "I am not sure what a fungus really does in biology.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The learner says they are unsure about fungus instead of using the word meaningfully.",
+      "suggested_sentence": "A fungus can break down dead leaves and recycle nutrients in soil."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",

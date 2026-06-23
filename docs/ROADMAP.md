@@ -118,6 +118,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers quoted target-word mentions that reach AI evaluation and keep review active without XP
 - review-answer corpus covers hypothetical target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers overgeneralized target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers learner uncertainty phrasing that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1589,7 +1590,7 @@ None.
 
 ### T-222 — Add review answer corpus case for learner uncertainty phrasing
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says they are unsure about the active word instead of using it meaningfully.
 - **Acceptance criteria:**
@@ -1601,7 +1602,7 @@ None.
 
 ### T-223 — Add learner sentence corpus case for indirect help requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "what can I do now" route when deterministic help commands require a supported phrase or AI interpretation.
 - **Acceptance criteria:**
@@ -1611,6 +1612,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-222.
+
+### T-224 — Add review answer corpus case for tautological target-word use
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner uses the active word in a circular or tautological sentence that does not show meaning.
+- **Acceptance criteria:**
+  - review corpus includes at least one tautological answer containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-223.
 
 ## Blocked Tasks
 
@@ -1660,6 +1673,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-222 by adding a review-answer corpus regression for uncertainty phrasing about fungus that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-221 by adding a learner-sentence corpus regression for `Please tell me how I am doing.`, routed through AI interpretation to deterministic status without state mutation.
 - 2026-06-23: Completed T-220 by adding a review-answer corpus regression for overgeneralized fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-219 by adding a learner-sentence corpus regression for `Please show me my stuff.`, routed through AI interpretation to inventory without state mutation.
