@@ -840,6 +840,25 @@
     "expected_vocabulary_request_count": 0
   },
   {
+    "id": "combat_room_visible_definition_before_combat",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go north",
+      "go north"
+    ],
+    "sentence": "Could you define mimicry?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "mimicry"
+    },
+    "expected_success": true,
+    "expected_room_id": "mimicry_trail",
+    "expected_message_contains": "mimicry: mimicry explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "indirect_combat_room_encountered_only_definition_away_from_source_room_ai_fallback_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",
