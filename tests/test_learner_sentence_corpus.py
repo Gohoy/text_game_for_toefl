@@ -372,6 +372,22 @@ def test_review_answer_corpus_covers_copied_example_reuse() -> None:
     )
 
 
+def test_review_answer_corpus_covers_negated_target_word_use() -> None:
+    negated_cases = [
+        case
+        for case in load_review_corpus()
+        if "not clear" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["expected_ai_evaluation"] is True
+        and case["expected_active_review_word"] == "fungus"
+        and case["expected_xp"] == 16
+        for case in negated_cases
+    )
+
+
 @pytest.mark.parametrize("case", load_corpus(), ids=lambda case: case["id"])
 def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
     provider = CorpusAIProvider(case)

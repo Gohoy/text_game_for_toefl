@@ -139,6 +139,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_negated_target_use",
+    "category": "rejected",
+    "sentence": "A fungus is not clear to me in biology.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence contains the target word but says the meaning is not clear instead of demonstrating it.",
+      "suggested_sentence": "A fungus can absorb nutrients from decaying plants."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",
