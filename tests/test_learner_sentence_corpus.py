@@ -667,6 +667,27 @@ def test_learner_sentence_corpus_covers_indirect_map_or_exits_requests() -> None
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_route_planning() -> None:
+    route_planning_cases = [
+        case
+        for case in load_corpus()
+        if "reach the microscope tent" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "look"
+        and case["expected_interpretation_exits"] == {
+            "east": "microscope_tent",
+            "north": "fungus_grove",
+        }
+        for case in route_planning_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_repeat_room_narration() -> None:
     repeat_room_cases = [
         case

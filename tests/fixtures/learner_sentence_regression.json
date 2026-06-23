@@ -624,6 +624,26 @@
     }
   },
   {
+    "id": "indirect_route_planning_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "How can I reach the microscope tent?",
+    "ai_interpretation": {
+      "action": "look",
+      "target": "",
+      "confidence": 0.81,
+      "reason": "The learner is asking for route-planning advice, so the game should describe current exits without moving automatically."
+    },
+    "expected_success": true,
+    "expected_message_contains": "AI room narration for Research Camp.",
+    "expected_state_unchanged": true,
+    "expected_interpretation_exits": {
+      "east": "microscope_tent",
+      "north": "fungus_grove"
+    }
+  },
+  {
     "id": "indirect_repeat_room_narration_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
