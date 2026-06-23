@@ -188,6 +188,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect vocabulary explanation requests routed through AI interpretation to deterministic explanation with no state mutation
 - learner sentence corpus covers polite definition requests routed through deterministic parsing to AI-backed vocabulary explanation with no state mutation
 - learner sentence corpus covers unavailable vocabulary explanation requests rejected before AI vocabulary calls and without state mutation
+- learner sentence corpus covers unknown vocabulary explanation requests rejected before AI vocabulary calls and without state mutation
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -2741,7 +2742,7 @@ None.
 
 ### T-309 — Add learner sentence corpus case for unknown vocabulary explanation requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Cover a full-sentence learner request that asks for an explanation of a word outside the Biology world vocabulary.
 - **Acceptance criteria:**
@@ -2750,6 +2751,18 @@ None.
   - AI does not invent or authorize explanations for words outside the world vocabulary
 - **Verification:** learner sentence corpus tests.
 - **Dependencies:** T-308.
+
+### T-310 — Add learner sentence corpus case for practiced vocabulary explanation away from source room
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Cover a full-sentence learner request that asks for an explanation of a practiced Biology word after leaving the room where it was learned.
+- **Acceptance criteria:**
+  - learner sentence corpus includes a practiced-word explanation request outside the word's source room
+  - case routes to the `explain` action and succeeds through AI-backed vocabulary explanation
+  - deterministic mastery/practiced-word state authorizes access without unrelated state mutation
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-309.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -2812,6 +2825,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-309 by adding a learner sentence corpus case for `Could you define astronomy?`, proving unknown vocabulary is rejected before AI vocabulary calls and without state mutation.
 - 2026-06-24: Completed T-308 by adding a learner sentence corpus case for `Could you define vaccine?`, proving unavailable Biology vocabulary is rejected before AI vocabulary calls and without state mutation.
 - 2026-06-24: Completed T-307 by adding a learner sentence corpus case for `Could you define organism?`, proving deterministic parsing routes to AI-backed vocabulary explanation without state mutation.
 - 2026-06-24: Completed T-306 by adding a renderer-output ambiguity seed entry to `docs/PLAYTEST_DEBUG_PROTOCOL.md`, documenting renderer ownership, AI display-only boundaries, and renderer regression coverage for result/feedback separation.
@@ -2822,6 +2836,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-300 by adding a review-answer corpus regression for `Fungus belongs on my TOEFL learning platform.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-299 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL language app.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-298 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL study-app.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-24: Completed T-297 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL vocabulary app.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.

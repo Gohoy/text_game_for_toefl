@@ -736,6 +736,23 @@ def test_learner_sentence_corpus_covers_unavailable_definition_requests() -> Non
     )
 
 
+def test_learner_sentence_corpus_covers_unknown_definition_requests() -> None:
+    unknown_definition_cases = [
+        case
+        for case in load_corpus()
+        if "define astronomy" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["route"] == "deterministic_parser"
+        and case["expected_success"] is False
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 0
+        for case in unknown_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_look_requests() -> None:
     indirect_look_cases = [
         case
