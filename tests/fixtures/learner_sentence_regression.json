@@ -425,6 +425,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_objective_priority_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Which task is most urgent?",
+    "ai_interpretation": {
+      "action": "status",
+      "target": "",
+      "confidence": 0.8,
+      "reason": "The learner is asking which current objective should be prioritized."
+    },
+    "expected_success": true,
+    "expected_message_contains": "Quest: Biology Investigation 0/3: Go north to the Fungus Grove and collect the fungus sample.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "indirect_enemy_warning_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

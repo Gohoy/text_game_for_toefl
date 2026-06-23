@@ -464,6 +464,23 @@ def test_learner_sentence_corpus_covers_indirect_goal_reminders() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_objective_priority() -> None:
+    objective_priority_cases = [
+        case
+        for case in load_corpus()
+        if "task is most urgent" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "status"
+        for case in objective_priority_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_enemy_warnings() -> None:
     indirect_enemy_warning_cases = [
         case
