@@ -690,14 +690,19 @@ def test_learner_sentence_corpus_covers_indirect_explanation_requests() -> None:
     indirect_explanation_cases = [
         case
         for case in load_corpus()
-        if "what organism means" in case["sentence"].lower()
+        if case["id"] == "indirect_explanation_request_ai_fallback_visible_word"
     ]
 
     assert any(
         case["category"] == "accepted"
         and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == []
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["ai_interpretation"]["target"] == "organism"
         and case["expected_success"] is True
+        and case["expected_room_id"] == "research_camp"
         and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
         for case in indirect_explanation_cases
     )
 
