@@ -177,6 +177,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect prerequisite-reminder requests routed through AI interpretation to deterministic help with no state mutation
 - learner sentence corpus covers indirect vocabulary-reminder requests routed through AI interpretation to deterministic help with no state mutation
 - learner sentence corpus covers indirect review requests routed through AI interpretation to deterministic review handling with no state mutation when no words are due
+- learner sentence corpus covers indirect review-readiness requests routed through AI interpretation to deterministic review availability with no mastery mutation
 - learner sentence corpus covers indirect vocabulary explanation requests routed through AI interpretation to deterministic explanation with no state mutation
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
@@ -256,6 +257,7 @@ Evidence from an in-memory playthrough:
 - indirect goal-reminder requests such as `What should I accomplish next?` now route through validated AI interpretation to deterministic status, preserving state while surfacing the next Biology Investigation objective
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - indirect next-word requests such as `Which vocabulary word comes next?` now route through validated AI interpretation to deterministic help, preserving state while avoiding practice credit
+- indirect review-readiness requests such as `Am I ready for a review?` now route through validated AI interpretation to deterministic review availability with no mastery mutation
 - indirect detour requests such as `Is there another way around?` now route through validated AI interpretation to deterministic room narration with exits grounding and no automatic movement
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
 - empty turn-feedback required fields now have regression coverage proving validation failures roll back state-changing actions
@@ -2374,7 +2376,7 @@ None.
 
 ### T-281 — Add learner sentence corpus case for indirect review-readiness requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner questions such as "Am I ready for a review?" route when the response should use deterministic status, help, or review availability without mutating mastery state.
 - **Acceptance criteria:**
@@ -2386,7 +2388,7 @@ None.
 
 ### T-282 — Add review answer corpus case for note-taking-only target use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says the active word appears in notes or study materials but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2469,6 +2471,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-281 by adding a learner-sentence corpus regression for `Am I ready for a review?`, routed through AI interpretation to deterministic review availability with no mastery mutation.
 - 2026-06-23: Completed T-280 by adding a review-answer corpus regression for `I can find fungus quickly in a TOEFL dictionary.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-279 by adding a review-answer corpus regression for `Fungus can improve my TOEFL reading skill.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-278 by adding a learner-sentence corpus regression for `Which vocabulary word comes next?`, routed through AI interpretation to deterministic help with no practice credit or state mutation.
@@ -2478,6 +2481,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-272 by adding a review-answer corpus regression for `Fungus helps me eliminate wrong TOEFL answer choices.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-274 by adding deterministic world-pack item descriptions, validation for item-description references, and vaccine vial inspection text that reports visible clear liquid contents.
 - 2026-06-23: Completed T-270 by adding a review-answer corpus regression for `Fungus is different from bacteria as a vocabulary word.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-23: Completed T-269 by adding a learner-sentence corpus regression for `How do I get back to camp?`, routed through AI interpretation to deterministic room narration with Fungus Grove exit grounding and no automatic movement.
 
 Keep at most ten items here.

@@ -626,6 +626,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_review_readiness_request_ai_fallback_no_due_words",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Am I ready for a review?",
+    "ai_interpretation": {
+      "action": "review",
+      "target": "",
+      "confidence": 0.8,
+      "reason": "The learner asks whether vocabulary review is available without submitting an answer."
+    },
+    "expected_success": true,
+    "expected_message_contains": "No vocabulary is due for review yet.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "indirect_explanation_request_ai_fallback_visible_word",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

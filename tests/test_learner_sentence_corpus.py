@@ -668,6 +668,24 @@ def test_learner_sentence_corpus_covers_indirect_review_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_review_readiness() -> None:
+    review_readiness_cases = [
+        case
+        for case in load_corpus()
+        if "ready for a review" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["ai_interpretation"]["action"] == "review"
+        and "No vocabulary is due for review yet." in case["expected_message_contains"]
+        for case in review_readiness_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_explanation_requests() -> None:
     indirect_explanation_cases = [
         case
