@@ -485,6 +485,28 @@
     ]
   },
   {
+    "id": "indirect_safety_check_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go north",
+      "go north"
+    ],
+    "sentence": "Is it safe to move on?",
+    "ai_interpretation": {
+      "action": "look",
+      "target": "",
+      "confidence": 0.8,
+      "reason": "The learner asks for safety advice in a dangerous room instead of directly moving or attacking."
+    },
+    "expected_success": true,
+    "expected_message_contains": "AI room narration for Mimicry Trail.",
+    "expected_state_unchanged": true,
+    "expected_interpretation_visible_enemies": [
+      "Invasive Vine"
+    ]
+  },
+  {
     "id": "indirect_retreat_advice_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

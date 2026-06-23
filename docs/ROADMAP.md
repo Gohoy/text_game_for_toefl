@@ -161,6 +161,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect objective-priority requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect enemy-warning requests routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation
 - learner sentence corpus covers indirect strategy-advice requests routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation
+- learner sentence corpus covers indirect safety-check requests routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation
 - learner sentence corpus covers indirect retreat-advice requests routed through AI interpretation to deterministic room narration with visible enemy grounding and no movement, combat, or state mutation
 - learner sentence corpus covers indirect rest requests routed through AI interpretation to deterministic status with no healing or state mutation
 - learner sentence corpus covers indirect help requests routed through AI interpretation to deterministic help with no state mutation
@@ -2201,7 +2202,7 @@ None.
 
 ### T-267 — Add learner sentence corpus case for indirect safety-check requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "is it safe to move on" route when the answer should use deterministic status or room narration without moving, attacking, or mutating state.
 - **Acceptance criteria:**
@@ -2213,7 +2214,7 @@ None.
 
 ### T-268 — Add review answer corpus case for confidence-only target use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says they feel confident about the active word but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2222,6 +2223,30 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-267.
+
+### T-269 — Add learner sentence corpus case for indirect backtracking requests
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "how do I get back to camp" route when the answer should use deterministic room narration or status without moving automatically.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect backtracking sentence
+  - expected AI fallback route and deterministic no-mutation outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-268.
+
+### T-270 — Add review answer corpus case for comparison-only target use
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner compares the active word with another word but does not show its Biology meaning, role, property, or consequence.
+- **Acceptance criteria:**
+  - review corpus includes at least one comparison-only sentence containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-269.
 
 ## Blocked Tasks
 
@@ -2271,6 +2296,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-267 by adding a learner-sentence corpus regression for `Is it safe to move on?`, routed through AI interpretation to deterministic room narration with visible enemy grounding and no movement or combat mutation.
 - 2026-06-23: Completed T-266 by adding a review-answer corpus regression for `I remember fungus by drawing the word on a flashcard.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-265 by adding a review-answer corpus regression for `Fungus is difficult for me to remember.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-264 by adding a learner-sentence corpus regression for `Which task is most urgent?`, routed through AI interpretation to deterministic status with no state mutation.
@@ -2280,6 +2306,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-260 by adding a review-answer corpus regression for `The word fungus has a singular noun form with a recognizable suffix.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-259 by adding a learner-sentence corpus regression for `Can you give me a hint?`, routed through AI interpretation to deterministic help with no state mutation.
 - 2026-06-23: Completed T-258 by adding a review-answer corpus regression for `The origin of fungus is interesting to study.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-23: Completed T-257 by adding a review-answer corpus regression for `I can pronounce fungus clearly during review.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.
