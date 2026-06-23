@@ -128,6 +128,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers comparison-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers test-strategy-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers score-goal-only target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers exam-context-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers analogy-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers cause-effect-free target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers unsupported-certainty target-word use that reaches AI evaluation and keeps review active without XP
@@ -248,6 +249,7 @@ Evidence from an in-memory playthrough:
 - synonym-heavy review answers such as defining `fungus` as a harmless animal now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - location-only review answers such as placing `fungus` near a research tent now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - answer-label review answers such as calling `fungus` the correct review answer now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
+- exam-context-only review answers such as saying `fungus` may appear in a difficult TOEFL exam question now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - indirect goal-reminder requests such as `What should I accomplish next?` now route through validated AI interpretation to deterministic status, preserving state while surfacing the next Biology Investigation objective
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - indirect detour requests such as `Is there another way around?` now route through validated AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -2308,7 +2310,7 @@ None.
 
 ### T-276 — Add review answer corpus case for exam-context-only target use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner places the active word only in an exam context but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2320,7 +2322,7 @@ None.
 
 ### T-277 — Add review answer corpus case for passage-prediction-only target use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner predicts the active word may appear in TOEFL passages but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
