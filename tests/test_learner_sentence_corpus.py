@@ -719,6 +719,23 @@ def test_learner_sentence_corpus_covers_polite_definition_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_unavailable_definition_requests() -> None:
+    unavailable_definition_cases = [
+        case
+        for case in load_corpus()
+        if "define vaccine" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["route"] == "deterministic_parser"
+        and case["expected_success"] is False
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 0
+        for case in unavailable_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_look_requests() -> None:
     indirect_look_cases = [
         case
@@ -1912,6 +1929,10 @@ def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
     assert case["expected_message_contains"] in result.message
     if "expected_should_quit" in case:
         assert result.should_quit is case["expected_should_quit"]
+    if "expected_vocabulary_request_count" in case:
+        assert len(provider.vocabulary_requests) == case[
+            "expected_vocabulary_request_count"
+        ]
 
     if case["route"] == "deterministic_parser":
         assert parsed.action == case["expected_parser"]["action"]
