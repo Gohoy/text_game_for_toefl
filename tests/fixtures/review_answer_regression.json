@@ -214,6 +214,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_overgeneralized_target_use",
+    "category": "rejected",
+    "sentence": "A fungus is basically any living thing in nature.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence overgeneralizes fungus into all living things instead of using the Biology meaning.",
+      "suggested_sentence": "A fungus is an organism that can absorb nutrients from decaying matter."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",
