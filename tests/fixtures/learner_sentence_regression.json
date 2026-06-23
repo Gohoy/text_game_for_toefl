@@ -470,6 +470,26 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_map_exits_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Which paths can I take from here?",
+    "ai_interpretation": {
+      "action": "look",
+      "target": "",
+      "confidence": 0.82,
+      "reason": "The learner is asking which exits or paths are available from the current room."
+    },
+    "expected_success": true,
+    "expected_message_contains": "AI room narration for Research Camp.",
+    "expected_state_unchanged": true,
+    "expected_interpretation_exits": {
+      "east": "microscope_tent",
+      "north": "fungus_grove"
+    }
+  },
+  {
     "id": "indirect_repeat_room_narration_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",

@@ -49,6 +49,15 @@ def parse_intent(text: str) -> ParsedIntent:
     )
     if any(marker in padded for marker in broad_destination_markers):
         return ParsedIntent("unknown", normalized)
+    map_or_exit_question_markers = (
+        " which paths ",
+        " what paths ",
+        " which exits ",
+        " what exits ",
+        " where can i go ",
+    )
+    if any(marker in padded for marker in map_or_exit_question_markers):
+        return ParsedIntent("unknown", normalized)
 
     movement_text = " ".join(
         normalized.translate(str.maketrans({",": " ", ";": " ", ":": " "})).split()

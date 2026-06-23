@@ -511,6 +511,26 @@ def test_learner_sentence_corpus_covers_indirect_look_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_map_or_exits_requests() -> None:
+    map_or_exits_cases = [
+        case
+        for case in load_corpus()
+        if "paths can i take" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["expected_success"] is True
+        and case["expected_state_unchanged"] is True
+        and case["expected_interpretation_exits"] == {
+            "east": "microscope_tent",
+            "north": "fungus_grove",
+        }
+        for case in map_or_exits_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_repeat_room_narration() -> None:
     repeat_room_cases = [
         case
@@ -956,6 +976,10 @@ def test_learner_sentence_corpus_routes(case: dict[str, Any]) -> None:
         if "expected_interpretation_visible_enemies" in case:
             assert provider.interpretation_requests[0].visible_enemies == case[
                 "expected_interpretation_visible_enemies"
+            ]
+        if "expected_interpretation_exits" in case:
+            assert provider.interpretation_requests[0].exits == case[
+                "expected_interpretation_exits"
             ]
 
     if "expected_room_id" in case:

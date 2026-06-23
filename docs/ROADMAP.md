@@ -149,6 +149,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect review requests routed through AI interpretation to deterministic review handling with no state mutation when no words are due
 - learner sentence corpus covers indirect vocabulary explanation requests routed through AI interpretation to deterministic explanation with no state mutation
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
+- learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect repeat-room narration requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect save-exit requests routed through AI interpretation to deterministic quit handling with no state mutation
 - learner sentence corpus covers indirect NPC dialogue requests routed through AI interpretation to deterministic talk validation with no state mutation
@@ -1889,7 +1890,7 @@ None.
 
 ### T-244 — Add learner sentence corpus case for indirect map-or-exits requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "which paths can I take" route when the answer can be given through deterministic room narration or help without mutating state.
 - **Acceptance criteria:**
@@ -1899,6 +1900,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-243.
+
+### T-245 — Add review answer corpus case for source-only target-word use
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner says where they learned the active word but does not show its Biology meaning, role, property, or consequence.
+- **Acceptance criteria:**
+  - review corpus includes at least one source-only answer containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-244.
 
 ## Blocked Tasks
 
@@ -1948,6 +1961,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-244 by adding a learner-sentence corpus regression for `Which paths can I take from here?`, routed through AI interpretation to deterministic room narration with exits grounding and no state mutation.
 - 2026-06-23: Completed T-243 by adding a review-answer corpus regression for `A fungus is associated with biology in my notes.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-242 by adding a learner-sentence corpus regression for `What danger is nearby?`, routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation.
 - 2026-06-23: Completed T-240 by adding a learner-sentence corpus regression for `Please remind me where I am.`, routed through AI interpretation to deterministic room narration without state mutation.
@@ -1957,6 +1971,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-236 by adding a learner-sentence corpus regression for `Which word should I practice here?`, routed through AI interpretation to deterministic help without state mutation.
 - 2026-06-23: Completed T-235 by adding a review-answer corpus regression for `A fungus is like a hidden city in my imagination.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-234 by adding a learner-sentence corpus regression for `What part of the investigation remains?`, routed through AI interpretation to deterministic quest progress in the status summary without state mutation.
-- 2026-06-23: Completed T-233 by adding a learner-sentence corpus regression for `What am I carrying right now?`, routed through AI interpretation to deterministic inventory display without state mutation.
 
 Keep at most ten items here.
