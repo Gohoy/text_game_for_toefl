@@ -120,6 +120,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers overgeneralized target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers learner uncertainty phrasing that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers tautological target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers shallow example-label target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1643,7 +1644,7 @@ None.
 
 ### T-226 — Add review answer corpus case for shallow example-label target-word use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner writes that the active word is "an example" of a topic without demonstrating the word's meaning.
 - **Acceptance criteria:**
@@ -1655,7 +1656,7 @@ None.
 
 ### T-227 — Add learner sentence corpus case for indirect explanation requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "tell me what this word means" route when deterministic explanation commands require a supported phrase or AI interpretation.
 - **Acceptance criteria:**
@@ -1714,6 +1715,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-226 by adding a review-answer corpus regression for shallow example-label fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-225 by adding a learner-sentence corpus regression for `Could you quiz me on words?`, routed through AI interpretation to deterministic review handling without state mutation when no words are due.
 - 2026-06-23: Completed T-224 by adding a review-answer corpus regression for tautological fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-223 by adding a learner-sentence corpus regression for `What can I do now?`, routed through AI interpretation to deterministic help without state mutation.
@@ -1723,6 +1725,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-219 by adding a learner-sentence corpus regression for `Please show me my stuff.`, routed through AI interpretation to inventory without state mutation.
 - 2026-06-23: Completed T-218 by adding a review-answer corpus regression for hypothetical fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-217 by adding a learner-sentence corpus regression for `Please fight it.`, rejected by deterministic enemy validation without state mutation.
-- 2026-06-23: Completed T-216 by adding a review-answer corpus regression for quoted fungus mentions that reach AI evaluation but keep review active without XP.
 
 Keep at most ten items here.
