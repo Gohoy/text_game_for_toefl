@@ -138,6 +138,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect review requests routed through AI interpretation to deterministic review handling with no state mutation when no words are due
 - learner sentence corpus covers indirect vocabulary explanation requests routed through AI interpretation to deterministic explanation with no state mutation
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
+- learner sentence corpus covers indirect NPC dialogue requests routed through AI interpretation to deterministic talk validation with no state mutation
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1697,7 +1698,7 @@ None.
 
 ### T-230 — Add learner sentence corpus case for indirect NPC dialogue requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "ask the scientist for advice" route when deterministic talk commands require a supported phrase or AI interpretation.
 - **Acceptance criteria:**
@@ -1710,7 +1711,7 @@ None.
 
 ### T-231 — Add review answer corpus case for emotional-reaction target-word use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner writes only an emotional reaction to the active word without demonstrating its meaning.
 - **Acceptance criteria:**
@@ -1719,6 +1720,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-230.
+
+### T-232 — Add learner sentence corpus case for indirect status comparison requests
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "am I ready to continue" route when deterministic status commands require a supported phrase or AI interpretation.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect status-comparison-style sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-231.
 
 ## Blocked Tasks
 
@@ -1768,6 +1782,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-230 by adding a learner-sentence corpus regression for `Could you ask the scientist for advice?`, routed through AI interpretation to deterministic NPC dialogue without state mutation.
 - 2026-06-23: Completed T-229 by adding a learner-sentence corpus regression for `What is around me?`, routed through AI interpretation to deterministic room narration without state mutation.
 - 2026-06-23: Completed T-228 by adding a review-answer corpus regression for personal-preference fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-227 by adding a learner-sentence corpus regression for `Could you tell me what organism means?`, routed through AI interpretation to deterministic vocabulary explanation without state mutation.
@@ -1777,6 +1792,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-223 by adding a learner-sentence corpus regression for `What can I do now?`, routed through AI interpretation to deterministic help without state mutation.
 - 2026-06-23: Completed T-222 by adding a review-answer corpus regression for uncertainty phrasing about fungus that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-221 by adding a learner-sentence corpus regression for `Please tell me how I am doing.`, routed through AI interpretation to deterministic status without state mutation.
-- 2026-06-23: Completed T-220 by adding a review-answer corpus regression for overgeneralized fungus use that reaches AI evaluation but keeps review active without XP.
 
 Keep at most ten items here.

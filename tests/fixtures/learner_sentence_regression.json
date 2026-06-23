@@ -379,6 +379,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_npc_dialogue_request_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Could you ask the scientist for advice?",
+    "ai_interpretation": {
+      "action": "talk",
+      "target": "Dr. Lin",
+      "confidence": 0.84,
+      "reason": "The learner is asking to speak with the visible scientist NPC."
+    },
+    "expected_success": true,
+    "expected_message_contains": "Dr. Lin says: Start by collecting a fungus sample",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",
