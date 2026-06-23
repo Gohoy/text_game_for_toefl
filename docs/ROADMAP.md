@@ -128,6 +128,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers unsupported-certainty target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers location-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers relation-only target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers source-only target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1903,7 +1904,7 @@ None.
 
 ### T-245 — Add review answer corpus case for source-only target-word use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says where they learned the active word but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -1912,6 +1913,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-244.
+
+### T-246 — Add learner sentence corpus case for indirect goal reminder requests
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "what should I accomplish next" route when the answer can be given through deterministic status or help without mutating state.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect goal-reminder-style sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-245.
 
 ## Blocked Tasks
 
@@ -1961,6 +1975,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-245 by adding a review-answer corpus regression for `I learned fungus from my biology teacher.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-244 by adding a learner-sentence corpus regression for `Which paths can I take from here?`, routed through AI interpretation to deterministic room narration with exits grounding and no state mutation.
 - 2026-06-23: Completed T-243 by adding a review-answer corpus regression for `A fungus is associated with biology in my notes.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-242 by adding a learner-sentence corpus regression for `What danger is nearby?`, routed through AI interpretation to deterministic room narration with visible enemy grounding and no state mutation.
@@ -1970,6 +1985,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-237 by adding a review-answer corpus regression for `A fungus exists in the forest today.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-236 by adding a learner-sentence corpus regression for `Which word should I practice here?`, routed through AI interpretation to deterministic help without state mutation.
 - 2026-06-23: Completed T-235 by adding a review-answer corpus regression for `A fungus is like a hidden city in my imagination.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-23: Completed T-234 by adding a learner-sentence corpus regression for `What part of the investigation remains?`, routed through AI interpretation to deterministic quest progress in the status summary without state mutation.
 
 Keep at most ten items here.
