@@ -753,6 +753,30 @@ def test_learner_sentence_corpus_covers_unknown_definition_requests() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_practiced_definition_away_from_source_room() -> None:
+    practiced_definition_cases = [
+        case
+        for case in load_corpus()
+        if "define fungus" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "deterministic_parser"
+        and case["setup_commands"] == [
+            "go north",
+            "The fungus is vital for the old forest.",
+            "go south",
+        ]
+        and case["expected_parser"]["action"] == "explain"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "research_camp"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in practiced_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_look_requests() -> None:
     indirect_look_cases = [
         case

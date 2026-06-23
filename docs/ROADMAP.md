@@ -189,6 +189,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers polite definition requests routed through deterministic parsing to AI-backed vocabulary explanation with no state mutation
 - learner sentence corpus covers unavailable vocabulary explanation requests rejected before AI vocabulary calls and without state mutation
 - learner sentence corpus covers unknown vocabulary explanation requests rejected before AI vocabulary calls and without state mutation
+- learner sentence corpus covers practiced vocabulary explanation requests away from the source room, proving mastered/practiced-word state authorizes AI-backed explanation without unrelated mutation
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -2754,7 +2755,7 @@ None.
 
 ### T-310 — Add learner sentence corpus case for practiced vocabulary explanation away from source room
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Cover a full-sentence learner request that asks for an explanation of a practiced Biology word after leaving the room where it was learned.
 - **Acceptance criteria:**
@@ -2763,6 +2764,42 @@ None.
   - deterministic mastery/practiced-word state authorizes access without unrelated state mutation
 - **Verification:** learner sentence corpus tests.
 - **Dependencies:** T-309.
+
+### T-311 — Add indirect practiced vocabulary explanation away from source room
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Cover an indirect full-sentence learner request for a practiced Biology word after leaving the room where it was learned.
+- **Acceptance criteria:**
+  - learner sentence corpus includes an indirect practiced-word explanation request outside the word's source room
+  - case routes through validated AI interpretation to the deterministic `explain` action
+  - AI-backed vocabulary explanation succeeds while deterministic state remains unchanged
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-310.
+
+### T-312 — Add encountered-only explanation rejection away from source room
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Prove that merely encountering a Biology word does not authorize off-room vocabulary explanation access.
+- **Acceptance criteria:**
+  - learner sentence corpus includes a word encountered in its source room, then requested from another room before practice
+  - case rejects before AI vocabulary explanation and keeps state unchanged
+  - message distinguishes encountered-only access from visible or practiced vocabulary access
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-311.
+
+### T-313 — Add item-practiced explanation away from source room
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Prove that deterministic item or quest practice authorizes later vocabulary explanation away from the source room.
+- **Acceptance criteria:**
+  - learner sentence corpus includes a word practiced by collecting or using a Biology item, then requested from another room
+  - case routes to `explain` and succeeds through AI-backed vocabulary explanation
+  - deterministic inventory, quest, mastery, and room state do not change during explanation
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-312.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -2825,6 +2862,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-310 by adding a learner sentence corpus case for `Could you define fungus?` after practicing `fungus` in the grove and returning to camp, proving practiced-word state authorizes AI-backed explanation away from the source room without unrelated mutation.
 - 2026-06-24: Completed T-309 by adding a learner sentence corpus case for `Could you define astronomy?`, proving unknown vocabulary is rejected before AI vocabulary calls and without state mutation.
 - 2026-06-24: Completed T-308 by adding a learner sentence corpus case for `Could you define vaccine?`, proving unavailable Biology vocabulary is rejected before AI vocabulary calls and without state mutation.
 - 2026-06-24: Completed T-307 by adding a learner sentence corpus case for `Could you define organism?`, proving deterministic parsing routes to AI-backed vocabulary explanation without state mutation.
@@ -2834,7 +2872,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-303 by linking `docs/PLAYTEST_DEBUG_PROTOCOL.md` from the automation runbook and limiting protocol updates to observed, verified player-facing failures.
 - 2026-06-24: Completed T-302 by adding `docs/PLAYTEST_DEBUG_PROTOCOL.md` with seed entries for the vial-liquid inspection fix, parser-miss state preservation, review-answer false positives, and Codex structured-output schema failures.
 - 2026-06-24: Completed T-300 by adding a review-answer corpus regression for `Fungus belongs on my TOEFL learning platform.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-24: Completed T-299 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL language app.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-24: Completed T-298 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL study-app.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.

@@ -702,6 +702,26 @@
     "expected_vocabulary_request_count": 0
   },
   {
+    "id": "practiced_definition_request_away_from_source_room",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go north",
+      "The fungus is vital for the old forest.",
+      "go south"
+    ],
+    "sentence": "Could you define fungus?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "fungus"
+    },
+    "expected_success": true,
+    "expected_room_id": "research_camp",
+    "expected_message_contains": "fungus: fungus explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "indirect_look_request_ai_fallback",
     "category": "accepted",
     "route": "ai_interpretation_fallback",
