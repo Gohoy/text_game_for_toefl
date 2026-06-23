@@ -136,6 +136,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers morphology-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers frequency-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers visual-form-only target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers difficulty-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers etymology-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers source-only target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
@@ -2175,7 +2176,7 @@ None.
 
 ### T-265 — Add review answer corpus case for difficulty-only target use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says the active word is difficult or easy to remember but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2187,7 +2188,7 @@ None.
 
 ### T-266 — Add review answer corpus case for memorization-method-only target use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner says how they memorize the active word but does not show its Biology meaning, role, property, or consequence.
 - **Acceptance criteria:**
@@ -2208,6 +2209,18 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-266.
+
+### T-268 — Add review answer corpus case for confidence-only target use
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Protect review feedback when a learner says they feel confident about the active word but does not show its Biology meaning, role, property, or consequence.
+- **Acceptance criteria:**
+  - review corpus includes at least one confidence-only sentence containing the active review word
+  - expected AI evaluation result and deterministic XP/review outcome are explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-267.
 
 ## Blocked Tasks
 
@@ -2257,6 +2270,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-265 by adding a review-answer corpus regression for `Fungus is difficult for me to remember.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-264 by adding a learner-sentence corpus regression for `Which task is most urgent?`, routed through AI interpretation to deterministic status with no state mutation.
 - 2026-06-23: Completed T-263 by adding a review-answer corpus regression for `The word fungus looks short and balanced on the page.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-262 by adding a review-answer corpus regression for `Fungus is a common word in TOEFL biology passages.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
@@ -2266,6 +2280,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-258 by adding a review-answer corpus regression for `The origin of fungus is interesting to study.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-257 by adding a review-answer corpus regression for `I can pronounce fungus clearly during review.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-23: Completed T-256 by adding a learner-sentence corpus regression for `Can I rest here?`, routed through AI interpretation to deterministic status with no healing or state mutation.
-- 2026-06-23: Completed T-255 by adding a review-answer corpus regression for `I can spell fungus correctly with six letters.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.
