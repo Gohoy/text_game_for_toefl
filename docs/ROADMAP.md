@@ -150,6 +150,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers spelling-bee-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers practice-schedule-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers e-learning-only target use that reaches AI evaluation and keeps review active without XP
+- TOEFL RPG playtest debug protocol records recurring failure signatures, deterministic owners, AI boundaries, verified fixes, regression coverage, and proactive checks without adding OpenGame runtime dependencies
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -2651,7 +2652,7 @@ None.
 
 ### T-302 — Add TOEFL RPG playtest debug protocol
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Adapt the copied OpenGame Debug Skill idea into a local protocol for recurring TOEFL CLI playtest failures.
 - **Acceptance criteria:**
@@ -2660,6 +2661,18 @@ None.
   - no OpenGame runtime dependency, Node tooling, browser-game scaffold, asset pipeline, or new API-key requirement is introduced
 - **Verification:** documentation consistency check and full suite if implementation files are touched.
 - **Dependencies:** T-301.
+
+### T-303 — Reference playtest debug protocol from automation runbook
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Make scheduled agents consult the TOEFL RPG playtest debug protocol when a run hits a recurring player-facing failure.
+- **Acceptance criteria:**
+  - automation runbook links to `docs/PLAYTEST_DEBUG_PROTOCOL.md`
+  - guidance says to add or update entries only after observed failures and verified fixes
+  - no OpenGame runtime dependency, Node tooling, browser-game scaffold, asset pipeline, or new API-key requirement is introduced
+- **Verification:** documentation consistency check.
+- **Dependencies:** T-302.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -2722,6 +2735,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-302 by adding `docs/PLAYTEST_DEBUG_PROTOCOL.md` with seed entries for the vial-liquid inspection fix, parser-miss state preservation, review-answer false positives, and Codex structured-output schema failures.
 - 2026-06-24: Completed T-300 by adding a review-answer corpus regression for `Fungus belongs on my TOEFL learning platform.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-299 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL language app.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-298 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL study-app.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
@@ -2731,6 +2745,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-294 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL hangman game.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-293 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL word search.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 - 2026-06-24: Completed T-292 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL crossword.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
-- 2026-06-24: Completed T-291 by adding a review-answer corpus regression for `Fungus belongs in my TOEFL spelling bee practice.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.
