@@ -934,6 +934,30 @@ def test_learner_sentence_corpus_covers_combat_room_visible_definition_before_co
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_combat_room_visible_definition_before_combat() -> None:
+    indirect_combat_room_visible_definition_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == "indirect_combat_room_visible_definition_before_combat_ai_fallback"
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == [
+            "go north",
+            "go north",
+        ]
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["ai_interpretation"]["target"] == "mimicry"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "mimicry_trail"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in indirect_combat_room_visible_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_combat_room_encountered_only_definition_rejection() -> None:
     indirect_combat_room_encountered_definition_cases = [
         case
