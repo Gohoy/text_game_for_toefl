@@ -214,6 +214,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_spelling_only_target_use",
+    "category": "rejected",
+    "sentence": "I can spell fungus correctly with six letters.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence comments on spelling fungus but does not show its Biology meaning.",
+      "suggested_sentence": "A fungus can break down dead plant material and absorb nutrients."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_source_only_target_use",
     "category": "rejected",
     "sentence": "I learned fungus from my biology teacher.",
