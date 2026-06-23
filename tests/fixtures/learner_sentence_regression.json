@@ -739,6 +739,26 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "indirect_item_room_visible_definition_before_item_use_ai_fallback",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go east"
+    ],
+    "sentence": "What does microscope mean while I am in this tent?",
+    "ai_interpretation": {
+      "action": "explain",
+      "target": "microscope",
+      "confidence": 0.84,
+      "reason": "The learner indirectly asks for the meaning of a visible item-room word before using the item."
+    },
+    "expected_success": true,
+    "expected_room_id": "microscope_tent",
+    "expected_message_contains": "microscope: microscope explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "item_practiced_definition_away_from_source_room",
     "category": "accepted",
     "route": "deterministic_parser",

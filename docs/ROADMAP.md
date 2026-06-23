@@ -201,6 +201,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers combat-room visible vocabulary explanation requests before combat without changing combat, mastery, quest, XP, or room state
 - learner sentence corpus covers indirect combat-room visible vocabulary explanation requests routed through validated AI interpretation before combat
 - learner sentence corpus covers item-room visible vocabulary explanation requests before item use without changing inventory, quest, mastery, XP, or room state
+- learner sentence corpus covers indirect item-room visible vocabulary explanation requests routed through validated AI interpretation before item use
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -2910,7 +2911,7 @@ None.
 
 ### T-322 — Add indirect item-room visible explanation before item use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Cover an indirect full-sentence request for item-room vocabulary while the player is in the source room before using the related item.
 - **Acceptance criteria:**
@@ -2922,7 +2923,7 @@ None.
 
 ### T-323 — Add source-room visible fungus explanation before collection
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Prove quest-room vocabulary is explainable while visible in the source room before collection or sentence practice.
 - **Acceptance criteria:**
@@ -2993,6 +2994,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-322 by adding an indirect learner sentence case for `What does microscope mean while I am in this tent?` before item use, proving validated AI interpretation can route visible item-room vocabulary to deterministic explanation without inventory, quest, mastery, XP, or room mutation.
 - 2026-06-24: Completed T-321 by adding a learner sentence corpus case for `Could you define microscope?` while standing in the Microscope Tent before item use, proving current-room vocabulary visibility authorizes AI-backed explanation without inventory, quest, mastery, XP, or room mutation.
 - 2026-06-24: Completed T-320 by adding an indirect learner sentence case for `What does mimicry mean while I am standing on this trail?` before combat, proving validated AI interpretation can route visible combat-room vocabulary to deterministic explanation without state mutation.
 - 2026-06-24: Completed T-319 by adding a learner sentence corpus case for `Could you define mimicry?` while standing in the Mimicry Trail before combat, proving current-room vocabulary visibility authorizes AI-backed explanation without state mutation.
@@ -3002,6 +3004,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-315 by adding a learner sentence corpus case for `Could you define mimicry?` after defeating the invasive vine and returning to camp, proving combat-practiced vocabulary authorizes off-room explanation without state mutation during explanation.
 - 2026-06-24: Completed T-314 by adding an indirect learner sentence case for `Can you remind me what microscope means now?` after using the microscope and returning to camp, proving validated AI interpretation can route item-practiced vocabulary to deterministic explanation without state mutation.
 - 2026-06-24: Completed T-313 by adding a learner sentence corpus case for `Could you define microscope?` after collecting a fungus sample, using the microscope, and returning to camp, proving item-practiced vocabulary authorizes off-room explanation without state mutation during explanation.
-- 2026-06-24: Completed T-312 by adding a learner sentence corpus case for `Could you define microscope?` after visiting and leaving the Microscope Tent without practice, proving encounter-only access is rejected before AI vocabulary calls.
 
 Keep at most ten items here.
