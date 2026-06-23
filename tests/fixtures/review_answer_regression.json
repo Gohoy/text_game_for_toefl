@@ -118,6 +118,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_cause_effect_free_target_use",
+    "category": "rejected",
+    "sentence": "A fungus exists in the forest today.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence names fungus in a setting but gives no biological role, property, cause, or effect.",
+      "suggested_sentence": "A fungus can decompose fallen leaves and return nutrients to forest soil."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_metaphorical_target_use",
     "category": "rejected",
     "sentence": "A fungus of doubt spread through the research team.",
