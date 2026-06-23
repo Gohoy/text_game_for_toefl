@@ -133,6 +133,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers vague inventory requests routed through AI interpretation with no state mutation
 - learner sentence corpus covers broad status requests routed through AI interpretation to deterministic status with no state mutation
 - learner sentence corpus covers indirect help requests routed through AI interpretation to deterministic help with no state mutation
+- learner sentence corpus covers indirect review requests routed through AI interpretation to deterministic review handling with no state mutation when no words are due
 - configurable `TOEFL_RPG_SAVE_PATH` for CLI smoke tests and isolated playthroughs
 - end-to-end Biology quest, review, save, and reload coverage with a fake AI provider
 - AI vocabulary explanation command for visible or practiced Biology words
@@ -1629,7 +1630,7 @@ None.
 
 ### T-225 — Add learner sentence corpus case for indirect review requests
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "quiz me on words" route when deterministic review commands require a supported phrase or AI interpretation.
 - **Acceptance criteria:**
@@ -1642,7 +1643,7 @@ None.
 
 ### T-226 — Add review answer corpus case for shallow example-label target-word use
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner writes that the active word is "an example" of a topic without demonstrating the word's meaning.
 - **Acceptance criteria:**
@@ -1651,6 +1652,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-225.
+
+### T-227 — Add learner sentence corpus case for indirect explanation requests
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "tell me what this word means" route when deterministic explanation commands require a supported phrase or AI interpretation.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect vocabulary-explanation-style sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-226.
 
 ## Blocked Tasks
 
@@ -1700,6 +1714,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-225 by adding a learner-sentence corpus regression for `Could you quiz me on words?`, routed through AI interpretation to deterministic review handling without state mutation when no words are due.
 - 2026-06-23: Completed T-224 by adding a review-answer corpus regression for tautological fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-223 by adding a learner-sentence corpus regression for `What can I do now?`, routed through AI interpretation to deterministic help without state mutation.
 - 2026-06-23: Completed T-222 by adding a review-answer corpus regression for uncertainty phrasing about fungus that reaches AI evaluation but keeps review active without XP.
@@ -1709,6 +1724,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-218 by adding a review-answer corpus regression for hypothetical fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-217 by adding a learner-sentence corpus regression for `Please fight it.`, rejected by deterministic enemy validation without state mutation.
 - 2026-06-23: Completed T-216 by adding a review-answer corpus regression for quoted fungus mentions that reach AI evaluation but keep review active without XP.
-- 2026-06-23: Completed T-215 by adding a learner-sentence corpus regression for `Please inspect everything.`, rejected by deterministic visible-target validation without state mutation.
 
 Keep at most ten items here.

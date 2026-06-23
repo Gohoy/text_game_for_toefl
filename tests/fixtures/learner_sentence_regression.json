@@ -331,6 +331,22 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "indirect_review_request_ai_fallback_no_due_words",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Could you quiz me on words?",
+    "ai_interpretation": {
+      "action": "review",
+      "target": "",
+      "confidence": 0.81,
+      "reason": "The learner is asking to start vocabulary review practice."
+    },
+    "expected_success": true,
+    "expected_message_contains": "No vocabulary is due for review yet.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "invented_sample_ai_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",
