@@ -126,6 +126,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers analogy-only target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers cause-effect-free target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers unsupported-certainty target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers location-only target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -209,6 +210,7 @@ Evidence from an in-memory playthrough:
 - duplicate review-answer messages are now protected from looking like normal AI acceptance or rejection and do not grant extra XP or mastery
 - duplicate review answers now skip AI review evaluation before returning the distinct duplicate message
 - synonym-heavy review answers such as defining `fungus` as a harmless animal now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
+- location-only review answers such as placing `fungus` near a research tent now reach validated AI evaluation, remain rejected, keep the review active, and award no XP
 - indirect vocabulary-reminder requests such as `Which word should I practice here?` now route through validated AI interpretation to deterministic help, preserving state while surfacing current practice examples
 - malformed AI outputs across turn feedback, sentence interpretation, vocabulary explanation, NPC dialogue, and room narration now have regression coverage for clear provider errors and state preservation
 - empty turn-feedback required fields now have regression coverage proving validation failures roll back state-changing actions
@@ -1848,7 +1850,7 @@ None.
 
 ### T-241 — Add review answer corpus case for location-only target-word use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner places the active word in a location but does not show a biological role, property, or consequence.
 - **Acceptance criteria:**
@@ -1860,7 +1862,7 @@ None.
 
 ### T-242 — Add learner sentence corpus case for indirect enemy-warning requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "what danger is nearby" route when the current room has no live enemy versus when combat validation is required.
 - **Acceptance criteria:**

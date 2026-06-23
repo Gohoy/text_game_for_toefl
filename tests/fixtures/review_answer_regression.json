@@ -134,6 +134,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_location_only_target_use",
+    "category": "rejected",
+    "sentence": "A fungus is near the old research tent.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence places fungus in a location but does not show a biological role, property, or consequence.",
+      "suggested_sentence": "A fungus can grow near an old research tent by absorbing nutrients from damp wood."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_unsupported_certainty_claim",
     "category": "rejected",
     "sentence": "I definitely understand fungus completely now.",
