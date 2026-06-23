@@ -278,6 +278,22 @@
     "expected_xp": 16
   },
   {
+    "id": "review_answer_personal_preference_target_use",
+    "category": "rejected",
+    "sentence": "I like fungus because the word sounds interesting to me.",
+    "expected_success": false,
+    "expected_message_contains": "Result: Review needs another try.",
+    "expected_ai_evaluation": true,
+    "ai_review_evaluation": {
+      "uses_target_meaningfully": false,
+      "explanation": "The sentence shares a personal preference but does not demonstrate the Biology meaning of fungus.",
+      "suggested_sentence": "A fungus can grow on damp logs and absorb nutrients from decaying matter."
+    },
+    "expected_active_review_word": "fungus",
+    "expected_review_stage": 0,
+    "expected_xp": 16
+  },
+  {
     "id": "review_answer_malformed_ai_evaluation",
     "category": "malformed",
     "sentence": "A fungus can be vital for forest metabolism.",

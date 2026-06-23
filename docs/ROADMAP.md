@@ -121,6 +121,7 @@ Phase 1 is complete. Exit evidence:
 - review-answer corpus covers learner uncertainty phrasing that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers tautological target-word use that reaches AI evaluation and keeps review active without XP
 - review-answer corpus covers shallow example-label target-word use that reaches AI evaluation and keeps review active without XP
+- review-answer corpus covers personal-preference target-word use that reaches AI evaluation and keeps review active without XP
 - learner sentence corpus covers pronoun-like item references with explicit AI fallback and deterministic collect validation
 - learner sentence corpus covers compound action requests while proving only one deterministic action executes
 - learner sentence corpus covers self-correction phrasing routed through AI fallback and deterministic collect validation
@@ -1670,7 +1671,7 @@ None.
 
 ### T-228 — Add review answer corpus case for personal-preference target-word use
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Protect review feedback when a learner writes a personal preference about the active word without demonstrating its meaning.
 - **Acceptance criteria:**
@@ -1682,7 +1683,7 @@ None.
 
 ### T-229 — Add learner sentence corpus case for indirect look requests
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Clarify how learner requests such as "what is around me" route when deterministic look commands require a supported phrase or AI interpretation.
 - **Acceptance criteria:**
@@ -1692,6 +1693,19 @@ None.
   - no live Codex CLI is required
 - **Verification:** learner sentence corpus tests and full suite.
 - **Dependencies:** T-228.
+
+### T-230 — Add learner sentence corpus case for indirect NPC dialogue requests
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Clarify how learner requests such as "ask the scientist for advice" route when deterministic talk commands require a supported phrase or AI interpretation.
+- **Acceptance criteria:**
+  - corpus includes at least one indirect NPC-dialogue-style sentence
+  - expected parser route or AI fallback route is explicit
+  - expected mutation or no-mutation outcome is explicit
+  - no live Codex CLI is required
+- **Verification:** learner sentence corpus tests and full suite.
+- **Dependencies:** T-229.
 
 ## Blocked Tasks
 
@@ -1741,6 +1755,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-23: Completed T-228 by adding a review-answer corpus regression for personal-preference fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-227 by adding a learner-sentence corpus regression for `Could you tell me what organism means?`, routed through AI interpretation to deterministic vocabulary explanation without state mutation.
 - 2026-06-23: Completed T-226 by adding a review-answer corpus regression for shallow example-label fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-225 by adding a learner-sentence corpus regression for `Could you quiz me on words?`, routed through AI interpretation to deterministic review handling without state mutation when no words are due.
@@ -1750,6 +1765,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-23: Completed T-221 by adding a learner-sentence corpus regression for `Please tell me how I am doing.`, routed through AI interpretation to deterministic status without state mutation.
 - 2026-06-23: Completed T-220 by adding a review-answer corpus regression for overgeneralized fungus use that reaches AI evaluation but keeps review active without XP.
 - 2026-06-23: Completed T-219 by adding a learner-sentence corpus regression for `Please show me my stuff.`, routed through AI interpretation to inventory without state mutation.
-- 2026-06-23: Completed T-218 by adding a review-answer corpus regression for hypothetical fungus use that reaches AI evaluation but keeps review active without XP.
 
 Keep at most ten items here.
