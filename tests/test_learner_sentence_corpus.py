@@ -253,6 +253,22 @@ def test_learner_sentence_corpus_covers_ambiguous_enemy_references() -> None:
     )
 
 
+def test_learner_sentence_corpus_covers_vague_combat_requests() -> None:
+    vague_combat_cases = [
+        case
+        for case in load_corpus()
+        if "fight it" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["route"] == "deterministic_parser"
+        and case["expected_success"] is False
+        and case["expected_state_unchanged"] is True
+        for case in vague_combat_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_broad_tool_use_requests() -> None:
     broad_tool_cases = [
         case

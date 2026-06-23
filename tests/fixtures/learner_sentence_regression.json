@@ -206,6 +206,23 @@
     "expected_state_unchanged": true
   },
   {
+    "id": "vague_combat_pronoun_rejected",
+    "category": "rejected",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go north",
+      "go north"
+    ],
+    "sentence": "Please fight it.",
+    "expected_parser": {
+      "action": "attack",
+      "target": "it"
+    },
+    "expected_success": false,
+    "expected_message_contains": "You do not see it here.",
+    "expected_state_unchanged": true
+  },
+  {
     "id": "broad_tool_use_request_rejected",
     "category": "rejected",
     "route": "deterministic_parser",
