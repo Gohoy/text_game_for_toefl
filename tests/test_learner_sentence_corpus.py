@@ -777,6 +777,30 @@ def test_learner_sentence_corpus_covers_practiced_definition_away_from_source_ro
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_practiced_definition_away_from_source_room() -> None:
+    indirect_practiced_definition_cases = [
+        case
+        for case in load_corpus()
+        if "remind me what fungus means" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == [
+            "go north",
+            "collect fungus sample",
+            "go south",
+        ]
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "research_camp"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in indirect_practiced_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_look_requests() -> None:
     indirect_look_cases = [
         case

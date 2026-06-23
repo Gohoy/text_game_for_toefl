@@ -190,6 +190,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers unavailable vocabulary explanation requests rejected before AI vocabulary calls and without state mutation
 - learner sentence corpus covers unknown vocabulary explanation requests rejected before AI vocabulary calls and without state mutation
 - learner sentence corpus covers practiced vocabulary explanation requests away from the source room, proving mastered/practiced-word state authorizes AI-backed explanation without unrelated mutation
+- learner sentence corpus covers indirect practiced vocabulary explanation requests routed through validated AI interpretation away from the source room
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -2767,7 +2768,7 @@ None.
 
 ### T-311 — Add indirect practiced vocabulary explanation away from source room
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Cover an indirect full-sentence learner request for a practiced Biology word after leaving the room where it was learned.
 - **Acceptance criteria:**
@@ -2862,6 +2863,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-311 by adding an indirect learner sentence case for `Can you remind me what fungus means now?` after collecting a fungus sample and returning to camp, proving validated AI interpretation can route to deterministic explanation without state mutation.
 - 2026-06-24: Completed T-310 by adding a learner sentence corpus case for `Could you define fungus?` after practicing `fungus` in the grove and returning to camp, proving practiced-word state authorizes AI-backed explanation away from the source room without unrelated mutation.
 - 2026-06-24: Completed T-309 by adding a learner sentence corpus case for `Could you define astronomy?`, proving unknown vocabulary is rejected before AI vocabulary calls and without state mutation.
 - 2026-06-24: Completed T-308 by adding a learner sentence corpus case for `Could you define vaccine?`, proving unavailable Biology vocabulary is rejected before AI vocabulary calls and without state mutation.
@@ -2871,6 +2873,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-304 by adding a save-path churn seed entry to `docs/PLAYTEST_DEBUG_PROTOCOL.md`, documenting temporary `TOEFL_RPG_SAVE_PATH` use and related app/smoke coverage.
 - 2026-06-24: Completed T-303 by linking `docs/PLAYTEST_DEBUG_PROTOCOL.md` from the automation runbook and limiting protocol updates to observed, verified player-facing failures.
 - 2026-06-24: Completed T-302 by adding `docs/PLAYTEST_DEBUG_PROTOCOL.md` with seed entries for the vial-liquid inspection fix, parser-miss state preservation, review-answer false positives, and Codex structured-output schema failures.
-- 2026-06-24: Completed T-300 by adding a review-answer corpus regression for `Fungus belongs on my TOEFL learning platform.`, which reaches AI review evaluation, remains rejected, keeps review active, and awards no XP.
 
 Keep at most ten items here.
