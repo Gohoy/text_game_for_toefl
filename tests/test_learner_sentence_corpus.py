@@ -1309,6 +1309,23 @@ def test_review_answer_corpus_covers_dictionary_skill_only_target_use() -> None:
     )
 
 
+def test_review_answer_corpus_covers_note_taking_only_target_use() -> None:
+    note_taking_only_cases = [
+        case
+        for case in load_review_corpus()
+        if "wrote fungus" in case["sentence"].lower()
+        and "biology notes" in case["sentence"].lower()
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["expected_ai_evaluation"] is True
+        and case["expected_active_review_word"] == "fungus"
+        and case["expected_xp"] == 16
+        for case in note_taking_only_cases
+    )
+
+
 def test_review_answer_corpus_covers_unsupported_certainty_claims() -> None:
     unsupported_certainty_cases = [
         case
