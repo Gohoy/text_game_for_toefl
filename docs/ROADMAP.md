@@ -208,6 +208,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect start-room visible organism vocabulary explanation requests routed through validated AI interpretation before movement or practice
 - learner sentence corpus covers start-room visible species vocabulary explanation requests before movement or practice
 - learner sentence corpus covers indirect start-room visible species vocabulary explanation requests routed through validated AI interpretation before movement or practice
+- learner sentence corpus covers start-room visible evolve vocabulary explanation requests before movement or practice
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -3001,7 +3002,7 @@ None.
 
 ### T-329 — Add evolve visible explanation from Research Camp
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Prove the remaining start-room Biology word remains explainable from visible room vocabulary before practice.
 - **Acceptance criteria:**
@@ -3013,7 +3014,7 @@ None.
 
 ### T-330 — Add indirect evolve visible explanation
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Prove indirect start-room `evolve` explanation requests route through AI interpretation without mutating state.
 - **Acceptance criteria:**
@@ -3022,6 +3023,30 @@ None.
   - explanation does not mutate inventory, quest, mastery, XP, HP, or room state
 - **Verification:** learner sentence corpus tests.
 - **Dependencies:** T-329.
+
+### T-331 — Add start-room encountered-only organism rejection after movement
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Prove start-room vocabulary is not explainable away from Research Camp unless it has been practiced.
+- **Acceptance criteria:**
+  - learner sentence corpus includes a direct `organism` explanation request after moving from Research Camp to Fungus Grove without practice
+  - case routes to deterministic `explain` and is rejected before AI vocabulary explanation
+  - rejection does not mutate inventory, quest, mastery, XP, HP, or room state
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-330.
+
+### T-332 — Add indirect start-room encountered-only organism rejection after movement
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Prove indirect start-room vocabulary explanation requests away from Research Camp route through AI interpretation but remain deterministically rejected before practice.
+- **Acceptance criteria:**
+  - learner sentence corpus includes an indirect `organism` explanation request after moving from Research Camp to Fungus Grove without practice
+  - case routes through AI interpretation to deterministic `explain`
+  - rejection happens before AI vocabulary explanation and does not mutate inventory, quest, mastery, XP, HP, or room state
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-331.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -3084,6 +3109,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-329 by adding a direct start-room `Could you define evolve?` corpus case that routes through deterministic `explain`, performs one AI vocabulary-explanation request, and leaves inventory, quest, mastery, XP, HP, and room state unchanged.
 - 2026-06-24: Completed T-328 by adding an indirect start-room `Could you tell me what species means?` corpus case that routes through validated AI interpretation to deterministic `explain`, performs one AI vocabulary-explanation request, and leaves inventory, quest, mastery, XP, HP, and room state unchanged.
 - 2026-06-24: Completed T-327 by adding a direct start-room `Could you define species?` corpus case that routes through deterministic `explain`, performs one AI vocabulary-explanation request, and leaves inventory, quest, mastery, XP, HP, and room state unchanged.
 - 2026-06-24: Completed T-326 by tightening the indirect start-room `Could you tell me what organism means?` corpus case with Research Camp, validated AI `explain` interpretation, one AI vocabulary-explanation request, and no inventory, quest, mastery, XP, HP, or room mutation.
@@ -3094,6 +3120,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-321 by adding a learner sentence corpus case for `Could you define microscope?` while standing in the Microscope Tent before item use, proving current-room vocabulary visibility authorizes AI-backed explanation without inventory, quest, mastery, XP, or room mutation.
 - 2026-06-24: Completed T-320 by adding an indirect learner sentence case for `What does mimicry mean while I am standing on this trail?` before combat, proving validated AI interpretation can route visible combat-room vocabulary to deterministic explanation without state mutation.
 - 2026-06-24: Completed T-319 by adding a learner sentence corpus case for `Could you define mimicry?` while standing in the Mimicry Trail before combat, proving current-room vocabulary visibility authorizes AI-backed explanation without state mutation.
-- 2026-06-24: Completed T-318 by adding an indirect learner sentence case for `Can you remind me what mimicry means before I fight?` after visiting the Mimicry Trail and returning to camp without fighting, proving validated AI interpretation still reaches deterministic encountered-only rejection before AI vocabulary calls.
 
 Keep at most ten items here.

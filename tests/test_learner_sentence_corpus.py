@@ -787,6 +787,27 @@ def test_learner_sentence_corpus_covers_indirect_start_room_visible_species_defi
     )
 
 
+def test_learner_sentence_corpus_covers_start_room_visible_evolve_definition() -> None:
+    evolve_definition_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == "start_room_evolve_visible_definition"
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "deterministic_parser"
+        and case["setup_commands"] == []
+        and case["expected_parser"]["action"] == "explain"
+        and case["expected_parser"]["target"] == "evolve"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "research_camp"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in evolve_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_unavailable_definition_requests() -> None:
     unavailable_definition_cases = [
         case
