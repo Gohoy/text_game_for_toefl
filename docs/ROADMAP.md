@@ -209,6 +209,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers indirect item-room encountered-only strain vocabulary explanation requests routed through validated AI interpretation and rejected after leaving the source room before AI vocabulary calls
 - learner sentence corpus covers practiced item-room strain vocabulary explanation requests after leaving the source room through AI-backed vocabulary explanation
 - learner sentence corpus covers indirect practiced item-room strain vocabulary explanation requests routed through validated AI interpretation after leaving the source room through AI-backed vocabulary explanation
+- learner sentence corpus covers practiced item-room bacteria vocabulary explanation requests after leaving the source room through AI-backed vocabulary explanation
 - learner sentence corpus covers indirect item-room visible vocabulary explanation requests routed through validated AI interpretation before item use
 - learner sentence corpus covers source-room visible fungus vocabulary explanation requests before collection without changing inventory, quest, mastery, XP, or room state
 - learner sentence corpus covers indirect source-room visible fungus vocabulary explanation requests routed through validated AI interpretation before collection
@@ -3287,7 +3288,7 @@ None.
 
 ### T-351 — Add practiced item-room bacteria explanation after leaving source room
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Prove practiced item-room bacteria vocabulary remains explainable after leaving the source room.
 - **Acceptance criteria:**
@@ -3296,6 +3297,30 @@ None.
   - explanation succeeds through AI-backed vocabulary explanation without mutating inventory, quest, mastery, XP, HP, or room state beyond setup practice
 - **Verification:** learner sentence corpus tests.
 - **Dependencies:** T-350.
+
+### T-352 — Add indirect practiced item-room bacteria explanation after leaving source room
+
+- **State:** ready
+- **Priority:** P2
+- **Goal:** Prove indirect practiced item-room bacteria vocabulary requests route through AI interpretation and remain explainable after leaving the source room.
+- **Acceptance criteria:**
+  - learner sentence corpus includes an indirect `bacteria` explanation request after practicing `bacteria` in Microscope Tent and returning to Research Camp
+  - case routes through AI interpretation to deterministic `explain`
+  - explanation succeeds through AI-backed vocabulary explanation without mutating inventory, quest, mastery, XP, HP, or room state beyond setup practice
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-351.
+
+### T-353 — Add item-room visible bacteria explanation before practice
+
+- **State:** planned
+- **Priority:** P2
+- **Goal:** Prove visible item-room bacteria vocabulary can be explained in Microscope Tent before practice while preserving deterministic state.
+- **Acceptance criteria:**
+  - learner sentence corpus includes a direct `bacteria` explanation request in Microscope Tent before practice
+  - case routes to deterministic `explain`
+  - explanation succeeds through AI-backed vocabulary explanation without mutating inventory, quest, mastery, XP, HP, or room state
+- **Verification:** learner sentence corpus tests.
+- **Dependencies:** T-352.
 
 ### T-274 — Add deterministic item inspection descriptions
 
@@ -3358,6 +3383,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-351 by adding a direct `Could you define bacteria?` corpus case after practicing `bacteria` in Microscope Tent and returning to Research Camp, proving deterministic `explain` succeeds through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
 - 2026-06-24: Completed T-350 by adding an indirect `Can you remind me what strain means after I leave the tent?` corpus case after practicing `strain` in Microscope Tent and returning to Research Camp, proving validated AI interpretation reaches deterministic `explain` and succeeds through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
 - 2026-06-24: Completed T-349 by adding a direct `Could you define strain?` corpus case after practicing `strain` in Microscope Tent and returning to Research Camp, proving deterministic `explain` succeeds through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
 - 2026-06-24: Completed T-348 by adding an indirect `Can you remind me what strain means now that I left the tent?` corpus case after entering Microscope Tent and returning to Research Camp without practice, proving validated AI interpretation reaches deterministic `explain` and rejects item-room encountered-only vocabulary before AI vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation.
@@ -3367,6 +3393,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-344 by adding an indirect `Can you remind me what microscope means after I leave the tent?` corpus case after inspecting `microscope` in Microscope Tent and returning to Research Camp, proving validated AI interpretation reaches deterministic `explain` and succeeds through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
 - 2026-06-24: Completed T-343 by adding a direct `Could you define microscope?` corpus case after inspecting `microscope` in Microscope Tent and returning to Research Camp, proving practiced item-room vocabulary remains explainable off-room through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
 - 2026-06-24: Completed T-342 by adding an indirect `Can you remind me what evolve means now that I am in the grove?` corpus case after practicing `evolve` in Research Camp and moving to Fungus Grove, proving validated AI interpretation reaches deterministic `explain` and succeeds through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
-- 2026-06-24: Completed T-341 by adding a direct `Could you define evolve?` corpus case after practicing `evolve` in Research Camp and moving to Fungus Grove, proving practiced start-room `evolve` remains explainable off-room through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
 
 Keep at most ten items here.

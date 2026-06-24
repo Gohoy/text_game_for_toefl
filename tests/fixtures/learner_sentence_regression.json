@@ -1149,6 +1149,26 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "practiced_item_room_bacteria_definition_after_leaving_source_room",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go east",
+      "inspect bacteria",
+      "go west"
+    ],
+    "sentence": "Could you define bacteria?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "bacteria"
+    },
+    "expected_success": true,
+    "expected_room_id": "research_camp",
+    "expected_message_contains": "bacteria: bacteria explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "item_room_visible_definition_before_item_use",
     "category": "accepted",
     "route": "deterministic_parser",
