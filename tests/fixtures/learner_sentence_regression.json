@@ -889,6 +889,27 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "indirect_practiced_start_room_species_definition_after_movement",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "inspect species",
+      "go north"
+    ],
+    "sentence": "Can you remind me what species means now that I am in the grove?",
+    "ai_interpretation": {
+      "action": "explain",
+      "target": "species",
+      "confidence": 0.84,
+      "reason": "The learner indirectly asks for a practiced start-room vocabulary explanation after leaving its source room."
+    },
+    "expected_success": true,
+    "expected_room_id": "fungus_grove",
+    "expected_message_contains": "species: species explained",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "start_room_encountered_only_evolve_definition_after_movement_rejected",
     "category": "rejected",
     "route": "deterministic_parser",

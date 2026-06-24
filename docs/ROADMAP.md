@@ -217,6 +217,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers start-room encountered-only species vocabulary explanation requests rejected after movement before AI vocabulary calls
 - learner sentence corpus covers indirect start-room encountered-only species vocabulary explanation requests routed through validated AI interpretation and rejected after movement before AI vocabulary calls
 - learner sentence corpus covers practiced start-room species vocabulary explanation requests after movement through AI-backed vocabulary explanation
+- learner sentence corpus covers indirect practiced start-room species vocabulary explanation requests routed through validated AI interpretation after movement through AI-backed vocabulary explanation
 - learner sentence corpus covers start-room encountered-only evolve vocabulary explanation requests rejected after movement before AI vocabulary calls
 - learner sentence corpus covers indirect start-room encountered-only evolve vocabulary explanation requests routed through validated AI interpretation and rejected after movement before AI vocabulary calls
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
@@ -3144,7 +3145,7 @@ None.
 
 ### T-340 — Add indirect practiced start-room species explanation after movement
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Prove indirect practiced start-room species explanation requests away from Research Camp route through AI interpretation and succeed.
 - **Acceptance criteria:**
@@ -3156,7 +3157,7 @@ None.
 
 ### T-341 — Add practiced start-room evolve explanation after movement
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Prove practiced start-room `evolve` remains explainable after leaving Research Camp.
 - **Acceptance criteria:**
@@ -3239,6 +3240,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-340 by adding an indirect `Can you remind me what species means now that I am in the grove?` corpus case after practicing `species` in Research Camp and moving to Fungus Grove, proving validated AI interpretation reaches deterministic `explain` and succeeds through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
 - 2026-06-24: Completed T-339 by adding a direct `Could you define species?` corpus case after practicing `species` in Research Camp and moving to Fungus Grove, proving another practiced start-room word remains explainable off-room through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
 - 2026-06-24: Completed T-338 by adding an indirect `Can you remind me what organism means while I am in the grove?` corpus case after practicing `organism` in Research Camp and moving to Fungus Grove, proving validated AI interpretation reaches deterministic `explain` and succeeds through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
 - 2026-06-24: Completed T-337 by adding a direct `Could you define organism?` corpus case after practicing `organism` in Research Camp and moving to Fungus Grove, proving practiced start-room vocabulary remains explainable off-room through AI-backed vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation beyond setup practice.
@@ -3248,6 +3250,5 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 - 2026-06-24: Completed T-333 by adding a direct `Could you define species?` corpus case after moving from Research Camp to Fungus Grove, proving another start-room encountered-only word is rejected before AI vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation.
 - 2026-06-24: Completed T-332 by adding an indirect `Can you remind me what organism means while I am in the grove?` corpus case after moving from Research Camp to Fungus Grove, proving validated AI interpretation still reaches deterministic start-room encountered-only rejection before AI vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation.
 - 2026-06-24: Completed T-331 by adding a direct `Could you define organism?` corpus case after moving from Research Camp to Fungus Grove, proving start-room encountered-only vocabulary is rejected before AI vocabulary explanation without inventory, quest, mastery, XP, HP, or room mutation.
-- 2026-06-24: Completed T-330 by adding an indirect start-room `Could you tell me what evolve means?` corpus case that routes through validated AI interpretation to deterministic `explain`, performs one AI vocabulary-explanation request, and leaves inventory, quest, mastery, XP, HP, and room state unchanged.
 
 Keep at most ten items here.
