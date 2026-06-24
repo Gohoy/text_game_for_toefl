@@ -1064,6 +1064,28 @@ def test_learner_sentence_corpus_covers_start_room_encountered_only_evolve_defin
     )
 
 
+def test_learner_sentence_corpus_covers_practiced_start_room_evolve_definition_after_movement() -> None:
+    target_case_id = "practiced_start_room_evolve_definition_after_movement"
+    practiced_start_room_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == target_case_id
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "deterministic_parser"
+        and case["setup_commands"] == ["inspect evolve", "go north"]
+        and case["expected_parser"]["action"] == "explain"
+        and case["expected_parser"]["target"] == "evolve"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "fungus_grove"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in practiced_start_room_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_start_room_encountered_only_species_definition_after_movement() -> None:
     target_case_id = (
         "indirect_start_room_encountered_only_species_definition_after_movement_rejected"
