@@ -1136,6 +1136,28 @@ def test_learner_sentence_corpus_covers_item_room_visible_strain_definition_befo
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_item_room_visible_strain_definition_before_practice() -> None:
+    target_case_id = "indirect_item_room_visible_strain_definition_before_practice"
+    indirect_visible_strain_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == target_case_id
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == ["go east"]
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["ai_interpretation"]["target"] == "strain"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "microscope_tent"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in indirect_visible_strain_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_start_room_encountered_only_organism_definition_after_movement() -> None:
     target_case_id = "start_room_encountered_only_organism_definition_after_movement_rejected"
     start_room_encountered_only_cases = [
