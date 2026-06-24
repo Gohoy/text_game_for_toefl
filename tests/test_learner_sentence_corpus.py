@@ -868,6 +868,28 @@ def test_learner_sentence_corpus_covers_vaccine_bench_visible_vaccine_definition
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_vaccine_bench_visible_vaccine_definition_before_practice() -> None:
+    target_case_id = "indirect_vaccine_bench_visible_vaccine_definition_before_practice"
+    indirect_visible_vaccine_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == target_case_id
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == ["go east", "go east"]
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["ai_interpretation"]["target"] == "vaccine"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "vaccine_bench"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in indirect_visible_vaccine_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_unknown_definition_requests() -> None:
     unknown_definition_cases = [
         case
