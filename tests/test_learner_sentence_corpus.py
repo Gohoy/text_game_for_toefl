@@ -882,6 +882,28 @@ def test_learner_sentence_corpus_covers_encountered_only_definition_away_from_so
     )
 
 
+def test_learner_sentence_corpus_covers_start_room_encountered_only_organism_definition_after_movement() -> None:
+    target_case_id = "start_room_encountered_only_organism_definition_after_movement_rejected"
+    start_room_encountered_only_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == target_case_id
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["route"] == "deterministic_parser"
+        and case["setup_commands"] == ["go north"]
+        and case["expected_parser"]["action"] == "explain"
+        and case["expected_parser"]["target"] == "organism"
+        and case["expected_success"] is False
+        and case["expected_room_id"] == "fungus_grove"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 0
+        for case in start_room_encountered_only_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_item_room_visible_definition_before_item_use() -> None:
     item_room_visible_definition_cases = [
         case
