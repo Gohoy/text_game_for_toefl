@@ -839,6 +839,25 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "vaccine_bench_visible_respiration_definition_before_practice",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go east",
+      "go east"
+    ],
+    "sentence": "Could you define respiration?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "respiration"
+    },
+    "expected_success": true,
+    "expected_room_id": "vaccine_bench",
+    "expected_message_contains": "respiration: respiration explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "polite_define_unknown_word_deterministic_rejected",
     "category": "rejected",
     "route": "deterministic_parser",
