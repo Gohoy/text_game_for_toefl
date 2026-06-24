@@ -930,6 +930,30 @@ def test_learner_sentence_corpus_covers_indirect_item_room_encountered_only_bact
     )
 
 
+def test_learner_sentence_corpus_covers_item_room_encountered_only_strain_definition_after_leaving_source_room() -> None:
+    target_case_id = (
+        "item_room_encountered_only_strain_definition_after_leaving_source_room_rejected"
+    )
+    encountered_only_strain_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == target_case_id
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["route"] == "deterministic_parser"
+        and case["setup_commands"] == ["go east", "go west"]
+        and case["expected_parser"]["action"] == "explain"
+        and case["expected_parser"]["target"] == "strain"
+        and case["expected_success"] is False
+        and case["expected_room_id"] == "research_camp"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 0
+        for case in encountered_only_strain_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_start_room_encountered_only_organism_definition_after_movement() -> None:
     target_case_id = "start_room_encountered_only_organism_definition_after_movement_rejected"
     start_room_encountered_only_cases = [
