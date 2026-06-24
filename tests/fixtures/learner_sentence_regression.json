@@ -1127,6 +1127,28 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "indirect_practiced_item_room_strain_definition_after_leaving_source_room",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [
+      "go east",
+      "inspect strain",
+      "go west"
+    ],
+    "sentence": "Can you remind me what strain means after I leave the tent?",
+    "ai_interpretation": {
+      "action": "explain",
+      "target": "strain",
+      "confidence": 0.84,
+      "reason": "The learner indirectly asks for a practiced item-room vocabulary explanation after leaving its source room."
+    },
+    "expected_success": true,
+    "expected_room_id": "research_camp",
+    "expected_message_contains": "strain: strain explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "item_room_visible_definition_before_item_use",
     "category": "accepted",
     "route": "deterministic_parser",
