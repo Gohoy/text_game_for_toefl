@@ -996,6 +996,30 @@ def test_learner_sentence_corpus_covers_indirect_start_room_encountered_only_spe
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_start_room_encountered_only_evolve_definition_after_movement() -> None:
+    target_case_id = (
+        "indirect_start_room_encountered_only_evolve_definition_after_movement_rejected"
+    )
+    indirect_start_room_encountered_only_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == target_case_id
+    ]
+
+    assert any(
+        case["category"] == "rejected"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == ["go north"]
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["ai_interpretation"]["target"] == "evolve"
+        and case["expected_success"] is False
+        and case["expected_room_id"] == "fungus_grove"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 0
+        for case in indirect_start_room_encountered_only_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_item_room_visible_definition_before_item_use() -> None:
     item_room_visible_definition_cases = [
         case
