@@ -766,6 +766,27 @@ def test_learner_sentence_corpus_covers_start_room_visible_species_definition() 
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_start_room_visible_species_definition() -> None:
+    indirect_species_definition_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == "indirect_start_room_species_visible_definition"
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == []
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["ai_interpretation"]["target"] == "species"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "research_camp"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in indirect_species_definition_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_unavailable_definition_requests() -> None:
     unavailable_definition_cases = [
         case
