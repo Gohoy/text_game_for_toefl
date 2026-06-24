@@ -1247,6 +1247,24 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "item_room_visible_strain_definition_before_practice",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go east"
+    ],
+    "sentence": "Could you define strain?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "strain"
+    },
+    "expected_success": true,
+    "expected_room_id": "microscope_tent",
+    "expected_message_contains": "strain: strain explained for Biology Realm.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "practiced_item_room_microscope_definition_after_leaving_source_room",
     "category": "accepted",
     "route": "deterministic_parser",
