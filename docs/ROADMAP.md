@@ -209,6 +209,7 @@ Phase 1 is complete. Exit evidence:
 - learner sentence corpus covers start-room visible species vocabulary explanation requests before movement or practice
 - learner sentence corpus covers indirect start-room visible species vocabulary explanation requests routed through validated AI interpretation before movement or practice
 - learner sentence corpus covers start-room visible evolve vocabulary explanation requests before movement or practice
+- learner sentence corpus covers indirect start-room visible evolve vocabulary explanation requests routed through validated AI interpretation before movement or practice
 - learner sentence corpus covers indirect look requests routed through AI interpretation to deterministic room narration with no state mutation
 - learner sentence corpus covers indirect map-or-exits requests routed through AI interpretation to deterministic room narration with exits grounding and no state mutation
 - learner sentence corpus covers indirect route-planning requests routed through AI interpretation to deterministic room narration with exits grounding and no automatic movement
@@ -3014,7 +3015,7 @@ None.
 
 ### T-330 — Add indirect evolve visible explanation
 
-- **State:** ready
+- **State:** done
 - **Priority:** P2
 - **Goal:** Prove indirect start-room `evolve` explanation requests route through AI interpretation without mutating state.
 - **Acceptance criteria:**
@@ -3026,7 +3027,7 @@ None.
 
 ### T-331 — Add start-room encountered-only organism rejection after movement
 
-- **State:** planned
+- **State:** ready
 - **Priority:** P2
 - **Goal:** Prove start-room vocabulary is not explainable away from Research Camp unless it has been practiced.
 - **Acceptance criteria:**
@@ -3109,6 +3110,7 @@ Add a second world only after the Biology world satisfies its full phase exit cr
 
 ## Recently Completed
 
+- 2026-06-24: Completed T-330 by adding an indirect start-room `Could you tell me what evolve means?` corpus case that routes through validated AI interpretation to deterministic `explain`, performs one AI vocabulary-explanation request, and leaves inventory, quest, mastery, XP, HP, and room state unchanged.
 - 2026-06-24: Completed T-329 by adding a direct start-room `Could you define evolve?` corpus case that routes through deterministic `explain`, performs one AI vocabulary-explanation request, and leaves inventory, quest, mastery, XP, HP, and room state unchanged.
 - 2026-06-24: Completed T-328 by adding an indirect start-room `Could you tell me what species means?` corpus case that routes through validated AI interpretation to deterministic `explain`, performs one AI vocabulary-explanation request, and leaves inventory, quest, mastery, XP, HP, and room state unchanged.
 - 2026-06-24: Completed T-327 by adding a direct start-room `Could you define species?` corpus case that routes through deterministic `explain`, performs one AI vocabulary-explanation request, and leaves inventory, quest, mastery, XP, HP, and room state unchanged.

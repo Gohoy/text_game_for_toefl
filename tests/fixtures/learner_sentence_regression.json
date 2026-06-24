@@ -726,6 +726,24 @@
     "expected_vocabulary_request_count": 1
   },
   {
+    "id": "indirect_start_room_evolve_visible_definition",
+    "category": "accepted",
+    "route": "ai_interpretation_fallback",
+    "setup_commands": [],
+    "sentence": "Could you tell me what evolve means?",
+    "ai_interpretation": {
+      "action": "explain",
+      "target": "evolve",
+      "confidence": 0.84,
+      "reason": "The learner indirectly asks for the meaning of a visible start-room vocabulary word."
+    },
+    "expected_success": true,
+    "expected_message_contains": "evolve: evolve explained",
+    "expected_room_id": "research_camp",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "polite_define_unavailable_word_deterministic_rejected",
     "category": "rejected",
     "route": "deterministic_parser",
