@@ -13,6 +13,8 @@ from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import RoomNarrationRequest
+from toefl_rpg.ai.contract import SentenceQualityEvaluation
+from toefl_rpg.ai.contract import SentenceQualityRequest
 from toefl_rpg.ai.contract import StructuredContentDraft
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
@@ -44,6 +46,57 @@ def test_fake_ai_provider_generates_valid_turn_feedback() -> None:
     assert response.sentence_feedback.startswith("AI feedback:")
     assert response.suggested_sentence == request.player_sentence
     assert provider.turn_feedback_requests == [request]
+
+
+def test_fake_ai_provider_supports_sentence_quality_precheck() -> None:
+    provider = FakeAIProvider()
+    accepted_request = SentenceQualityRequest(
+        player_sentence="I go north to the fungus grove.",
+        location_id="research_camp",
+        room_name="Research Camp",
+        target_words=["organism", "species", "evolve"],
+    )
+    rejected_request = SentenceQualityRequest(
+        player_sentence="go north",
+        location_id="research_camp",
+        room_name="Research Camp",
+        target_words=["organism", "species", "evolve"],
+    )
+
+    accepted = provider.evaluate_sentence_quality(accepted_request)
+    rejected = provider.evaluate_sentence_quality(rejected_request)
+
+    assert accepted.is_complete_and_correct is True
+    assert rejected.is_complete_and_correct is False
+    assert rejected.suggested_sentence == "I want to go north."
+    assert provider.sentence_quality_requests == [accepted_request, rejected_request]
+
+
+def test_sentence_quality_request_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        SentenceQualityRequest(
+            player_sentence="I go north to the fungus grove.",
+            location_id="research_camp",
+            room_name="Research Camp",
+            target_words=["organism"],
+            xp=100,
+            inventory=["fungus sample"],
+        )
+
+    message = str(exc_info.value)
+    assert "xp" in message
+    assert "inventory" in message
+    assert "Extra inputs are not permitted" in message
+
+
+def test_sentence_quality_evaluation_rejects_extra_state_mutation_fields() -> None:
+    with pytest.raises(ValidationError):
+        SentenceQualityEvaluation(
+            is_complete_and_correct=True,
+            explanation="The sentence is complete.",
+            suggested_sentence="I go north to the fungus grove.",
+            xp=100,
+        )
 
 
 def test_turn_feedback_request_rejects_extra_state_mutation_fields() -> None:
@@ -175,6 +228,7 @@ def test_structured_content_draft_rejects_extra_state_mutation_fields() -> None:
 
 def test_player_facing_response_schemas_are_strict_for_codex() -> None:
     response_models = [
+        SentenceQualityEvaluation,
         TurnFeedback,
         VocabularyExplanation,
         PlayerSentenceInterpretation,
@@ -204,6 +258,7 @@ def test_ai_request_schemas_are_strict_and_audited() -> None:
         "PlayerSentenceInterpretationRequest",
         "ReviewAnswerEvaluationRequest",
         "RoomNarrationRequest",
+        "SentenceQualityRequest",
         "TurnFeedbackRequest",
         "VocabularyExplanationRequest",
     }

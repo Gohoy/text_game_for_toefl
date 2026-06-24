@@ -18,6 +18,8 @@ from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import RoomNarrationRequest
+from toefl_rpg.ai.contract import SentenceQualityEvaluation
+from toefl_rpg.ai.contract import SentenceQualityRequest
 from toefl_rpg.ai.contract import StructuredContentDraft
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
@@ -45,6 +47,15 @@ class CodexCliProvider:
         self.timeout_seconds = timeout_seconds
         self.cwd = cwd
         self._runner = runner
+
+    def evaluate_sentence_quality(
+        self, request: SentenceQualityRequest
+    ) -> SentenceQualityEvaluation:
+        return self._invoke(
+            response_model=SentenceQualityEvaluation,
+            purpose="sentence quality pre-check",
+            payload=request.model_dump(),
+        )
 
     def generate_turn_feedback(self, request: TurnFeedbackRequest) -> TurnFeedback:
         return self._invoke(

@@ -15,13 +15,34 @@ def parse_intent(text: str) -> ParsedIntent:
     normalized = " ".join(text.lower().strip().split()).strip(".,!?")
     if normalized in {"quit", "exit"}:
         return ParsedIntent("quit")
+    if " quit " in f" {normalized} " or " leave the game" in f" {normalized} ":
+        return ParsedIntent("quit")
     if normalized in {"help", "commands"}:
+        return ParsedIntent("help")
+    if (
+        normalized.startswith("could you help me")
+        or normalized.startswith("please help me")
+    ):
         return ParsedIntent("help")
     if normalized in {"inventory", "items", "bag"}:
         return ParsedIntent("inventory")
+    if (
+        normalized.startswith("could you show me my inventory")
+        or normalized.startswith("please show me my inventory")
+    ):
+        return ParsedIntent("inventory")
     if normalized in {"status", "stats", "progress"}:
         return ParsedIntent("status")
+    if (
+        " status" in normalized
+        or " current status" in normalized
+        or " how am i doing" in f" {normalized} "
+        or " my progress" in normalized
+    ):
+        return ParsedIntent("status")
     if normalized in {"review", "review vocabulary", "start review"}:
+        return ParsedIntent("review")
+    if " review vocabulary" in normalized or " start review" in normalized:
         return ParsedIntent("review")
     if normalized.startswith("review "):
         return ParsedIntent("review", normalized.removeprefix("review ").strip())
@@ -35,6 +56,12 @@ def parse_intent(text: str) -> ParsedIntent:
         target = normalized.rstrip("?").removeprefix("what does ").removesuffix(" mean")
         return ParsedIntent("explain", target.strip())
     if normalized in {"look", "look around"}:
+        return ParsedIntent("look")
+    if (
+        " look around" in normalized
+        or " what is around" in normalized
+        or " what do i see" in normalized
+    ):
         return ParsedIntent("look")
 
     padded = f" {normalized} "

@@ -164,3 +164,19 @@ def test_parse_what_does_word_mean_question() -> None:
 
     assert intent.action == "explain"
     assert intent.target == "bacteria"
+
+
+@pytest.mark.parametrize(
+    ("sentence", "expected_action"),
+    [
+        ("I look around the area.", "look"),
+        ("Could you show me my current status?", "status"),
+        ("I would like to review vocabulary.", "review"),
+        ("I would like to quit and save my progress.", "quit"),
+    ],
+)
+def test_parse_full_sentence_meta_commands(sentence: str, expected_action: str) -> None:
+    intent = parse_intent(sentence)
+
+    assert intent.action == expected_action
+    assert intent.target == ""

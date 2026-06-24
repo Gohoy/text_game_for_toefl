@@ -41,7 +41,8 @@ class Renderer:
             self.console.print(save_text)
             self.console.print(
                 "Type full English sentences such as I want to inspect the microscope "
-                "or short commands such as go east. Type quit to leave."
+                "or I go east to the microscope tent. Type I would like to quit "
+                "and save my progress to leave."
             )
             return
 
@@ -49,7 +50,8 @@ class Renderer:
             Panel(
                 f"{save_text}\n\n"
                 "Type full English sentences such as [bold]I want to inspect the microscope[/] "
-                "or short commands such as [bold]go east[/]. Type [bold]quit[/] to leave.",
+                "or [bold]I go east to the microscope tent[/]. Type "
+                "[bold]I would like to quit and save my progress[/] to leave.",
                 title="TOEFL Text RPG",
                 border_style="green",
             )

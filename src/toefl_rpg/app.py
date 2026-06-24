@@ -52,9 +52,13 @@ def main() -> None:
         console.print(f"AI provider error: {exc}")
         return
     engine = (
-        GameEngine(state, ai_provider=ai_provider)
+        GameEngine(state, ai_provider=ai_provider, require_complete_sentences=True)
         if state is not None
-        else GameEngine.new_game(world, ai_provider=ai_provider)
+        else GameEngine.new_game(
+            world,
+            ai_provider=ai_provider,
+            require_complete_sentences=True,
+        )
     )
     renderer = Renderer(console)
 

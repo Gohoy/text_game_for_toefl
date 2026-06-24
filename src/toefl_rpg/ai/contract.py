@@ -31,6 +31,23 @@ class TurnFeedback(BaseModel):
     vocabulary_notes: list[str] = Field(default_factory=list)
 
 
+class SentenceQualityRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    player_sentence: str = Field(min_length=1)
+    location_id: str = Field(min_length=1)
+    room_name: str = Field(min_length=1)
+    target_words: list[str] = Field(default_factory=list)
+
+
+class SentenceQualityEvaluation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    is_complete_and_correct: StrictBool
+    explanation: str = Field(min_length=1)
+    suggested_sentence: str = Field(min_length=1)
+
+
 class VocabularyExplanationRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -147,6 +164,11 @@ class RoomNarration(BaseModel):
 
 
 class AIProvider(Protocol):
+    def evaluate_sentence_quality(
+        self, request: SentenceQualityRequest
+    ) -> SentenceQualityEvaluation:
+        raise NotImplementedError
+
     def generate_turn_feedback(self, request: TurnFeedbackRequest) -> TurnFeedback:
         raise NotImplementedError
 
@@ -185,6 +207,7 @@ def require_ai_provider(provider: Optional[AIProvider]) -> AIProvider:
 
 class FakeAIProvider:
     def __init__(self) -> None:
+        self.sentence_quality_requests: list[SentenceQualityRequest] = []
         self.turn_feedback_requests: list[TurnFeedbackRequest] = []
         self.interpretation_requests: list[PlayerSentenceInterpretationRequest] = []
         self.dialogue_requests: list[NPCDialogueRequest] = []
@@ -192,6 +215,36 @@ class FakeAIProvider:
         self.vocabulary_requests: list[VocabularyExplanationRequest] = []
         self.review_evaluation_requests: list[ReviewAnswerEvaluationRequest] = []
         self.content_requests: list[ContentDraftRequest] = []
+
+    def evaluate_sentence_quality(
+        self, request: SentenceQualityRequest
+    ) -> SentenceQualityEvaluation:
+        self.sentence_quality_requests.append(request)
+        normalized = " ".join(request.player_sentence.lower().strip().split()).strip(
+            ".,!?"
+        )
+        command_fragments = {
+            "go north",
+            "go south",
+            "go east",
+            "go west",
+            "look",
+            "status",
+            "quit",
+            "review",
+            "inventory",
+        }
+        if normalized in command_fragments:
+            return SentenceQualityEvaluation(
+                is_complete_and_correct=False,
+                explanation="Use a complete English sentence before the game accepts the action.",
+                suggested_sentence=f"I want to {normalized}.",
+            )
+        return SentenceQualityEvaluation(
+            is_complete_and_correct=True,
+            explanation="The sentence is complete enough for TOEFL RPG input.",
+            suggested_sentence=request.player_sentence,
+        )
 
     def generate_turn_feedback(self, request: TurnFeedbackRequest) -> TurnFeedback:
         self.turn_feedback_requests.append(request)

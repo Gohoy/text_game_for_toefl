@@ -4,6 +4,8 @@ from toefl_rpg.ai.contract import AIProvider
 from toefl_rpg.ai.contract import AIProviderUnavailable
 from toefl_rpg.ai.contract import ContentDraftRequest
 from toefl_rpg.ai.contract import FakeAIProvider
+from toefl_rpg.ai.contract import SentenceQualityEvaluation
+from toefl_rpg.ai.contract import SentenceQualityRequest
 from toefl_rpg.ai.contract import StructuredContentDraft
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
@@ -22,6 +24,8 @@ __all__ = [
     "ContentDraftValidationError",
     "ContentDraftRequest",
     "FakeAIProvider",
+    "SentenceQualityEvaluation",
+    "SentenceQualityRequest",
     "StructuredContentDraft",
     "TurnFeedback",
     "TurnFeedbackRequest",

@@ -74,6 +74,44 @@ def test_engine_uses_ai_feedback_for_runtime_sentence_feedback() -> None:
     assert provider.turn_feedback_requests[0].location_id == "research_camp"
 
 
+def test_sentence_quality_precheck_rejects_fragment_before_state_change() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        ai_provider=provider,
+        require_complete_sentences=True,
+    )
+    before_state = deepcopy(engine.state)
+
+    result = engine.handle("go north")
+
+    assert not result.success
+    assert "Rewrite the sentence before the game accepts the action." in result.message
+    assert "Try: I want to go north." in result.message
+    assert "Feedback: Use a complete English sentence" in result.english_feedback
+    assert engine.state == before_state
+    assert provider.sentence_quality_requests[0].player_sentence == "go north"
+    assert provider.turn_feedback_requests == []
+
+
+def test_sentence_quality_precheck_accepts_complete_sentence_before_action() -> None:
+    provider = FakeAIProvider()
+    engine = GameEngine.new_game(
+        build_biology_realm(),
+        ai_provider=provider,
+        require_complete_sentences=True,
+    )
+
+    result = engine.handle("I go north to the fungus grove.")
+
+    assert result.success
+    assert engine.state.current_room_id == "fungus_grove"
+    assert provider.sentence_quality_requests[0].player_sentence == (
+        "I go north to the fungus grove."
+    )
+    assert provider.turn_feedback_requests[-1].deterministic_action == "move"
+
+
 def test_ai_turn_feedback_display_keeps_coaching_sections_distinct() -> None:
     class StructuredFeedbackProvider(FakeAIProvider):
         def generate_turn_feedback(self, request):

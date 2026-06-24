@@ -33,7 +33,7 @@ provider explicitly. Use `TOEFL_RPG_SAVE_PATH` to keep smoke runs away from the
 normal player save slot:
 
 ```bash
-printf "look\nstatus\nquit\n" \
+printf "I look around the area.\nCould you show me my current status?\nI would like to quit and save my progress.\n" \
   | TOEFL_RPG_AI_PROVIDER=fake TOEFL_RPG_SAVE_PATH=/tmp/toefl-rpg-smoke.json PYTHONPATH=src python3 -m toefl_rpg
 ```
 
@@ -42,15 +42,14 @@ save path. This calls your local Codex CLI account and is not part of the
 required automation gate:
 
 ```bash
-printf "look\nquit\n" \
+printf "I look around the area.\nI would like to quit and save my progress.\n" \
   | TOEFL_RPG_SAVE_PATH=/tmp/toefl-rpg-live-smoke.json PYTHONPATH=src python3 -m toefl_rpg
 ```
 
 Current supported actions include:
 
-- `help`
-- `look`
-- `go east`
+- `Could you help me understand what I can do next?`
+- `I look around the area.`
 - `I want to go to the east`
 - `I go north to the fungus grove.`
 - `I want to inspect the microscope`
@@ -59,13 +58,13 @@ Current supported actions include:
 - `I want to use the microscope`
 - `I attack the invasive vine`
 - `The fungus is vital for the forest.`
-- `explain fungus`
-- `review`
+- `Could you explain fungus?`
+- `I would like to review vocabulary.`
 - `A fungus can be vital for forest metabolism.`
-- `talk to Dr. Lin`
-- `inventory`
-- `status`
-- `quit`
+- `Could I talk to Dr. Lin?`
+- `Could you show me my inventory?`
+- `Could you show me my current status?`
+- `I would like to quit and save my progress.`
 
 The current Biology Investigation quest has three deterministic steps: collect the fungus sample, analyze it with the microscope, and defeat the invasive vine.
 After using target words in context, `review` presents due vocabulary and asks
@@ -87,9 +86,12 @@ quest progress, visible entities, and target words. Narration and dialogue are
 coaching text only; deterministic quest state and rewards remain controlled by
 code.
 
-The deterministic engine still owns movement, inventory, combat, XP, quest
-completion, vocabulary rewards, and saves. AI feedback is validated before display;
-if the provider fails during a turn, the game state is not advanced.
+Before normal CLI gameplay accepts an action, the AI provider checks whether the
+input is a complete and correct English sentence. Command fragments such as
+`go north` are rejected with a suggested rewrite before deterministic state can
+change. The deterministic engine still owns movement, inventory, combat, XP,
+quest completion, vocabulary rewards, and saves. AI feedback is validated before
+display; if the provider fails during a turn, the game state is not advanced.
 
 Progress is autosaved after each handled turn:
 

@@ -142,6 +142,13 @@ The first implementation may use game turns for same-session review and UTC time
 
 ## Feedback Contract
 
+Normal CLI play now starts with an AI sentence-quality pre-check. The player's
+input must be judged as a complete and correct English sentence before the game
+accepts a deterministic action, AI interpretation fallback, vocabulary reward,
+quest update, combat result, or save-worthy state change. Rejected inputs should
+give a concise reason and a corrected sentence so the player practices writing
+before progressing.
+
 Feedback should normally contain:
 
 1. what action or meaning was understood

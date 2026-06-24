@@ -12,6 +12,7 @@ from toefl_rpg.ai.contract import NPCDialogueRequest
 from toefl_rpg.ai.contract import PlayerSentenceInterpretationRequest
 from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarrationRequest
+from toefl_rpg.ai.contract import SentenceQualityRequest
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanationRequest
 
@@ -131,6 +132,37 @@ def test_codex_cli_provider_supports_player_sentence_interpretation() -> None:
     assert response.action == "collect"
     assert response.target == "fungus sample"
     assert response.confidence == 0.82
+
+
+def test_codex_cli_provider_supports_sentence_quality_precheck() -> None:
+    def fake_runner(command, **kwargs):
+        assert "sentence quality pre-check" in kwargs["input"]
+        assert '"player_sentence": "go north"' in kwargs["input"]
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            stdout=json.dumps(
+                {
+                    "is_complete_and_correct": False,
+                    "explanation": "This is a command fragment, not a complete sentence.",
+                    "suggested_sentence": "I go north to the fungus grove.",
+                }
+            ),
+            stderr="",
+        )
+
+    provider = CodexCliProvider(runner=fake_runner)
+    request = SentenceQualityRequest(
+        player_sentence="go north",
+        location_id="research_camp",
+        room_name="Research Camp",
+        target_words=["organism", "species", "evolve"],
+    )
+
+    response = provider.evaluate_sentence_quality(request)
+
+    assert response.is_complete_and_correct is False
+    assert response.suggested_sentence == "I go north to the fungus grove."
 
 
 def test_codex_cli_provider_supports_npc_dialogue() -> None:

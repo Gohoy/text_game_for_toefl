@@ -15,6 +15,8 @@ from toefl_rpg.ai.contract import ReviewAnswerEvaluation
 from toefl_rpg.ai.contract import ReviewAnswerEvaluationRequest
 from toefl_rpg.ai.contract import RoomNarration
 from toefl_rpg.ai.contract import RoomNarrationRequest
+from toefl_rpg.ai.contract import SentenceQualityEvaluation
+from toefl_rpg.ai.contract import SentenceQualityRequest
 from toefl_rpg.ai.contract import TurnFeedback
 from toefl_rpg.ai.contract import TurnFeedbackRequest
 from toefl_rpg.ai.contract import VocabularyExplanation
@@ -49,11 +51,13 @@ class GameEngine:
         state: GameState,
         ai_provider: Optional[AIProvider] = None,
         use_deterministic_feedback: bool = False,
+        require_complete_sentences: bool = False,
         clock: Optional[Callable[[], datetime]] = None,
     ) -> None:
         self.state = state
         self.ai_provider = ai_provider
         self.use_deterministic_feedback = use_deterministic_feedback
+        self.require_complete_sentences = require_complete_sentences
         self._clock = clock or (lambda: datetime.now(timezone.utc))
 
     @classmethod
@@ -62,6 +66,7 @@ class GameEngine:
         world: World,
         ai_provider: Optional[AIProvider] = None,
         use_deterministic_feedback: bool = False,
+        require_complete_sentences: bool = False,
         clock: Optional[Callable[[], datetime]] = None,
     ) -> "GameEngine":
         state = GameState(world=world, current_room_id=world.start_room_id)
@@ -70,13 +75,19 @@ class GameEngine:
             state,
             ai_provider=ai_provider,
             use_deterministic_feedback=use_deterministic_feedback,
+            require_complete_sentences=require_complete_sentences,
             clock=clock,
         )
 
     def handle(self, text: str) -> TurnResult:
+        before_state = deepcopy(self.state)
+        if self.require_complete_sentences:
+            rejection = self._sentence_quality_rejection(text, before_state)
+            if rejection is not None:
+                return rejection
+
         intent = parse_intent(text)
         feedback = ""
-        before_state = deepcopy(self.state)
         if intent.action == "unknown" and not self.use_deterministic_feedback:
             interpreted_intent, rejection = self._interpret_unknown_intent(text, before_state)
             if rejection is not None:
@@ -143,6 +154,42 @@ class GameEngine:
             feedback,
         )
         return self._with_turn_feedback(text, intent, result, before_state)
+
+    def _sentence_quality_rejection(
+        self,
+        text: str,
+        before_state: GameState,
+    ) -> Optional[TurnResult]:
+        provider = require_ai_provider(self.ai_provider)
+        request = SentenceQualityRequest(
+            player_sentence=text,
+            location_id=before_state.current_room_id,
+            room_name=before_state.current_room.name,
+            target_words=list(before_state.current_room.target_words),
+        )
+        try:
+            evaluation = SentenceQualityEvaluation.model_validate(
+                provider.evaluate_sentence_quality(request)
+            )
+        except Exception as exc:
+            raise AIProviderUnavailable(
+                f"AI sentence quality check failed: {exc}"
+            ) from exc
+
+        if evaluation.is_complete_and_correct:
+            return None
+        return TurnResult(
+            False,
+            (
+                "Rewrite the sentence before the game accepts the action.\n"
+                f"Reason: {evaluation.explanation}\n"
+                f"Try: {evaluation.suggested_sentence}"
+            ),
+            (
+                f"Feedback: {evaluation.explanation}\n"
+                f"Try: {evaluation.suggested_sentence}"
+            ),
+        )
 
     def _interpret_unknown_intent(
         self,

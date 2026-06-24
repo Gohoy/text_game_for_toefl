@@ -20,7 +20,7 @@ If the project standardizes commands in `pyproject.toml`, a `Makefile`, or a tas
 Run this when changing application startup, command parsing, rendering, movement, inventory, quests, combat, saves, or language practice:
 
 ```bash
-printf "look\nstatus\nquit\n" \
+printf "I look around the area.\nCould you show me my current status?\nI would like to quit and save my progress.\n" \
   | TOEFL_RPG_AI_PROVIDER=fake TOEFL_RPG_SAVE_PATH=/tmp/toefl-rpg-smoke.json PYTHONPATH=src python3 -m toefl_rpg
 ```
 
@@ -44,7 +44,7 @@ Run this only when changing Codex CLI provider wiring, structured-output
 schemas, timeouts, or player-facing AI runtime behavior:
 
 ```bash
-printf "look\nquit\n" \
+printf "I look around the area.\nI would like to quit and save my progress.\n" \
   | TOEFL_RPG_SAVE_PATH=/tmp/toefl-rpg-live-smoke.json PYTHONPATH=src python3 -m toefl_rpg
 ```
 
