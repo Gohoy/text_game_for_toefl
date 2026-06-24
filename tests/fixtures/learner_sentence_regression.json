@@ -870,6 +870,25 @@
     "expected_vocabulary_request_count": 0
   },
   {
+    "id": "practiced_start_room_species_definition_after_movement",
+    "category": "accepted",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "inspect species",
+      "go north"
+    ],
+    "sentence": "Could you define species?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "species"
+    },
+    "expected_success": true,
+    "expected_room_id": "fungus_grove",
+    "expected_message_contains": "species: species explained",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 1
+  },
+  {
     "id": "start_room_encountered_only_evolve_definition_after_movement_rejected",
     "category": "rejected",
     "route": "deterministic_parser",
