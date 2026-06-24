@@ -1203,6 +1203,30 @@ def test_learner_sentence_corpus_covers_practiced_item_room_microscope_definitio
     )
 
 
+def test_learner_sentence_corpus_covers_indirect_practiced_item_room_microscope_definition_after_leaving_source_room() -> None:
+    target_case_id = (
+        "indirect_practiced_item_room_microscope_definition_after_leaving_source_room"
+    )
+    indirect_practiced_item_room_cases = [
+        case
+        for case in load_corpus()
+        if case["id"] == target_case_id
+    ]
+
+    assert any(
+        case["category"] == "accepted"
+        and case["route"] == "ai_interpretation_fallback"
+        and case["setup_commands"] == ["go east", "inspect microscope", "go west"]
+        and case["ai_interpretation"]["action"] == "explain"
+        and case["ai_interpretation"]["target"] == "microscope"
+        and case["expected_success"] is True
+        and case["expected_room_id"] == "research_camp"
+        and case["expected_state_unchanged"] is True
+        and case["expected_vocabulary_request_count"] == 1
+        for case in indirect_practiced_item_room_cases
+    )
+
+
 def test_learner_sentence_corpus_covers_indirect_item_room_visible_definition_before_item_use() -> None:
     indirect_item_room_visible_definition_cases = [
         case
