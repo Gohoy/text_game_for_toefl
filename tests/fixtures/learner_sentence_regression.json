@@ -830,6 +830,24 @@
     "expected_vocabulary_request_count": 0
   },
   {
+    "id": "start_room_encountered_only_evolve_definition_after_movement_rejected",
+    "category": "rejected",
+    "route": "deterministic_parser",
+    "setup_commands": [
+      "go north"
+    ],
+    "sentence": "Could you define evolve?",
+    "expected_parser": {
+      "action": "explain",
+      "target": "evolve"
+    },
+    "expected_success": false,
+    "expected_room_id": "fungus_grove",
+    "expected_message_contains": "'evolve' is in Biology Realm, but it is not visible here or practiced yet.",
+    "expected_state_unchanged": true,
+    "expected_vocabulary_request_count": 0
+  },
+  {
     "id": "indirect_start_room_encountered_only_species_definition_after_movement_rejected",
     "category": "rejected",
     "route": "ai_interpretation_fallback",
